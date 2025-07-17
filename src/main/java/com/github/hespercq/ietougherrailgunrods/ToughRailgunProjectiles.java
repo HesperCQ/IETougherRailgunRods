@@ -35,6 +35,7 @@ public class ToughRailgunProjectiles {
 		// Iron
 		register(Ingredient.of(IETags.ironRod), new ToughRailgunProjectile(16, 1.25)
 				.setColorMap(new RailgunRenderColors(0xd8d8d8, 0xd8d8d8, 0xd8d8d8, 0xa8a8a8, 0x686868, 0x686868)));
+
 		// Aluminum
 		register(Ingredient.of(IETags.aluminumRod), new ToughRailgunProjectile(10, 1.05)
 				.setColorMap(new RailgunRenderColors(0xd8d8d8, 0xd8d8d8, 0xd8d8d8, 0xa8a8a8, 0x686868, 0x686868)));
@@ -90,7 +91,7 @@ public class ToughRailgunProjectiles {
 	// =========================================================================================================
 	protected static void register(Ingredient newAmmo, IRailgunProjectile railgunProjectile) {
 		log("Registering Railgun Projectile: " + newAmmo.toJson().toString() + " - Start");
-		
+
 		for (int i = 0; i < RailgunHandler.projectilePropertyMap.size(); i++) {
 			Pair<Supplier<Ingredient>, IRailgunProjectile> pair = RailgunHandler.projectilePropertyMap.get(i);
 			Ingredient existingAmmo = pair.getFirst().get();
@@ -107,7 +108,7 @@ public class ToughRailgunProjectiles {
 		boolean stringEquality = ing1.toJson().toString().equals(ing2.toJson().toString());
 		return stringEquality;
 	}
-	
+
 	private static void log(String sMessage) {
 		IETougherRailgunRods.LOGGER.info("[" + IETougherRailgunRods.MODID + "] " + sMessage);
 	}

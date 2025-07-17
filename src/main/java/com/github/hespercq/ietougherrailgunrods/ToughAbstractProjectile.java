@@ -48,12 +48,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public abstract class ToughAbstractProjectile extends Projectile {
-   //private static final double ARROW_BASE_DAMAGE = 2.0D;
    private static final EntityDataAccessor<Byte> ID_FLAGS = SynchedEntityData.defineId(ToughAbstractProjectile.class, EntityDataSerializers.BYTE);
    private static final EntityDataAccessor<Byte> PIERCE_LEVEL = SynchedEntityData.defineId(ToughAbstractProjectile.class, EntityDataSerializers.BYTE);
-   //private static final int FLAG_CRIT = 1;
-   //private static final int FLAG_NOPHYSICS = 2;
-   //private static final int FLAG_CROSSBOW = 4;
    @Nullable
    private BlockState lastState;
    protected boolean inGround;
