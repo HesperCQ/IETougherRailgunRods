@@ -1,8 +1,9 @@
-package com.github.hespercq.ietougherrailgunrods;
+package io.github.hespercq.ietooltweaks.toughRailgun;
 
 import blusunrize.immersiveengineering.api.tool.RailgunHandler;
 import blusunrize.immersiveengineering.api.tool.RailgunHandler.IRailgunProjectile;
 import blusunrize.immersiveengineering.common.config.IEServerConfig;
+import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -35,7 +36,7 @@ public class ToughRailgunShotEntity extends ToughProjectileEntity
 
 	public ToughRailgunShotEntity(Level world, @Nonnull LivingEntity living, float velocity, float accuracy, ItemStack ammo)
 	{
-		super(IETougherRailgunRods.TOUGH_RAILGUN_SHOT.get(), world, living, velocity, accuracy);
+		super(IEToolTweaks.TOUGH_RAILGUN_SHOT.get(), world, living, velocity, accuracy);
 		this.ammo = ammo;
 		this.setAmmoSynced();
 	}

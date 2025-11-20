@@ -1,12 +1,4 @@
-package com.github.hespercq.ietougherrailgunrods;
-/*
- * BluSunrize
- * Copyright (c) 2017
- *
- * This code is licensed under "Blu's License of Common Sense"
- * Details can be found in the license file in the root folder of this project
- */
-
+package io.github.hespercq.ietooltweaks.toughRailgun;
 
 import blusunrize.immersiveengineering.api.tool.RailgunHandler;
 import blusunrize.immersiveengineering.api.tool.RailgunHandler.RailgunRenderColors;

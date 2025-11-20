@@ -1,4 +1,4 @@
-package com.github.hespercq.ietougherrailgunrods;
+package io.github.hespercq.ietooltweaks.toughRailgun;
 
 import blusunrize.immersiveengineering.api.IETags;
 import blusunrize.immersiveengineering.api.Lib.DamageTypes;
@@ -9,6 +9,7 @@ import blusunrize.immersiveengineering.api.tool.RailgunHandler.StandardRailgunPr
 import blusunrize.immersiveengineering.common.register.IEItems;
 import blusunrize.immersiveengineering.common.register.IEPotions;
 import blusunrize.immersiveengineering.mixin.accessors.DamageSourcesAccess;
+import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -110,7 +111,7 @@ public class ToughRailgunProjectiles {
 	}
 
 	private static void log(String sMessage) {
-		IETougherRailgunRods.LOGGER.info("[" + IETougherRailgunRods.MODID + "] " + sMessage);
+		IEToolTweaks.LOGGER.info("[" + IEToolTweaks.MODID + "] " + sMessage);
 	}
 
 	// Projectile Class

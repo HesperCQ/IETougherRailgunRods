@@ -1,4 +1,4 @@
-package com.github.hespercq.ietougherrailgunrods;
+package io.github.hespercq.ietooltweaks.toughRailgun;
 
 import com.google.common.collect.Lists;
 
