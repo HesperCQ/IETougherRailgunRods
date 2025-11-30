@@ -1,0 +1,10 @@
+{
+  "size": 5,
+  "depth": 1,
+  "tier": 3,
+  "speed": 8,
+  "attack": 5,
+  "durability": 1200,
+  "texture": "immersiveengineering:item/drill_iron",
+  "itemColor": "0x404040"
+}

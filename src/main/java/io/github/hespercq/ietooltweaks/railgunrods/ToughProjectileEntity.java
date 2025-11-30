@@ -1,4 +1,4 @@
-package io.github.hespercq.ietooltweaks.toughRailgun;
+package io.github.hespercq.ietooltweaks.railgunrods;
 
 
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;

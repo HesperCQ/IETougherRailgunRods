@@ -1,4 +1,4 @@
-package io.github.hespercq.ietooltweaks.toughRailgun;
+package io.github.hespercq.ietooltweaks.railgunrods;
 
 import blusunrize.immersiveengineering.api.Lib.DamageTypes;
 import blusunrize.immersiveengineering.api.Lib.TurretDamageType;
