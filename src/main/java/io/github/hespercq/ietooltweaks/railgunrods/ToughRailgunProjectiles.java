@@ -91,15 +91,15 @@ public class ToughRailgunProjectiles {
 	// HELPER
 	// =========================================================================================================
 	protected static void register(Ingredient newAmmo, IRailgunProjectile railgunProjectile) {
-		log("Registering Railgun Projectile: " + newAmmo.toJson().toString() + " - Start");
+		IEToolTweaks.LOGGER.info("Registering Railgun Projectile: " + newAmmo.toJson().toString() + " - Start");
 
 		for (int i = 0; i < RailgunHandler.projectilePropertyMap.size(); i++) {
 			Pair<Supplier<Ingredient>, IRailgunProjectile> pair = RailgunHandler.projectilePropertyMap.get(i);
 			Ingredient existingAmmo = pair.getFirst().get();
 			if (checkSimilarIngredient(existingAmmo, newAmmo)) {
-				log("Registering Railgun Projectile: " + newAmmo.toJson().toString() + " - Overwriting Existing Railgun Projectile");
+				IEToolTweaks.LOGGER.info("Registering Railgun Projectile: " + newAmmo.toJson().toString() + " - Overwriting Existing Railgun Projectile");
 				RailgunHandler.projectilePropertyMap.set(i, Pair.of(() -> newAmmo, railgunProjectile));
-				log("Registering Railgun Projectile: " + newAmmo.toJson().toString() + " - Done");
+				IEToolTweaks.LOGGER.info("Registering Railgun Projectile: " + newAmmo.toJson().toString() + " - Done");
 			}
 		}
 		RailgunHandler.registerProjectile(() -> newAmmo, railgunProjectile);
@@ -108,10 +108,6 @@ public class ToughRailgunProjectiles {
 	protected static boolean checkSimilarIngredient(Ingredient ing1, Ingredient ing2) {
 		boolean stringEquality = ing1.toJson().toString().equals(ing2.toJson().toString());
 		return stringEquality;
-	}
-
-	private static void log(String sMessage) {
-		IEToolTweaks.LOGGER.info("[" + IEToolTweaks.MODID + "] " + sMessage);
 	}
 
 	// Projectile Class

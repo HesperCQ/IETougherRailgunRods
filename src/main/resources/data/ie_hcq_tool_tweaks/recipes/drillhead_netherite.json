@@ -1,0 +1,25 @@
+{
+  "type": "immersiveengineering:blueprint",
+  "category": "tool_tweaks_drill_heads_adv",
+  "inputs": [
+    {
+       "item": "immersiveengineering:drillhead_steel"
+    },
+    {
+       "item": "minecraft:netherite_upgrade_smithing_template"
+    },
+    {
+      "base_ingredient": {
+        "tag": "forge:ingots/netherite"
+      },
+      "count": 4
+    },
+    {
+      "item": "immersiveengineering:grindingdisk"
+    }
+  ],
+  "result": {
+    "item": "ie_hcq_tool_tweaks:drillhead",
+    "nbt": "{drillhead_perm_data:netherite}"
+  }
+}

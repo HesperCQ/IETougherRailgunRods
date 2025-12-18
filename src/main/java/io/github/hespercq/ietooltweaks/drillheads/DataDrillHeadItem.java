@@ -6,7 +6,7 @@ import blusunrize.immersiveengineering.common.items.IEBaseItem;
 import blusunrize.immersiveengineering.common.register.IEItems.Tools;
 import blusunrize.immersiveengineering.common.util.ItemNBTHelper;
 import blusunrize.immersiveengineering.common.util.Utils;
-import io.github.hespercq.ietooltweaks.IEToolTweaks;
+import io.github.hespercq.ietooltweaks.helpers.DisplayHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,12 +15,11 @@ import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -40,24 +39,15 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
-	public static final TagKey<Block> VEIN_MINE_BLOCKS_TAG = BlockTags.create(ResourceLocation.fromNamespaceAndPath(IEToolTweaks.MODID, "vein_mine_blocks"));
-
 	public DataDrillHeadItem() {
 		super(new Properties().stacksTo(1));
 	}
 
 	@Override
 	public Component getName(ItemStack stack) {
-		String name = getPermData(stack).name();
-		String baseKey = stack.getDescriptionId();
-		String key = baseKey + "." + name;
-
-		// If a lang key was found
-		if (!Component.translatable(key).getString().equals(key)) {
-			return Component.translatable(key); // Return translation
-		}
-		// Fallback
-		return Component.literal(generateNameFallbackDisplaySeg(name)).append(" ").append(Component.translatable(baseKey));
+		String itemKey = stack.getDescriptionId();
+		String subKey = getPermData(stack).name();
+		return DisplayHelper.getSubItemDisplayName(itemKey, subKey);
 	}
 
 	@Override
@@ -74,6 +64,12 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 		String status = "" + var10000;
 		String s = status + (this.getMaximumHeadDamage(stack) - this.getHeadDamage(stack)) + "/" + this.getMaximumHeadDamage(stack);
 		list.add(Component.translatable("desc.immersiveengineering.info.durability", new Object[] { s }));
+		
+		// Additional Info:
+		if (permData.isVeinMining()) {
+			list.add(Component.translatable("desc.ie_hcq_tool_tweaks.flavour.drillhead.vein",
+					new Object[] { permData.veinMiningSize(), DisplayHelper.getTagDisplayName(permData.veinMiningTag()).getString() }));
+		}
 	}
 
 	public int getBarWidth(@Nonnull ItemStack stack) {
@@ -85,7 +81,8 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 	}
 
 	public boolean isValidRepairItem(ItemStack stack, ItemStack material) {
-		return material.is(getPermData(stack).repairMaterialTag());
+		Ingredient ingredient = getPermData(stack).repairMaterial();
+		return ingredient.test(material);
 	}
 
 	// Custom Data for Item rendering
@@ -174,13 +171,14 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 		}
 
 		// Get more start block info
-		boolean canHarvestStart = state.getBlock().canHarvestBlock(world.getBlockState(startPos), world, startPos, player);
-		boolean drillMatStart = ((DrillItem) Tools.DRILL.get()).isEffective(ItemStack.EMPTY, state);
+		// Ignore canHarvest & isEffective, maybe add in future when adding logic for effective / can harvest tags for drills
+		//boolean canHarvestStart = state.getBlock().canHarvestBlock(world.getBlockState(startPos), world, startPos, player);
+		//boolean drillMatStart = ((DrillItem) Tools.DRILL.get()).isEffective(ItemStack.EMPTY, state);
 		boolean hardnessStart = state.getDestroyProgress(player, world, startPos) >= maxHardness;
 
 		// Get vein blocks instead if drill and block fit
-		if (dh_type.veinMining() && state.is(VEIN_MINE_BLOCKS_TAG) && canHarvestStart && drillMatStart && hardnessStart) {
-			return getBlocksInVein(head, world, player, brtr);
+		if (dh_type.isVeinMining() && state.is(dh_type.veinMiningTag()) && hardnessStart) {
+			return getBlocksInVein(head, world, player, brtr, dh_type.veinMiningSize());
 		}
 
 		if (diameter % 2 == 0) {
@@ -231,13 +229,13 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 		return b.build();
 	}
 
-	public ImmutableList<BlockPos> getBlocksInVein(ItemStack head, Level world, Player player, BlockHitResult brtr) {
+	public ImmutableList<BlockPos> getBlocksInVein(ItemStack head, Level world, Player player, BlockHitResult brtr, int maxBlocksNum) {
 		BlockPos startPos = brtr.getBlockPos();
 		BlockState startState = world.getBlockState(startPos);
 		Block targetBlock = startState.getBlock();
 
-		// Predicate: only vein-mine ores or the same block type
-		Predicate<BlockPos> isSameVein = pos -> {
+		// Predicate: only vein-mine same block type
+		Predicate<BlockPos> isSimilarBlock = pos -> {
 			BlockState state = world.getBlockState(pos);
 			Block block = state.getBlock();
 			// Optionally check harvestability and tool effectiveness
@@ -250,14 +248,12 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 		queue.add(startPos);
 		visited.add(startPos);
 
-		int maxVeinSize = 128; // Limit to prevent runaway scans //TODO: Add to config
-
-		while (!queue.isEmpty() && visited.size() < maxVeinSize) {
+		while (!queue.isEmpty() && visited.size() < maxBlocksNum) {
 			BlockPos current = queue.poll();
 
 			for (Direction dir : Direction.values()) {
 				BlockPos neighbor = current.relative(dir);
-				if (!visited.contains(neighbor) && isSameVein.test(neighbor)) {
+				if (!visited.contains(neighbor) && isSimilarBlock.test(neighbor)) {
 					visited.add(neighbor);
 					queue.add(neighbor);
 				}
@@ -284,22 +280,6 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 		CompoundTag nbt = head.getOrCreateTag();
 		nbt.remove("headDamage");
 		nbt.putInt("Damage", totalDamage);
-	}
-
-	private static String generateNameFallbackDisplaySeg(String name) {
-		String[] words = name.split("[_\\s]+"); // split on underscores or spaces
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < words.length; i++) {
-			if (words[i].isEmpty())
-				continue;
-			sb.append(Character.toUpperCase(words[i].charAt(0)));
-			if (words[i].length() > 1) {
-				sb.append(words[i].substring(1).toLowerCase());
-			}
-			if (i < words.length - 1)
-				sb.append(" ");
-		}
-		return sb.toString();
 	}
 	// #endregion ===================================================================================================
 

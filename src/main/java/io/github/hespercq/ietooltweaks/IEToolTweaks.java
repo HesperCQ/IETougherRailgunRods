@@ -1,7 +1,5 @@
 package io.github.hespercq.ietooltweaks;
 
-import com.mojang.logging.LogUtils;
-
 import io.github.hespercq.ietooltweaks.drillheads.DataDrillHeadItem;
 import io.github.hespercq.ietooltweaks.railgunrods.ToughRailgunShotEntity;
 import net.minecraft.world.entity.EntityType;
@@ -13,7 +11,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import org.slf4j.Logger;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(IEToolTweaks.MODID)
@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 public class IEToolTweaks {
 
 	public static final String MODID = "ie_hcq_tool_tweaks";
-	public static final Logger LOGGER = LogUtils.getLogger();
+	public static final Logger LOGGER = LogManager.getLogger(MODID); 
 
 	// Item Register
 	// ================================================================================================
@@ -39,7 +39,7 @@ public class IEToolTweaks {
 	// Tough Railgun Shot - Registration
 	public static final RegistryObject<EntityType<ToughRailgunShotEntity>> TOUGH_RAILGUN_SHOT = ENTITY_TYPES.register("tough_railgun_shot",
 			() -> TOUGH_RAILGUN_SHOT_ENTIY_BUILDER.build(MODID + ":" + "tough_railgun_shot"));
-				
+
 	// Mod bus
 	// ================================================================================================
 	public IEToolTweaks(FMLJavaModLoadingContext context) {

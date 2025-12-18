@@ -1,0 +1,25 @@
+{
+  "type": "immersiveengineering:blueprint",
+  "category": "tool_tweaks_drill_heads_adv",
+  "inputs": [
+    {
+      "item": "immersiveengineering:drillhead_steel"
+    },
+    {
+      "item": "minecraft:spire_armor_trim_smithing_template"
+    },
+    {
+      "item": "immersiveengineering:toolupgrade_drill_waterproof"
+    },
+    {
+      "base_ingredient": {
+        "item": "minecraft:dragon_breath"
+      },
+      "count": 5
+    }
+  ],
+  "result": {
+    "item": "ie_hcq_tool_tweaks:drillhead",
+    "nbt": "{drillhead_perm_data:end}"
+  }
+}

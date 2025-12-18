@@ -1,0 +1,22 @@
+{
+  "type": "immersiveengineering:blueprint",
+  "category": "tool_tweaks_drill_heads_adv",
+  "inputs": [
+    {
+      "item": "immersiveengineering:drillhead_steel"
+    },
+    {
+      "base_ingredient": {
+        "tag": "forge:gems/diamond"
+      },
+      "count": 9
+    },
+    {
+      "item": "immersiveengineering:grindingdisk"
+    }
+  ],
+  "result": {
+    "item": "ie_hcq_tool_tweaks:drillhead",
+    "nbt": "{drillhead_perm_data:diamond}"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "size": 3,
+  "depth": 3,
+  "tier": 3,
+  "speed": 10,
+  "veinMiningTag": null,
+  "veinMiningSize": null,
+  "attack": 7,
+  "durability": 6000,
+  "repairMaterial": {
+    "item": "minecraft:dragon_breath"
+  },
+  "texture": "immersiveengineering:item/drill_iron",
+  "itemColor": "#CB74A2"
+}

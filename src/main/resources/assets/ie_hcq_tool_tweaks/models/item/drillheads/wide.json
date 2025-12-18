@@ -1,6 +1,0 @@
-{
-    "parent": "minecraft:item/generated",
-    "textures": {
-        "layer0": "ie_hcq_tool_tweaks:item/drillheads/light_red"
-    }
-}

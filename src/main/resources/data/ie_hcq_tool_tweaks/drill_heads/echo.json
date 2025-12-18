@@ -1,0 +1,23 @@
+{
+  "size": 1,
+  "depth": 1,
+  "tier": 3,
+  "speed": 11,
+  "veinMiningTag": "ie_hcq_tool_tweaks:vein_mine_echo",
+  "veinMiningSize": 64,
+  "attack": 6,
+  "durability": 6000,
+  "repairMaterial": [
+    {
+      "item": "minecraft:echo_shard"
+    },
+    {
+      "item": "minecraft:sculk"
+    },
+    {
+      "item": "minecraft:calibrated_sculk_sensor"
+    }
+  ],
+  "texture": "immersiveengineering:item/drill_iron",
+  "itemColor": "#0A4F5F"
+}

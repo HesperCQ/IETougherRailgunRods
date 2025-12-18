@@ -20,9 +20,9 @@ public class ModEventSubscriber {
 	// InterModProcessEvent
 	@SubscribeEvent
 	public static void onInterModProcessEvent(final InterModProcessEvent event) {
-		IEToolTweaks.LOGGER.info("[" + IEToolTweaks.MODID + "] " + "InterModProcess - Start Railgun Projectile Injection");
+		IEToolTweaks.LOGGER.info("InterModProcess - Start Railgun Projectile Injection");
 		ToughRailgunProjectiles.inject();
-		IEToolTweaks.LOGGER.info("[" + IEToolTweaks.MODID + "] " + "InterModProcess - End Railgun Projectile Injection");
+		IEToolTweaks.LOGGER.info("InterModProcess - End Railgun Projectile Injection");
 
 	}
 

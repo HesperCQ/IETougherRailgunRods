@@ -1,0 +1,25 @@
+{
+  "type": "immersiveengineering:blueprint",
+  "category": "tool_tweaks_drill_heads_adv",
+  "inputs": [
+    {
+      "item": "minecraft:sculk_catalyst"
+    },
+    {
+      "item": "minecraft:ward_armor_trim_smithing_template"
+    },
+    {
+      "base_ingredient": {
+        "item": "minecraft:echo_shard"
+      },
+      "count": 3
+    },
+    {
+      "item": "minecraft:calibrated_sculk_sensor"
+    }
+  ],
+  "result": {
+    "item": "ie_hcq_tool_tweaks:drillhead",
+    "nbt": "{drillhead_perm_data:echo}"
+  }
+}

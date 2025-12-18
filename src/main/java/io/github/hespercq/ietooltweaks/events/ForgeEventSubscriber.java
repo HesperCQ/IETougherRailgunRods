@@ -13,6 +13,6 @@ public class ForgeEventSubscriber {
 	@SubscribeEvent
 	public static void onAddReloadListener(final AddReloadListenerEvent event) {
 		event.addListener(new DataDrillHeadPermsDataLoader());
-		IEToolTweaks.LOGGER.info(IEToolTweaks.MODID + " - Reload Listeners Registered");
+		IEToolTweaks.LOGGER.info("Reload Listeners Registered");
 	}
 }

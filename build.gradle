@@ -129,6 +129,8 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly fg.deobf("curse.maven:immersive-engineering-231951:6206989")
+    compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-1.20.1-common-api:${jei_version}")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -148,7 +150,8 @@ tasks.named('processResources', ProcessResources).configure {
             version: version,
             mod_authors: mod_authors,
             mod_description: mod_description,
-            ie_version: ie_version
+            ie_version: ie_version,
+            jei_version: jei_version
     ]
     inputs.properties replaceProperties
 

@@ -1,6 +1,13 @@
 {
+    "desc.ie_hcq_tool_tweaks.flavour.drillhead.vein" : "Mines up to %1$s connected blocks of %2$s",
+    
+    
     "item.ie_hcq_tool_tweaks.drillhead" : "Drill Head",
-    "item.ie_hcq_tool_tweaks.drillhead.invalid" : "Invalid Drill Head",
-    "item.ie_hcq_tool_tweaks.drillhead.wide" : "Wide Drill Head",
-    "item.ie_hcq_tool_tweaks.drillhead.cube" : "Cube Drill Head"
+    "item.ie_hcq_tool_tweaks.drillhead.debug" : "Debug Drill Head",
+    "item.ie_hcq_tool_tweaks.drillhead.diamond" : "Diamond Coated Drill Head",
+    "item.ie_hcq_tool_tweaks.drillhead.end" : "Pneumatic Drill Head",
+    "item.ie_hcq_tool_tweaks.drillhead.netherite" : "Netherite Drill Head",
+    "item.ie_hcq_tool_tweaks.drillhead.echo" : "Echo Drill Head",
+    
+    "tag.block.ie_hcq_tool_tweaks.vein_mine_echo" : "Ores & Sculk"
 }
