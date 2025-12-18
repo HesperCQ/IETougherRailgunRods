@@ -5,6 +5,16 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tier;
 
-public record DataDrillHeadPerms(String id, String name, TagKey<Item> repairMaterial, int drillSize, int drillDepth, Tier drillLevel, float drillSpeed, int drillAttack, int maxDamage,
-		ResourceLocation texture, int itemColor, float itemModelOverrideId) {
+public record DataDrillHeadPerms(
+	String id,
+	String name,
+	TagKey<Item> repairMaterialTag,
+	int drillSize,
+	int drillDepth,
+	Tier drillLevel,
+	float drillSpeed,
+	boolean veinMining,
+	int drillAttack,
+	int maxDamage,
+	ResourceLocation texture, int itemColor, float itemModelOverrideId) {
 }

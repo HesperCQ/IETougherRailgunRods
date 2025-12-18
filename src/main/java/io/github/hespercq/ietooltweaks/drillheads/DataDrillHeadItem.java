@@ -6,6 +6,7 @@ import blusunrize.immersiveengineering.common.items.IEBaseItem;
 import blusunrize.immersiveengineering.common.register.IEItems.Tools;
 import blusunrize.immersiveengineering.common.util.ItemNBTHelper;
 import blusunrize.immersiveengineering.common.util.Utils;
+import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,6 +15,8 @@ import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
@@ -29,9 +32,16 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
 
+import java.util.ArrayDeque;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+import java.util.function.Predicate;
 
 public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
+	public static final TagKey<Block> VEIN_MINE_BLOCKS_TAG = BlockTags.create(ResourceLocation.fromNamespaceAndPath(IEToolTweaks.MODID, "vein_mine_blocks"));
+
 	public DataDrillHeadItem() {
 		super(new Properties().stacksTo(1));
 	}
@@ -75,7 +85,7 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 	}
 
 	public boolean isValidRepairItem(ItemStack stack, ItemStack material) {
-		return material.is(getPermData(stack).repairMaterial());
+		return material.is(getPermData(stack).repairMaterialTag());
 	}
 
 	// Custom Data for Item rendering
@@ -138,18 +148,23 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 	}
 
 	@Override
-	// Adds Fix for depth and even numbers
+	// Adds Fix for depth and even numbers & vein mining
 	public ImmutableList<BlockPos> getExtraBlocksDug(ItemStack head, Level world, Player player, HitResult rtr) {
+		// Exit on no Block
 		if (!(rtr instanceof BlockHitResult brtr)) {
 			return ImmutableList.of();
 		}
+
+		// Get drill params
 		DataDrillHeadPerms dh_type = getPermData(head);
 		int diameter = dh_type.drillSize();
 		int depth = dh_type.drillDepth();
 
+		// Get Start Block Info
 		Direction side = brtr.getDirection();
 		BlockPos startPos = brtr.getBlockPos();
 		BlockState state = world.getBlockState(startPos);
+
 		float maxHardness = 1.0F;
 		if (!state.isAir()) {
 			maxHardness = state.getDestroyProgress(player, world, startPos) * 0.4F;
@@ -157,6 +172,17 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 		if (maxHardness < 0.0F) {
 			maxHardness = 0.0F;
 		}
+
+		// Get more start block info
+		boolean canHarvestStart = state.getBlock().canHarvestBlock(world.getBlockState(startPos), world, startPos, player);
+		boolean drillMatStart = ((DrillItem) Tools.DRILL.get()).isEffective(ItemStack.EMPTY, state);
+		boolean hardnessStart = state.getDestroyProgress(player, world, startPos) >= maxHardness;
+
+		// Get vein blocks instead if drill and block fit
+		if (dh_type.veinMining() && state.is(VEIN_MINE_BLOCKS_TAG) && canHarvestStart && drillMatStart && hardnessStart) {
+			return getBlocksInVein(head, world, player, brtr);
+		}
+
 		if (diameter % 2 == 0) {
 			float hx = (float) brtr.getLocation().x - (float) brtr.getBlockPos().getX();
 			float hy = (float) brtr.getLocation().y - (float) brtr.getBlockPos().getY();
@@ -203,6 +229,43 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 			}
 		}
 		return b.build();
+	}
+
+	public ImmutableList<BlockPos> getBlocksInVein(ItemStack head, Level world, Player player, BlockHitResult brtr) {
+		BlockPos startPos = brtr.getBlockPos();
+		BlockState startState = world.getBlockState(startPos);
+		Block targetBlock = startState.getBlock();
+
+		// Predicate: only vein-mine ores or the same block type
+		Predicate<BlockPos> isSameVein = pos -> {
+			BlockState state = world.getBlockState(pos);
+			Block block = state.getBlock();
+			// Optionally check harvestability and tool effectiveness
+			return block == targetBlock && !state.isAir();
+		};
+
+		// BFS for vein mining
+		Set<BlockPos> visited = new HashSet<>();
+		Queue<BlockPos> queue = new ArrayDeque<>();
+		queue.add(startPos);
+		visited.add(startPos);
+
+		int maxVeinSize = 128; // Limit to prevent runaway scans //TODO: Add to config
+
+		while (!queue.isEmpty() && visited.size() < maxVeinSize) {
+			BlockPos current = queue.poll();
+
+			for (Direction dir : Direction.values()) {
+				BlockPos neighbor = current.relative(dir);
+				if (!visited.contains(neighbor) && isSameVein.test(neighbor)) {
+					visited.add(neighbor);
+					queue.add(neighbor);
+				}
+			}
+		}
+		// Remove the original block if you don’t want it mined twice
+		visited.remove(startPos);
+		return ImmutableList.copyOf(visited);
 	}
 
 	// #endregion ===================================================================================================

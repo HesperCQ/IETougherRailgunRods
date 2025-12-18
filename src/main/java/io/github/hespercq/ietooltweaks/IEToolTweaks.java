@@ -39,7 +39,7 @@ public class IEToolTweaks {
 	// Tough Railgun Shot - Registration
 	public static final RegistryObject<EntityType<ToughRailgunShotEntity>> TOUGH_RAILGUN_SHOT = ENTITY_TYPES.register("tough_railgun_shot",
 			() -> TOUGH_RAILGUN_SHOT_ENTIY_BUILDER.build(MODID + ":" + "tough_railgun_shot"));
-			
+				
 	// Mod bus
 	// ================================================================================================
 	public IEToolTweaks(FMLJavaModLoadingContext context) {

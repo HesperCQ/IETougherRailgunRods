@@ -11,11 +11,13 @@ import com.google.gson.JsonObject;
 
 import blusunrize.immersiveengineering.ImmersiveEngineering;
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraftforge.common.Tags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 
@@ -23,10 +25,11 @@ public class DataDrillHeadPermsDataLoader extends SimpleJsonResourceReloadListen
 	// Data for constructor
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	private static final String FOLDER = "drillheads";
+	private static final ResourceLocation DEFAULT_REPAIR_MATERIAL_TAG_RL = ResourceLocation.fromNamespaceAndPath(IEToolTweaks.MODID, "default_repair_materials");
 
 	// Constants
 	public static final Map<Integer, Tier> TIER_MAP = Map.of(0, Tiers.WOOD, 1, Tiers.STONE, 2, Tiers.IRON, 3, Tiers.DIAMOND, 4, Tiers.NETHERITE);
-	public static final DataDrillHeadPerms INVALID = new DataDrillHeadPerms("invalid", "invalid", Tags.Items.INGOTS_IRON, 1, 1, Tiers.WOOD, 1, 1, 1,
+	public static final DataDrillHeadPerms INVALID = new DataDrillHeadPerms("invalid", "invalid", TagKey.create(Registries.ITEM, DEFAULT_REPAIR_MATERIAL_TAG_RL), 1, 1, Tiers.WOOD, 1, false, 1, 1,
 			ResourceLocation.fromNamespaceAndPath(ImmersiveEngineering.MODID, "item/drill_diesel"), 0xFFFFFF, 0);
 
 	// Stores loaded drill head permanents
@@ -79,7 +82,12 @@ public class DataDrillHeadPermsDataLoader extends SimpleJsonResourceReloadListen
 
 				ResourceLocation texture = safeRL(obj, "texture", ImmersiveEngineering.rl("item/drill_diesel"));
 
-				DataDrillHeadPerms perm = new DataDrillHeadPerms(id, name, Tags.Items.INGOTS_IRON, drillSize, drillDepth, drillLevel, drillSpeed, drillAttack, maxDamage, texture, itemColor, itemModelOverrideId);
+				TagKey<Item> repairMaterialTag = TagKey.create(Registries.ITEM, safeTagRL(obj, "repairMaterialTag", DEFAULT_REPAIR_MATERIAL_TAG_RL));
+
+				boolean veinMining = getBooleanOr(obj, "veinMining", false);
+
+				DataDrillHeadPerms perm = new DataDrillHeadPerms(id, name, repairMaterialTag, drillSize, drillDepth, drillLevel, drillSpeed, veinMining, drillAttack, maxDamage, texture, itemColor,
+						itemModelOverrideId);
 
 				DRILL_HEAD_PERMS.put(id, perm);
 			}
@@ -93,6 +101,10 @@ public class DataDrillHeadPermsDataLoader extends SimpleJsonResourceReloadListen
 
 	private int getIntOr(JsonObject obj, String key, int fallback) {
 		return obj.has(key) ? obj.get(key).getAsInt() : fallback;
+	}
+
+	private boolean getBooleanOr(JsonObject obj, String key, boolean fallback) {
+		return obj.has(key) ? obj.get(key).getAsBoolean() : fallback;
 	}
 
 	private float getFloatOr(JsonObject obj, String key, float fallback) {
@@ -119,5 +131,20 @@ public class DataDrillHeadPermsDataLoader extends SimpleJsonResourceReloadListen
 			return fallback;
 		String s = obj.get(key).getAsString();
 		return ResourceLocation.isValidResourceLocation(s) ? ResourceLocation.tryParse(s) : fallback;
+	}
+
+	private ResourceLocation safeTagRL(JsonObject obj, String key, ResourceLocation fallback) {
+		if (!obj.has(key))
+			return fallback;
+
+		String s = obj.get(key).getAsString();
+		ResourceLocation rl = ResourceLocation.tryParse(s);
+
+		if (rl == null) {
+			IEToolTweaks.LOGGER.warn("Invalid ResourceLocation '{}' for key '{}'", s, key);
+			return fallback;
+		}
+
+		return rl;
 	}
 }
