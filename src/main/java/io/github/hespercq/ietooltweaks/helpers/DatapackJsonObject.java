@@ -101,4 +101,32 @@ public class DatapackJsonObject {
 		}
 	}
 
+	public double getDoubleOr(String key, double fallback) {
+		if (!obj.has(key) || obj.get(key).isJsonNull()) {
+			return fallback;
+		}
+
+		try {
+			return obj.get(key).getAsDouble();
+		}
+		catch (Exception e) {
+			IEToolTweaks.LOGGER.warn("Invalid double value '{}' for key '{}'", obj.get(key), key);
+			return fallback;
+		}
+	}
+
+	public String getStringOr(String key, String fallback) {
+		if (!obj.has(key) || obj.get(key).isJsonNull()) {
+			return fallback;
+		}
+
+		try {
+			return obj.get(key).getAsString();
+		}
+		catch (Exception e) {
+			IEToolTweaks.LOGGER.warn("Invalid string value '{}' for key '{}'", obj.get(key), key);
+			return fallback;
+		}
+	}
+
 }

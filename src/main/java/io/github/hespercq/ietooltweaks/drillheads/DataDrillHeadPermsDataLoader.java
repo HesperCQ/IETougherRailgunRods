@@ -102,10 +102,4 @@ public class DataDrillHeadPermsDataLoader extends SimpleJsonResourceReloadListen
 		});
 
 	}
-
-	/*
-	 * private ResourceLocation safeRL(JsonObject obj, String key, ResourceLocation fallback) { if (!obj.has(key)) return fallback; String s = obj.get(key).getAsString(); return
-	 * ResourceLocation.isValidResourceLocation(s) ? ResourceLocation.tryParse(s) : fallback; }
-	 */
-
 }

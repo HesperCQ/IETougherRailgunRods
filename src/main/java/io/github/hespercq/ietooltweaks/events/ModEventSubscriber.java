@@ -3,7 +3,6 @@ package io.github.hespercq.ietooltweaks.events;
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import io.github.hespercq.ietooltweaks.drillheads.DataDrillHeadItem;
 import io.github.hespercq.ietooltweaks.drillheads.DataDrillHeadPermsDataLoader;
-import io.github.hespercq.ietooltweaks.railgunrods.ToughRailgunProjectiles;
 import io.github.hespercq.ietooltweaks.railgunrods.ToughRailgunShotRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -12,19 +11,14 @@ import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 
 @Mod.EventBusSubscriber(modid = IEToolTweaks.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModEventSubscriber {
 
-	// InterModProcessEvent
-	@SubscribeEvent
-	public static void onInterModProcessEvent(final InterModProcessEvent event) {
-		IEToolTweaks.LOGGER.info("InterModProcess - Start Railgun Projectile Injection");
-		ToughRailgunProjectiles.inject();
-		IEToolTweaks.LOGGER.info("InterModProcess - End Railgun Projectile Injection");
-
-	}
+	/*
+	 * InterModProcessEvent
+	 * @SubscribeEvent public static void onInterModProcessEvent(final InterModProcessEvent event) { }
+	 */
 
 	// EntityRenderersEvent.RegisterRenderers
 	@SubscribeEvent

@@ -1,0 +1,12 @@
+{
+  "ammo": {
+    "item": "immersiveengineering:graphite_electrode"
+  },
+  "chargeDuration": 400,
+  "velocity": 1,
+  "accuracy": 0,
+  "isValidForTurret": true,
+  "rodDamage": 300,
+  "rodGravity": 0.9,
+  "isAbstractArrow": false
+}
