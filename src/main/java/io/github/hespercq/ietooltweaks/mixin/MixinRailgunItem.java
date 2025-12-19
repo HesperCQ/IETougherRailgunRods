@@ -3,12 +3,13 @@ package io.github.hespercq.ietooltweaks.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import blusunrize.immersiveengineering.common.config.IEServerConfig;
 import blusunrize.immersiveengineering.common.items.RailgunItem;
 import blusunrize.immersiveengineering.common.register.IEItems.Ingredients;
 import blusunrize.immersiveengineering.common.util.IESounds;
+import blusunrize.immersiveengineering.common.util.ItemNBTHelper;
 import blusunrize.immersiveengineering.common.util.Utils;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,10 +17,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.energy.IEnergyStorage;
 import blusunrize.immersiveengineering.api.shader.ShaderRegistry;
 import blusunrize.immersiveengineering.api.shader.ShaderRegistry.ShaderAndCase;
 import blusunrize.immersiveengineering.api.tool.RailgunHandler;
 import blusunrize.immersiveengineering.api.tool.RailgunHandler.IRailgunProjectile;
+import blusunrize.immersiveengineering.api.utils.CapabilityUtils;
 import blusunrize.immersiveengineering.api.utils.ItemUtils;
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import io.github.hespercq.ietooltweaks.railgunrods.DataRailgunProjectile;
@@ -27,14 +31,27 @@ import io.github.hespercq.ietooltweaks.railgunrods.DataRailgunProjectile;
 @Mixin(RailgunItem.class)
 public abstract class MixinRailgunItem {
 
-    /*
-     * @Redirect(method = "playChargeSound(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;)V", at = @At(value = "INVOKE", target =
-     * "Lblusunrize/immersiveengineering/common/items/RailgunItem;getChargeTime(Lnet/minecraft/world/item/ItemStack;)I", remap = false), remap = false) private static int
-     * redirectPlayChargeSoundGetChargeTime(RailgunItem instance, // "this" reference ItemStack stack, // argument passed to getChargeTime LivingEntity living, // from playChargeSound method ItemStack
-     * railgun // from playChargeSound method ) { IEToolTweaks.LOGGER.info("Mixin playChargeSound getChargeTime called!"); return getEntityChargeTime(stack, living); }
-     */
 
-    //WORKS
+    // TODO: Rethink Sound
+    // TODO: Add Colour logic
+    // TODO: Add blaze & Ender Logic
+
+    // playChargSound - Missing Scaling by speed kinda akward
+    @Inject(method = "playChargeSound(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;)V", at = @At("HEAD"), cancellable = true, remap = false)
+    private static void injectPlayChargeSound(LivingEntity living, ItemStack railgun, CallbackInfo ci) {
+        IEToolTweaks.LOGGER.info("chargeSound!");
+        int customChargeTime = getEntityChargeTime(railgun, living);
+        int sampleTime = 20;
+        float pitch = sampleTime / customChargeTime;
+        float volume = Math.min(1.5f + (0.25f / pitch), 5.0f);
+
+        living.level().playSound(null, living.getX(), living.getY(), living.getZ(), customChargeTime <= 20 ? IESounds.chargeFast.get() : IESounds.chargeSlow.get(), SoundSource.PLAYERS, volume, pitch);
+
+        ci.cancel(); // prevent the original method from running
+    }
+
+     // TODO: Rethink Sound - Maybe start lightning noises earlier for large charge times
+    // onUseTick - Works
     @Inject(method = "onUseTick(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;I)V", at = @At("HEAD"), cancellable = true)
     private void injectOnUseTick(Level level, LivingEntity user, ItemStack stack, int count, CallbackInfo ci) {
         RailgunItem railgunItem = (RailgunItem) (Object) this;
@@ -55,12 +72,41 @@ public abstract class MixinRailgunItem {
         ci.cancel(); // prevent the original method from running
     }
 
-    /*
-     * @Redirect(method = "releaseUsing(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;I)V", at = @At(value = "INVOKE", target =
-     * "Lblusunrize/immersiveengineering/common/items/RailgunItem;getChargeTime(Lnet/minecraft/world/item/ItemStack;)I", remap = false), remap = false) private int
-     * redirectReleaseUsingGetChargeTime(ItemStack stack, // argument passed to getChargeTime ItemStack usedStack, // original calling method args Level world, LivingEntity user, int timeLeft) {
-     * IEToolTweaks.LOGGER.info("Mixin releaseUsing"); return getEntityChargeTime(stack, user); }
-     */
+    // releaseUsing - should Work
+    @Inject(method = "releaseUsing(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;I)V", at = @At("HEAD"), cancellable = true)
+    private void injectReleaseUsing(ItemStack stack, Level world, LivingEntity user, int timeLeft, CallbackInfo ci) {
+        IEToolTweaks.LOGGER.info("release!");
+        RailgunItem railgunItem = (RailgunItem) (Object) this; // cast to RailgunItem
+
+        if (!world.isClientSide() && user instanceof Player player) {
+            int inUse = railgunItem.getUseDuration(stack) - timeLeft;
+            ItemNBTHelper.remove(stack, "inUse");
+
+            int customChargeTime = getEntityChargeTime(stack, user);
+            if (inUse < customChargeTime) {
+                IEToolTweaks.LOGGER.info("abort!");
+                ci.cancel(); // stop vanilla method
+                return;
+            }
+
+            int consumption = IEServerConfig.TOOLS.railgun_consumption.get();
+            float energyMod = 1 + railgunItem.getUpgrades(stack).getFloat("consumption");
+            consumption = (int) (consumption * energyMod);
+
+            IEnergyStorage energy = CapabilityUtils.getPresentCapability(stack, ForgeCapabilities.ENERGY);
+            if (energy.extractEnergy(consumption, true) == consumption) {
+                ItemStack ammo = RailgunItem.findAmmo(stack, player);
+                if (!ammo.isEmpty()) {
+                    ItemStack ammoConsumed = ammo.split(1);
+                    RailgunItem.fireProjectile(stack, world, user, ammoConsumed);
+                    energy.extractEnergy(consumption, false);
+                }
+            }
+        }
+
+        ci.cancel(); // stop vanilla method
+    }
+
     // ##########################################################################################################
     // #region HELPER
     private static int getEntityChargeTime(ItemStack stack, LivingEntity entity) {
