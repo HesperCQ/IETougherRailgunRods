@@ -31,7 +31,6 @@ import io.github.hespercq.ietooltweaks.railgunrods.DataRailgunProjectile;
 @Mixin(RailgunItem.class)
 public abstract class MixinRailgunItem {
 
-
     // TODO: Rethink Sound
     // TODO: Add Colour logic
     // TODO: Add blaze & Ender Logic
@@ -40,17 +39,17 @@ public abstract class MixinRailgunItem {
     @Inject(method = "playChargeSound(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;)V", at = @At("HEAD"), cancellable = true, remap = false)
     private static void injectPlayChargeSound(LivingEntity living, ItemStack railgun, CallbackInfo ci) {
         IEToolTweaks.LOGGER.info("chargeSound!");
-        int customChargeTime = getEntityChargeTime(railgun, living);
-        int sampleTime = 20;
+        float customChargeTime = getEntityChargeTime(railgun, living);
+        float sampleTime = customChargeTime < 21 ? 30 : 20;
         float pitch = sampleTime / customChargeTime;
         float volume = Math.min(1.5f + (0.25f / pitch), 5.0f);
 
-        living.level().playSound(null, living.getX(), living.getY(), living.getZ(), customChargeTime <= 20 ? IESounds.chargeFast.get() : IESounds.chargeSlow.get(), SoundSource.PLAYERS, volume, pitch);
+        living.level().playSound(null, living.getX(), living.getY(), living.getZ(), customChargeTime < 21 ? IESounds.chargeFast.get() : IESounds.chargeSlow.get(), SoundSource.PLAYERS, volume, pitch);
 
         ci.cancel(); // prevent the original method from running
     }
 
-     // TODO: Rethink Sound - Maybe start lightning noises earlier for large charge times
+    // TODO: Rethink Sound - Maybe start lightning noises earlier for large charge times currently lightning at 75 %
     // onUseTick - Works
     @Inject(method = "onUseTick(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;I)V", at = @At("HEAD"), cancellable = true)
     private void injectOnUseTick(Level level, LivingEntity user, ItemStack stack, int count, CallbackInfo ci) {
@@ -59,7 +58,7 @@ public abstract class MixinRailgunItem {
         int inUse = railgunItem.getUseDuration(stack) - count;
         int customChargeTime = getEntityChargeTime(stack, user);
 
-        if (inUse > customChargeTime && inUse % 20 == user.getRandom().nextInt(20)) {
+        if (inUse > (int) (customChargeTime * 0.75) && inUse % 20 == user.getRandom().nextInt(20)) {
             user.level().playSound(null, user.getX(), user.getY(), user.getZ(), IESounds.spark.get(), SoundSource.PLAYERS, 0.8f + 0.2f * user.getRandom().nextFloat(),
                     0.5f + 0.5f * user.getRandom().nextFloat());
 
