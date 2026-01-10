@@ -40,11 +40,11 @@ public abstract class MixinRailgunItem {
     private static void injectPlayChargeSound(LivingEntity living, ItemStack railgun, CallbackInfo ci) {
         IEToolTweaks.LOGGER.info("chargeSound!");
         float customChargeTime = getEntityChargeTime(railgun, living);
-        float sampleTime = customChargeTime < 21 ? 30 : 20;
-        float pitch = sampleTime / customChargeTime;
-        float volume = Math.min(1.5f + (0.25f / pitch), 5.0f);
+        //float sampleTime = customChargeTime < 21 ? 20 : 40;
+        // float pitch = sampleTime / customChargeTime;
+        // float volume = Math.min(1.5f + (0.5f / pitch), 5.0f);
 
-        living.level().playSound(null, living.getX(), living.getY(), living.getZ(), customChargeTime < 21 ? IESounds.chargeFast.get() : IESounds.chargeSlow.get(), SoundSource.PLAYERS, volume, pitch);
+        living.level().playSound(null, living.getX(), living.getY(), living.getZ(), customChargeTime < 21 ? IESounds.chargeFast.get() : IESounds.chargeSlow.get(), SoundSource.PLAYERS, 1.5f, 1);
 
         ci.cancel(); // prevent the original method from running
     }
@@ -58,7 +58,7 @@ public abstract class MixinRailgunItem {
         int inUse = railgunItem.getUseDuration(stack) - count;
         int customChargeTime = getEntityChargeTime(stack, user);
 
-        if (inUse > (int) (customChargeTime * 0.75) && inUse % 20 == user.getRandom().nextInt(20)) {
+        if (inUse >  Math.min((int)customChargeTime, 40) && inUse % 20 == user.getRandom().nextInt(20)) {
             user.level().playSound(null, user.getX(), user.getY(), user.getZ(), IESounds.spark.get(), SoundSource.PLAYERS, 0.8f + 0.2f * user.getRandom().nextFloat(),
                     0.5f + 0.5f * user.getRandom().nextFloat());
 
