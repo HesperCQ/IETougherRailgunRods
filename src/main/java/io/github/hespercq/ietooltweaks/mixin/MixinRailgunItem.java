@@ -1,5 +1,6 @@
 package io.github.hespercq.ietooltweaks.mixin;
 
+import org.antlr.v4.parse.GrammarTreeVisitor.channelSpec_return;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -11,6 +12,7 @@ import blusunrize.immersiveengineering.common.register.IEItems.Ingredients;
 import blusunrize.immersiveengineering.common.util.IESounds;
 import blusunrize.immersiveengineering.common.util.ItemNBTHelper;
 import blusunrize.immersiveengineering.common.util.Utils;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -31,7 +33,6 @@ import io.github.hespercq.ietooltweaks.railgunrods.DataRailgunProjectile;
 @Mixin(RailgunItem.class)
 public abstract class MixinRailgunItem {
 
-    // TODO: Rethink Sound
     // TODO: Add Colour logic
     // TODO: Add blaze & Ender Logic
 
@@ -40,11 +41,19 @@ public abstract class MixinRailgunItem {
     private static void injectPlayChargeSound(LivingEntity living, ItemStack railgun, CallbackInfo ci) {
         IEToolTweaks.LOGGER.info("chargeSound!");
         float customChargeTime = getEntityChargeTime(railgun, living);
-        //float sampleTime = customChargeTime < 21 ? 20 : 40;
-        // float pitch = sampleTime / customChargeTime;
-        // float volume = Math.min(1.5f + (0.5f / pitch), 5.0f);
+        float pitch = 1.0f;
+        float sampleTime = customChargeTime < 40 ? 20.0f : 35.0f;
+        if (customChargeTime < 10) { // Do not play charge up sound as pitch would be to high
+            ci.cancel();
+            return;
+        }
+        if (customChargeTime < 20) { // Make charge sound shorter if shorter than normal short sound
+            pitch = sampleTime / customChargeTime;
+        }
+        double varianceMultiplier = 1 + (0.03 * (Math.random() - 0.5)); // +/- 3%
+        pitch = (float) (pitch * varianceMultiplier);
 
-        living.level().playSound(null, living.getX(), living.getY(), living.getZ(), customChargeTime < 21 ? IESounds.chargeFast.get() : IESounds.chargeSlow.get(), SoundSource.PLAYERS, 1.5f, 1);
+        living.level().playSound(null, living.getX(), living.getY(), living.getZ(), customChargeTime < 40 ? IESounds.chargeFast.get() : IESounds.chargeSlow.get(), SoundSource.PLAYERS, 1.5f, pitch);
 
         ci.cancel(); // prevent the original method from running
     }
@@ -56,9 +65,13 @@ public abstract class MixinRailgunItem {
         RailgunItem railgunItem = (RailgunItem) (Object) this;
 
         int inUse = railgunItem.getUseDuration(stack) - count;
-        int customChargeTime = getEntityChargeTime(stack, user);
 
-        if (inUse >  Math.min((int)customChargeTime, 40) && inUse % 20 == user.getRandom().nextInt(20)) {
+        // Get Custom data
+        int customChargeTime = getEntityChargeTime(stack, user);
+        float sampleTime = customChargeTime < 40 ? 20.0f : 35.0f;
+
+        // Do Stuff after sampleTime is over
+        if (inUse > sampleTime && inUse % 20 == user.getRandom().nextInt(20)) {
             user.level().playSound(null, user.getX(), user.getY(), user.getZ(), IESounds.spark.get(), SoundSource.PLAYERS, 0.8f + 0.2f * user.getRandom().nextFloat(),
                     0.5f + 0.5f * user.getRandom().nextFloat());
 
@@ -67,6 +80,14 @@ public abstract class MixinRailgunItem {
                 Vec3 pos = Utils.getLivingFrontPos(user, 0.4375, user.getBbHeight() * 0.75, ItemUtils.getLivingHand(user, user.getUsedItemHand()), false, 1);
                 shader.registryEntry().getEffectFunction().execute(user.level(), shader.shader(), stack, shader.sCase().getShaderType().toString(), pos, null, 0.0625f);
             }
+        }
+
+        // TODO MAKE THIS CONFIGURABLE VIA CLIENT CONFIG
+        // Play sound when charge time is hit maybe little earlier because reaction time
+        if (inUse == (customChargeTime)) {
+            user.level().playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.NOTE_BLOCK_BELL.get(), // Sound
+                    SoundSource.PLAYERS, 1, // Volume
+                    2.0f - (0.03f * user.getRandom().nextFloat())); // Pitch
         }
         ci.cancel(); // prevent the original method from running
     }
