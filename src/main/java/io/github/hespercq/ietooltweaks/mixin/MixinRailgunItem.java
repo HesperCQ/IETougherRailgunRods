@@ -1,6 +1,5 @@
 package io.github.hespercq.ietooltweaks.mixin;
 
-import org.antlr.v4.parse.GrammarTreeVisitor.channelSpec_return;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,30 +23,27 @@ import net.minecraftforge.energy.IEnergyStorage;
 import blusunrize.immersiveengineering.api.shader.ShaderRegistry;
 import blusunrize.immersiveengineering.api.shader.ShaderRegistry.ShaderAndCase;
 import blusunrize.immersiveengineering.api.tool.RailgunHandler;
-import blusunrize.immersiveengineering.api.tool.RailgunHandler.IRailgunProjectile;
 import blusunrize.immersiveengineering.api.utils.CapabilityUtils;
 import blusunrize.immersiveengineering.api.utils.ItemUtils;
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import io.github.hespercq.ietooltweaks.railgunrods.DataRailgunProjectile;
 
+// TODO: Add mixin for ai -> Cooldown & normal ammo from config?
+
 @Mixin(RailgunItem.class)
 public abstract class MixinRailgunItem {
 
-    // TODO: Add Colour logic
-    // TODO: Add blaze & Ender Logic
-
-    // playChargSound - Missing Scaling by speed kinda akward
     @Inject(method = "playChargeSound(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;)V", at = @At("HEAD"), cancellable = true, remap = false)
     private static void injectPlayChargeSound(LivingEntity living, ItemStack railgun, CallbackInfo ci) {
         IEToolTweaks.LOGGER.info("chargeSound!");
-        float customChargeTime = getEntityChargeTime(railgun, living);
+        float customChargeTime = getProjectileChargeTime(railgun, living);
         float pitch = 1.0f;
         float sampleTime = customChargeTime < 40 ? 20.0f : 35.0f;
         if (customChargeTime < 10) { // Do not play charge up sound as pitch would be to high
             ci.cancel();
             return;
         }
-        if (customChargeTime < 20) { // Make charge sound shorter if shorter than normal short sound
+        if (customChargeTime < 20) { // Make charge sound shorter if custom charge time is shorter than normal short sound
             pitch = sampleTime / customChargeTime;
         }
         double varianceMultiplier = 1 + (0.03 * (Math.random() - 0.5)); // +/- 3%
@@ -58,7 +54,6 @@ public abstract class MixinRailgunItem {
         ci.cancel(); // prevent the original method from running
     }
 
-    // TODO: Rethink Sound - Maybe start lightning noises earlier for large charge times currently lightning at 75 %
     // onUseTick - Works
     @Inject(method = "onUseTick(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;I)V", at = @At("HEAD"), cancellable = true)
     private void injectOnUseTick(Level level, LivingEntity user, ItemStack stack, int count, CallbackInfo ci) {
@@ -67,7 +62,7 @@ public abstract class MixinRailgunItem {
         int inUse = railgunItem.getUseDuration(stack) - count;
 
         // Get Custom data
-        int customChargeTime = getEntityChargeTime(stack, user);
+        int customChargeTime = getProjectileChargeTime(stack, user);
         float sampleTime = customChargeTime < 40 ? 20.0f : 35.0f;
 
         // Do Stuff after sampleTime is over
@@ -102,7 +97,7 @@ public abstract class MixinRailgunItem {
             int inUse = railgunItem.getUseDuration(stack) - timeLeft;
             ItemNBTHelper.remove(stack, "inUse");
 
-            int customChargeTime = getEntityChargeTime(stack, user);
+            int customChargeTime = getProjectileChargeTime(stack, user);
             if (inUse < customChargeTime) {
                 IEToolTweaks.LOGGER.info("abort!");
                 ci.cancel(); // stop vanilla method
@@ -129,28 +124,26 @@ public abstract class MixinRailgunItem {
 
     // ##########################################################################################################
     // #region HELPER
-    private static int getEntityChargeTime(ItemStack stack, LivingEntity entity) {
-        IEToolTweaks.LOGGER.info("getProjectile!");
-        ItemStack ammo;
-        if (entity instanceof Player player) {
-            IEToolTweaks.LOGGER.info("Player!");
-            ammo = RailgunItem.findAmmo(stack, player);
-        }
-        else {
-            ammo = new ItemStack(Ingredients.STICK_STEEL); // Mobs use Steel TODO: Check turret logic
-        }
-        return getProjectileChargeTime(stack, RailgunHandler.getProjectile(ammo));
-    }
-
-    private static int getProjectileChargeTime(ItemStack railgun, IRailgunProjectile projectile) {
+    private static int getProjectileChargeTime(ItemStack railgunItemStack, LivingEntity entity) {
         int baseCharge = 40;
-        if (projectile instanceof DataRailgunProjectile data) {
-            IEToolTweaks.LOGGER.info("Projectile!");
-            IEToolTweaks.LOGGER.info(data.chargeDuration);
+        ItemStack ammo = getAmmoStack(railgunItemStack, entity);
+
+        if (RailgunHandler.getProjectile(ammo) instanceof DataRailgunProjectile data) {
             baseCharge = data.chargeDuration;
         }
-        float speedUpgrade = RailgunItem.getUpgradesStatic(railgun).getFloat("speed");
+        float speedUpgrade = RailgunItem.getUpgradesStatic(railgunItemStack).getFloat("speed");
         return (int) (baseCharge / (1 + speedUpgrade));
+
+    }
+
+    private static ItemStack getAmmoStack(ItemStack railgunItemStack, LivingEntity entity) {
+        if (entity instanceof Player player) {
+            return RailgunItem.findAmmo(railgunItemStack, player);
+        }
+        else {
+            // Mobs use
+            return new ItemStack(Ingredients.STICK_STEEL); // Mobs use Steel TODO: Check turret logic
+        }
     }
     // #endregion
 }

@@ -3,10 +3,10 @@
     "tag": "forge:rods/iron"
   },
   "chargeDuration": 40,
-  "velocity": 20,
-  "accuracy": 0,
+  "speed": 20,
+  "deviation": 0,
   "isValidForTurret": true,
   "rodDamage": 16,
   "rodGravity": 1.25,
-  "isAbstractArrow": false
+  "ignoresArrowSpecificCoding": true
 }

@@ -3,10 +3,10 @@
     "tag": "forge:rods/aluminum"
   },
   "chargeDuration": 40,
-  "velocity": 20,
-  "accuracy": 0,
+  "speed": 20,
+  "deviation": 0,
   "isValidForTurret": true,
   "rodDamage": 10,
   "rodGravity": 1.05,
-  "isAbstractArrow": false
+  "ignoresArrowSpecificCoding": true
 }

@@ -2,11 +2,11 @@
   "ammo": {
     "tag": "forge:rods/steel"
   },
-  "chargeDuration": 5000,
-  "velocity": 20,
-  "accuracy": 0,
+  "chargeDuration": 40,
+  "speed": 20,
+  "deviation": 0,
   "isValidForTurret": true,
   "rodDamage": 24,
   "rodGravity": 1.25,
-  "isAbstractArrow": false
+  "ignoresArrowSpecificCoding": true
 }

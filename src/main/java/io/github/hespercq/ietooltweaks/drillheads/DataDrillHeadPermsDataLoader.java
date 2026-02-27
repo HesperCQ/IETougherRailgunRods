@@ -10,7 +10,7 @@ import com.google.gson.JsonElement;
 
 import blusunrize.immersiveengineering.ImmersiveEngineering;
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
-import io.github.hespercq.ietooltweaks.helpers.DatapackJsonObject;
+import io.github.hespercq.ietooltweaks.helpers.SafeJsonObject;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -58,40 +58,45 @@ public class DataDrillHeadPermsDataLoader extends SimpleJsonResourceReloadListen
 
 		jsons.forEach((rl, json) -> {
 			try {
-				DatapackJsonObject obj = new DatapackJsonObject(json.getAsJsonObject());
+				SafeJsonObject obj = new SafeJsonObject(json.getAsJsonObject());
 
 				String id = rl.getPath();
 				String name = id.contains("/") ? id.substring(id.lastIndexOf('/') + 1) : id;
 
 				// Mining Area
-				int drillSize = obj.getIntOr("size", 1);
-				int drillDepth = obj.getIntOr("depth", 1);
+				int drillSize = obj.getInt("size").orElse(1);
+				int drillDepth = obj.getInt("depth").orElse(1);
 
 				// Mining Level
-				int tierInt = obj.getIntOr("tier", 1);
+				int tierInt = obj.getInt("tier").orElse(1);
 				Tier drillLevel = TIER_MAP.getOrDefault(tierInt, Tiers.WOOD);
 
 				// Mining Speed
-				float drillSpeed = obj.getFloatOr("speed", 1f);
+				float drillSpeed = obj.getFloat("speed").orElse(1f);
 
 				// Vein Mining
-				int veinMiningSize = obj.getIntOr("veinMiningSize", 0);
-				ResourceLocation veinMiningTagRL = obj.getResourceLocationOr("veinMiningTag", null);
+				int veinMiningSize = obj.getInt("veinMiningSize").orElse(0);
+
+				ResourceLocation veinMiningTagRL = obj.getResourceLocation("veinMiningTag").orElse(null);
+
 				TagKey<Block> veinMiningTag = veinMiningTagRL != null ? TagKey.create(Registries.BLOCK, veinMiningTagRL) : null;
 
 				// Attack, Durability & Repair
-				int drillAttack = obj.getIntOr("attack", 1);
-				int maxDamage = obj.getIntOr("durability", 100);
-				Ingredient repairMaterial = obj.getIngredientOr("repairMaterial", Ingredient.EMPTY);
+				int drillAttack = obj.getInt("attack").orElse(1);
+				int maxDamage = obj.getInt("durability").orElse(100);
+
+				Ingredient repairMaterial = obj.getIngredient("repairMaterial").orElse(Ingredient.EMPTY);
 
 				// Render stuff
-				int itemColor = obj.getIntOr("itemColor", 0xFFFFFF);
-				float itemModelOverrideId = obj.getFloatOr("itemModelOverrideId", 0.0f);
-				ResourceLocation texture = obj.getResourceLocationOr("texture", ImmersiveEngineering.rl("item/drill_diesel"));
+				int itemColor = obj.getInt("itemColor").orElse(0xFFFFFF);
+				float itemModelOverrideId = obj.getFloat("itemModelOverrideId").orElse(0.0f);
+
+				ResourceLocation texture = obj.getResourceLocation("texture").orElse(ImmersiveEngineering.rl("item/drill_diesel"));
 
 				// Build & add to Map
 				DataDrillHeadPerms perm = new DataDrillHeadPerms(id, name, drillSize, drillDepth, drillLevel, drillSpeed, veinMiningSize, veinMiningTag, drillAttack, maxDamage, repairMaterial,
 						texture, itemColor, itemModelOverrideId);
+
 				DRILL_HEAD_PERMS.put(id, perm);
 
 				IEToolTweaks.LOGGER.info("Loaded drillhead '{}'", rl);

@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import blusunrize.immersiveengineering.common.items.RailgunItem;
 import blusunrize.immersiveengineering.common.register.IEItems.Ingredients;
-import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import io.github.hespercq.ietooltweaks.railgunrods.DataRailgunProjectile;
 import net.minecraft.client.gui.Font.DisplayMode;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -63,7 +62,6 @@ public abstract class MixinItemOverlayUtils {
 	// ##########################################################################################################
 	// #region HELPER
 	private static int getEntityChargeTime(ItemStack stack, LivingEntity entity) {
-		IEToolTweaks.LOGGER.info("getProjectile!");
 		ItemStack ammo;
 		if (entity instanceof Player player) {
 			ammo = RailgunItem.findAmmo(stack, player);
@@ -77,7 +75,6 @@ public abstract class MixinItemOverlayUtils {
 	private static int getProjectileChargeTime(ItemStack railgun, IRailgunProjectile projectile) {
 		int baseCharge = 40;
 		if (projectile instanceof DataRailgunProjectile data) {
-			IEToolTweaks.LOGGER.info(data.chargeDuration);
 			baseCharge = data.chargeDuration;
 		}
 		float speedUpgrade = RailgunItem.getUpgradesStatic(railgun).getFloat("speed");

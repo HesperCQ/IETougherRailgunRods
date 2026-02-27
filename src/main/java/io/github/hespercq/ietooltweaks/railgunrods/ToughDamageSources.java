@@ -17,5 +17,4 @@ public class ToughDamageSources {
 		final Registry<DamageType> registry = shot.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
 		return new DamageSource(registry.getHolderOrThrow(type), shot, shooter);
 	}
-	
 }
