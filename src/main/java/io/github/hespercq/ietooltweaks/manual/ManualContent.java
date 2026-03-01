@@ -55,7 +55,7 @@ public class ManualContent {
 
 			// Start new page
 			text.append("<np>");
-			text.append(Component.translatable("item.ie_hcq_tool_tweaks.drillhead".concat(drillHeadVariant.name())).getString());
+			text.append(Component.translatable("item.ie_hcq_tool_tweaks.drillhead.".concat(drillHeadVariant.name())).getString());
 			text.append("\n");
 			text.append(Component.translatable("desc.immersiveengineering.flavour.drillhead.size", new Object[] { drillHeadVariant.miningSize(), drillHeadVariant.miningDepth() }).getString());
 			text.append("\n");
