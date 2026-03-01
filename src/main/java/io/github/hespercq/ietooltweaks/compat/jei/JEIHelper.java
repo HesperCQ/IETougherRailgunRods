@@ -1,8 +1,8 @@
 package io.github.hespercq.ietooltweaks.compat.jei;
 
 import blusunrize.immersiveengineering.api.Lib;
-import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import io.github.hespercq.ietooltweaks.drillheads.DataDrillHeadItem;
+import io.github.hespercq.ietooltweaks.register.IEToolTweaksItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
@@ -20,10 +20,7 @@ public class JEIHelper implements IModPlugin {
 
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistration subtypeRegistry) {
-		subtypeRegistry.registerSubtypeInterpreter(
-			VanillaTypes.ITEM_STACK,
-			IEToolTweaks.DRILLHEAD.get(),
-			(stack, $) -> DataDrillHeadItem.getPermData(stack).name());
+		subtypeRegistry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, IEToolTweaksItems.DRILLHEAD.get(), (stack, $) -> DataDrillHeadItem.getPermData(stack).name());
 	}
 
 }

@@ -1,0 +1,8 @@
+{
+    "autoload_priority": 3,
+    "ie_hcq_tool_tweaks:tool_tweaks": {
+        "category_weight": 200,
+        "entry_list": [
+        ]
+    }
+}

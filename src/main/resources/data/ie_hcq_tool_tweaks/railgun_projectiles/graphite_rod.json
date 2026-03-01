@@ -3,7 +3,7 @@
     "item": "immersiveengineering:graphite_electrode"
   },
   "chargeDuration": 400,
-  "speed": 20,
+  "miningSpeed": 20,
   "deviation": 0,
   "isValidForTurret": true,
   "rodDamage": 30,

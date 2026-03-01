@@ -1,13 +1,27 @@
 {
-    "desc.ie_hcq_tool_tweaks.flavour.drillhead.vein" : "Mines up to %1$s connected blocks of %2$s",
     
+	"_comment": "################## IE-Manual ##################",
     
-    "item.ie_hcq_tool_tweaks.drillhead" : "Drill Head",
-    "item.ie_hcq_tool_tweaks.drillhead.debug" : "Debug Drill Head",
-    "item.ie_hcq_tool_tweaks.drillhead.diamond" : "Diamond Coated Drill Head",
-    "item.ie_hcq_tool_tweaks.drillhead.end" : "Pneumatic Drill Head",
-    "item.ie_hcq_tool_tweaks.drillhead.netherite" : "Netherite Drill Head",
-    "item.ie_hcq_tool_tweaks.drillhead.echo" : "Echo Drill Head",
+    "manual.ie_hcq_tool_tweaks.tool_tweaks": "[Add-On] Tool Tweaks",
+
+	"_comment": "Below are used for Dynamic page generation",
+
+
+
+	"_comment": "################## Descriptions ##################",
+
+    "desc.ie_hcq_tool_tweaks.flavour.drillhead.vein": "Mines up to %1$s connected blocks of %2$s",
     
-    "tag.block.ie_hcq_tool_tweaks.vein_mine_echo" : "Ores & Sculk"
+	"_comment": "################## Items ##################",
+
+    "item.ie_hcq_tool_tweaks.drillhead": "Drill Head",
+    "item.ie_hcq_tool_tweaks.drillhead.debug": "Debug Drill Head",
+    "item.ie_hcq_tool_tweaks.drillhead.diamond": "Diamond Coated Drill Head",
+    "item.ie_hcq_tool_tweaks.drillhead.end": "Pneumatic Drill Head",
+    "item.ie_hcq_tool_tweaks.drillhead.netherite": "Netherite Drill Head",
+    "item.ie_hcq_tool_tweaks.drillhead.echo": "Echo Drill Head",
+
+	"_comment": "################## Tags // TODO move to Descriptions ##################",
+
+    "tag.block.ie_hcq_tool_tweaks.vein_mine_echo": "Ores & Sculk"
 }

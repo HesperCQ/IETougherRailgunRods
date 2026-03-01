@@ -1,6 +1,6 @@
 {
   "type": "immersiveengineering:blueprint",
-  "category": "tool_tweaks_drill_heads_adv",
+  "category": "tool_tweaks_drillheads_adv",
   "inputs": [
     {
       "item": "minecraft:sculk_catalyst"
@@ -20,6 +20,6 @@
   ],
   "result": {
     "item": "ie_hcq_tool_tweaks:drillhead",
-    "nbt": "{drillhead_perm_data:echo}"
+    "nbt": "{drillhead_variant_data:echo}"
   }
 }

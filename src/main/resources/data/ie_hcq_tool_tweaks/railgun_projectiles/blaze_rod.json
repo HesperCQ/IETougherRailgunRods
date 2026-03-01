@@ -1,0 +1,12 @@
+{
+  "ammo": {
+    "tag": "forge:rods/blaze"
+  },
+  "chargeDuration": 40,
+  "miningSpeed": 20,
+  "deviation": 0,
+  "isValidForTurret": true,
+  "rodDamage": 10,
+  "rodGravity": 1.05,
+  "ignoresArrowSpecificCoding": true
+}

@@ -1,8 +1,8 @@
 package io.github.hespercq.ietooltweaks.events;
 
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
-import io.github.hespercq.ietooltweaks.drillheads.DataDrillHeadPermsDataLoader;
-import io.github.hespercq.ietooltweaks.railgunrods.DataRailgunProjectilesDataLoader;
+import io.github.hespercq.ietooltweaks.drillheads.DataDrillHeadVariantsDataLoader;
+import io.github.hespercq.ietooltweaks.railgunrods.AmmoDataLoader;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -13,8 +13,8 @@ public class ForgeEventSubscriber {
 	// AddReloadListenerEvent
 	@SubscribeEvent
 	public static void onAddReloadListener(final AddReloadListenerEvent event) {
-		event.addListener(new DataDrillHeadPermsDataLoader());
-		event.addListener(new DataRailgunProjectilesDataLoader());
+		event.addListener(new DataDrillHeadVariantsDataLoader());
+		event.addListener(new AmmoDataLoader());
 		IEToolTweaks.LOGGER.info("Reload Listeners Registered");
 	}
 }

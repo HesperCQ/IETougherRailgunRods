@@ -1,6 +1,6 @@
 {
   "type": "immersiveengineering:blueprint",
-  "category": "tool_tweaks_drill_heads_adv",
+  "category": "tool_tweaks_drillheads_adv",
   "inputs": [
     {
       "item": "immersiveengineering:drillhead_steel"
@@ -17,6 +17,6 @@
   ],
   "result": {
     "item": "ie_hcq_tool_tweaks:drillhead",
-    "nbt": "{drillhead_perm_data:diamond}"
+    "nbt": "{drillhead_variant_data:diamond}"
   }
 }

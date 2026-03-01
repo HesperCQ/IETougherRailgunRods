@@ -1,0 +1,5 @@
+Additional DrillHeads
+Keeping a Level Head
+Tool Tweaks introduces new drill heads for the <link;mining_drill;Mining Drill>.
+
+The following pages list every drill head and their properties.

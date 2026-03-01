@@ -20,7 +20,7 @@
   "result": {
     "item": "immersiveengineering:blueprint",
     "nbt": {
-      "blueprint": "tool_tweaks_drill_heads_adv"
+      "blueprint": "tool_tweaks_drillheads_adv"
     }
   },
   "show_notification": true

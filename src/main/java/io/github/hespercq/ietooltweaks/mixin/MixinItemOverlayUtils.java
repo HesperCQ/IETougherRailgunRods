@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import blusunrize.immersiveengineering.common.items.RailgunItem;
 import blusunrize.immersiveengineering.common.register.IEItems.Ingredients;
-import io.github.hespercq.ietooltweaks.railgunrods.DataRailgunProjectile;
+import io.github.hespercq.ietooltweaks.railgunrods.IRailgunAmmoData;
 import net.minecraft.client.gui.Font.DisplayMode;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.InteractionHand;
@@ -17,7 +17,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import blusunrize.immersiveengineering.api.Lib;
 import blusunrize.immersiveengineering.api.tool.RailgunHandler;
-import blusunrize.immersiveengineering.api.tool.RailgunHandler.IRailgunProjectile;
 import blusunrize.immersiveengineering.client.ClientUtils;
 import blusunrize.immersiveengineering.client.ItemOverlayUtils;
 import blusunrize.immersiveengineering.client.utils.GuiHelper;
@@ -34,7 +33,7 @@ public abstract class MixinItemOverlayUtils {
 			ItemStack equipped, CallbackInfo ci) {
 		// Use your custom getEntityChargeTime
 		int duration = 72000 - (player.isUsingItem() && player.getUsedItemHand() == hand ? player.getUseItemRemainingTicks() : 0);
-		int chargeTime = getEntityChargeTime(equipped, player);
+		int chargeTime = getProjectileChargeTime(equipped, player);
 		int chargeLevel = duration < 72000 ? Math.min(99, (int) (duration / (float) chargeTime * 100)) : 0;
 		float scale = 1.5f;
 
@@ -61,24 +60,26 @@ public abstract class MixinItemOverlayUtils {
 
 	// ##########################################################################################################
 	// #region HELPER
-	private static int getEntityChargeTime(ItemStack stack, LivingEntity entity) {
-		ItemStack ammo;
-		if (entity instanceof Player player) {
-			ammo = RailgunItem.findAmmo(stack, player);
+	private static int getProjectileChargeTime(ItemStack railgunItemStack, LivingEntity entity) {
+		int baseCharge = 40;
+		ItemStack ammo = getAmmoStack(railgunItemStack, entity);
+
+		if (RailgunHandler.getProjectile(ammo) instanceof IRailgunAmmoData data) {
+			baseCharge = data.getChargeDuration();
 		}
-		else {
-			ammo = new ItemStack(Ingredients.STICK_STEEL); // Mobs use Steel TODO: Check turret logic
-		}
-		return getProjectileChargeTime(stack, RailgunHandler.getProjectile(ammo));
+		float speedUpgrade = RailgunItem.getUpgradesStatic(railgunItemStack).getFloat("miningSpeed");
+		return (int) (baseCharge / (1 + speedUpgrade));
+
 	}
 
-	private static int getProjectileChargeTime(ItemStack railgun, IRailgunProjectile projectile) {
-		int baseCharge = 40;
-		if (projectile instanceof DataRailgunProjectile data) {
-			baseCharge = data.chargeDuration;
+	private static ItemStack getAmmoStack(ItemStack railgunItemStack, LivingEntity entity) {
+		if (entity instanceof Player player) {
+			return RailgunItem.findAmmo(railgunItemStack, player);
 		}
-		float speedUpgrade = RailgunItem.getUpgradesStatic(railgun).getFloat("speed");
-		return (int) (baseCharge / (1 + speedUpgrade));
+		else {
+			// Mobs use
+			return new ItemStack(Ingredients.STICK_STEEL); // Mobs use Steel TODO: Check turret logic
+		}
 	}
 	// #endregion
 }

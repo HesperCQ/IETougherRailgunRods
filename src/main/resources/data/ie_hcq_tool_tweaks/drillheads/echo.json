@@ -1,11 +1,11 @@
 {
-  "size": 1,
-  "depth": 1,
-  "tier": 3,
-  "speed": 11,
+  "miningSize": 1,
+  "miningDepth": 1,
+  "miningTier": 3,
+  "miningSpeed": 11,
   "veinMiningTag": "ie_hcq_tool_tweaks:vein_mine_echo",
   "veinMiningSize": 64,
-  "attack": 6,
+  "attackDamage": 6,
   "durability": 6000,
   "repairMaterial": [
     {
@@ -19,5 +19,5 @@
     }
   ],
   "texture": "immersiveengineering:item/drill_iron",
-  "itemColor": "#0A4F5F"
+  "color": "#0A4F5F"
 }

@@ -1,15 +1,15 @@
 {
-  "size": 4,
-  "depth": 1,
-  "tier": 3,
-  "speed": 12,
+  "miningSize": 4,
+  "miningDepth": 1,
+  "miningTier": 3,
+  "miningSpeed": 12,
   "veinMiningTag": null,
   "veinMiningSize": null,
-  "attack": 7,
+  "attackDamage": 7,
   "durability": 6000,
   "repairMaterial": {
     "item": "minecraft:diamond"
   },
   "texture": "immersiveengineering:item/drill_iron",
-  "itemColor": "#9FF8E5"
+  "color": "#9FF8E5"
 }

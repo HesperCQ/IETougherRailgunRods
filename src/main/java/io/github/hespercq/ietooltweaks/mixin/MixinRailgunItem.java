@@ -26,9 +26,7 @@ import blusunrize.immersiveengineering.api.tool.RailgunHandler;
 import blusunrize.immersiveengineering.api.utils.CapabilityUtils;
 import blusunrize.immersiveengineering.api.utils.ItemUtils;
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
-import io.github.hespercq.ietooltweaks.railgunrods.DataRailgunProjectile;
-
-// TODO: Add mixin for ai -> Cooldown & normal ammo from config?
+import io.github.hespercq.ietooltweaks.railgunrods.IRailgunAmmoData;
 
 @Mixin(RailgunItem.class)
 public abstract class MixinRailgunItem {
@@ -128,10 +126,10 @@ public abstract class MixinRailgunItem {
         int baseCharge = 40;
         ItemStack ammo = getAmmoStack(railgunItemStack, entity);
 
-        if (RailgunHandler.getProjectile(ammo) instanceof DataRailgunProjectile data) {
-            baseCharge = data.chargeDuration;
+        if (RailgunHandler.getProjectile(ammo) instanceof IRailgunAmmoData data) {
+            baseCharge = data.getChargeDuration();
         }
-        float speedUpgrade = RailgunItem.getUpgradesStatic(railgunItemStack).getFloat("speed");
+        float speedUpgrade = RailgunItem.getUpgradesStatic(railgunItemStack).getFloat("miningSpeed");
         return (int) (baseCharge / (1 + speedUpgrade));
 
     }
@@ -151,6 +149,6 @@ public abstract class MixinRailgunItem {
 /*
  * @Inject(method = "getChargeTime(Lnet/minecraft/world/item/ItemStack;)I", at = @At("HEAD"), cancellable = true, remap = false) private static void injectGetChargeTime(ItemStack railgun,
  * CallbackInfoReturnable<Integer> cir) { IEToolTweaks.LOGGER.info("MixinRailgunItem Called!"); ItemStack ammo = findAmmo(stack, player); IRailgunProjectile projectile =
- * RailgunHandler.getProjectile(railgun); if (projectile instanceof DataRailgunProjectile data) { IEToolTweaks.LOGGER.info("Projectile!"); IEToolTweaks.LOGGER.info(data.chargeDuration); int baseCharge
- * = data.chargeDuration; float speedUpgrade = RailgunItem.getUpgradesStatic(railgun).getFloat("speed"); cir.setReturnValue((int) (baseCharge / (1 + speedUpgrade))); } }
+ * RailgunHandler.getProjectile(railgun); if (projectile instanceof RailgunAmmoData data) { IEToolTweaks.LOGGER.info("Projectile!"); IEToolTweaks.LOGGER.info(data.chargeDuration); int baseCharge
+ * = data.chargeDuration; float speedUpgrade = RailgunItem.getUpgradesStatic(railgun).getFloat("miningSpeed"); cir.setReturnValue((int) (baseCharge / (1 + speedUpgrade))); } }
  */

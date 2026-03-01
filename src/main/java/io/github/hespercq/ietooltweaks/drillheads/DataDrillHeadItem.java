@@ -52,8 +52,8 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> list, TooltipFlag flag) {
-		DataDrillHeadPerms permData = getPermData(stack);
-		list.add(Component.translatable("desc.immersiveengineering.flavour.drillhead.size", new Object[] { permData.drillSize(), permData.drillDepth() }));
+		DataDrillHeadVariant permData = getPermData(stack);
+		list.add(Component.translatable("desc.immersiveengineering.flavour.drillhead.size", new Object[] { permData.miningSize(), permData.miningDepth() }));
 		list.add(Component.translatable("desc.immersiveengineering.flavour.drillhead.level", new Object[] { Utils.getHarvestLevelName(this.getMiningLevel(stack)) }));
 		list.add(Component.translatable("desc.immersiveengineering.flavour.drillhead.speed", new Object[] { Utils.formatDouble((double) this.getMiningSpeed(stack), "0.###") }));
 		list.add(Component.translatable("desc.immersiveengineering.flavour.drillhead.damage", new Object[] { Utils.formatDouble((double) this.getAttackDamage(stack), "0.###") }));
@@ -64,11 +64,13 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 		String status = "" + var10000;
 		String s = status + (this.getMaximumHeadDamage(stack) - this.getHeadDamage(stack)) + "/" + this.getMaximumHeadDamage(stack);
 		list.add(Component.translatable("desc.immersiveengineering.info.durability", new Object[] { s }));
-		
+
 		// Additional Info:
 		if (permData.isVeinMining()) {
-			list.add(Component.translatable("desc.ie_hcq_tool_tweaks.flavour.drillhead.vein",
-					new Object[] { permData.veinMiningSize(), DisplayHelper.getTagDisplayName(permData.veinMiningTag()).getString() }));
+			permData.veinMiningTag().ifPresent((veinMiningTag) -> {
+				list.add(Component.translatable("desc.ie_hcq_tool_tweaks.flavour.drillhead.vein",
+						new Object[] { permData.veinMiningSize(), DisplayHelper.getTagDisplayName(veinMiningTag).getString() }));
+			});
 		}
 	}
 
@@ -87,7 +89,7 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 
 	// Custom Data for Item rendering
 	public int getItemColor(ItemStack stack) {
-		return getPermData(stack).itemColor();
+		return getPermData(stack).color();
 	}
 
 	// ==============================================================================================================
@@ -95,22 +97,22 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 	// ==============================================================================================================
 	@Override
 	public float getAttackDamage(ItemStack head) {
-		return getPermData(head).drillAttack();
+		return getPermData(head).attackDamage();
 	}
 
 	@Override
 	public int getMaximumHeadDamage(ItemStack head) {
-		return getPermData(head).maxDamage();
+		return getPermData(head).durability();
 	}
 
 	@Override
 	public Tier getMiningLevel(ItemStack head) {
-		return getPermData(head).drillLevel();
+		return getPermData(head).miningLevel();
 	}
 
 	@Override
 	public float getMiningSpeed(ItemStack head) {
-		return getPermData(head).drillSpeed();
+		return getPermData(head).miningSpeed();
 	}
 
 	@Override
@@ -153,9 +155,9 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 		}
 
 		// Get drill params
-		DataDrillHeadPerms dh_type = getPermData(head);
-		int diameter = dh_type.drillSize();
-		int depth = dh_type.drillDepth();
+		DataDrillHeadVariant dh_type = getPermData(head);
+		int diameter = dh_type.miningSize();
+		int depth = dh_type.miningDepth();
 
 		// Get Start Block Info
 		Direction side = brtr.getDirection();
@@ -172,12 +174,14 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 
 		// Get more start block info
 		// Ignore canHarvest & isEffective, maybe add in future when adding logic for effective / can harvest tags for drills
-		//boolean canHarvestStart = state.getBlock().canHarvestBlock(world.getBlockState(startPos), world, startPos, player);
-		//boolean drillMatStart = ((DrillItem) Tools.DRILL.get()).isEffective(ItemStack.EMPTY, state);
+		// boolean canHarvestStart = state.getBlock().canHarvestBlock(world.getBlockState(startPos), world, startPos, player);
+		// boolean drillMatStart = ((DrillItem) Tools.DRILL.get()).isEffective(ItemStack.EMPTY, state);
 		boolean hardnessStart = state.getDestroyProgress(player, world, startPos) >= maxHardness;
 
 		// Get vein blocks instead if drill and block fit
-		if (dh_type.isVeinMining() && state.is(dh_type.veinMiningTag()) && hardnessStart) {
+		boolean stateInTag = dh_type.veinMiningTag().map(state::is).orElse(false);
+
+		if (dh_type.isVeinMining() && stateInTag && hardnessStart) {
 			return getBlocksInVein(head, world, player, brtr, dh_type.veinMiningSize());
 		}
 
@@ -269,11 +273,11 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 	// #region HELPERS
 	// ==============================================================================================================
 	public static String getDrillHeadId(ItemStack stack) {
-		return ItemNBTHelper.getString(stack, "drillhead_perm_data");
+		return ItemNBTHelper.getString(stack, "drillhead_variant_data");
 	}
 
-	public static DataDrillHeadPerms getPermData(ItemStack stack) {
-		return DataDrillHeadPermsDataLoader.getData(getDrillHeadId(stack));
+	public static DataDrillHeadVariant getPermData(ItemStack stack) {
+		return DataDrillHeadVariantsDataLoader.getData(getDrillHeadId(stack));
 	}
 
 	public static void setHeadDamage(ItemStack head, int totalDamage) {

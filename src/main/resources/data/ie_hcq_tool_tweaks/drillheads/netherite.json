@@ -1,15 +1,15 @@
 {
-  "size": 5,
-  "depth": 1,
-  "tier": 4,
-  "speed": 14,
+  "miningSize": 5,
+  "miningDepth": 1,
+  "miningTier": 4,
+  "miningSpeed": 14,
   "veinMiningTag": null,
   "veinMiningSize": null,
-  "attack": 8,
+  "attackDamage": 8,
   "durability": 16000,
   "repairMaterial": {
     "item": "minecraft:netherite_ingot"
   },
   "texture": "immersiveengineering:item/drill_iron",
-  "itemColor": "#4C484C"
+  "color": "#4C484C"
 }
