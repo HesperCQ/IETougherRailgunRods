@@ -1,5 +1,6 @@
 package io.github.hespercq.ietooltweaks.railgunrods;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -30,6 +31,9 @@ public class AmmoDataLoader extends SimpleJsonResourceReloadListener {
 		jsons.forEach(this::processEntry);
 	}
 
+	// Stores loaded railgun ammo
+	public static final Map<String, IRailgunAmmoData> RAILGUN_AMMO = new HashMap<>();
+
 	// =========================================================
 	// Entry Pipeline
 	// =========================================================
@@ -45,6 +49,7 @@ public class AmmoDataLoader extends SimpleJsonResourceReloadListener {
 			/*
 			 * boolean projectileDataIsValid = validateAmmoOverlap(rl, projectile); if (!projectileDataIsValid) { return; }
 			 */
+			RAILGUN_AMMO.put(rl.getPath(), railgunAmmoData);
 			registerProjectile(rl, railgunAmmoData);
 		}
 		catch (Exception e) {

@@ -1,5 +1,5 @@
 Railgun Ammo
 Rebalanced (Again)
-Tool Tweaks adjust the properties of ammunition available for the railgun.
+Tool Tweaks adjust the properties of ammunition available for the <link;railgun;Railgun>.
 
 The following pages list all railgun ammunition types and their properties.

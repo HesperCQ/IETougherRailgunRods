@@ -14,7 +14,7 @@ public record DataDrillHeadVariant(String id, String name,
 
 		Optional<TagKey<Block>> veinMiningTag, int veinMiningSize,
 
-		int durability, int attackDamage, Ingredient repairMaterial,
+		int attackDamage, int durability, Ingredient repairMaterial,
 
 		int color, ResourceLocation texture, Optional<Float> itemModelOverrideId) {
 

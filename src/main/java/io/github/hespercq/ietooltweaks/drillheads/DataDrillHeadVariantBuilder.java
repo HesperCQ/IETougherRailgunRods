@@ -144,8 +144,15 @@ public class DataDrillHeadVariantBuilder {
 	// -------- Build --------
 
 	public DataDrillHeadVariant build() {
-		return new DataDrillHeadVariant(id, name, miningSize, miningDepth, miningLevel, miningSpeed, veinMiningTag, veinMiningSize, attackDamage, durability, repairMaterial, color, texture,
-				itemModelOverrideId);
+		return new DataDrillHeadVariant(id, name,
+
+				miningSize, miningDepth, miningLevel, miningSpeed,
+
+				veinMiningTag, veinMiningSize,
+
+				attackDamage, durability, repairMaterial,
+
+				color, texture, itemModelOverrideId);
 	}
 
 }

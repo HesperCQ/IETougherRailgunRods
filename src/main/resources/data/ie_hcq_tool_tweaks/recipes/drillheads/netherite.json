@@ -20,6 +20,6 @@
   ],
   "result": {
     "item": "ie_hcq_tool_tweaks:drillhead",
-    "nbt": "{drillhead_variant_data:netherite}"
+    "nbt": "{drillhead_variant_id:netherite}"
   }
 }

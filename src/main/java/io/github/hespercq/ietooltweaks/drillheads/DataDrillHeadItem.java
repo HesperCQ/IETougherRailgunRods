@@ -273,7 +273,7 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 	// #region HELPERS
 	// ==============================================================================================================
 	public static String getDrillHeadId(ItemStack stack) {
-		return ItemNBTHelper.getString(stack, "drillhead_variant_data");
+		return ItemNBTHelper.getString(stack, "drillhead_variant_id");
 	}
 
 	public static DataDrillHeadVariant getPermData(ItemStack stack) {

@@ -18,17 +18,17 @@ import net.minecraft.world.phys.HitResult;
 
 public final class RailgunAmmoData extends StandardRailgunProjectile implements IRailgunAmmoData {
 
-	private final Ingredient ammo;
+	public final Ingredient ammo;
 
-	private final boolean isValidForTurret;
-	private final int chargeDuration;
+	public final boolean isValidForTurret;
+	public final int chargeDuration;
 
-	private final float speed;
-	private final float deviation;
-	private final double rodDamage;
-	private final double rodGravity;
-	private final boolean ignoresArrowSpecificCoding;
-	private final Optional<String> rodOnHitCommand;
+	public final float speed;
+	public final float deviation;
+	public final double rodDamage;
+	public final double rodGravity;
+	public final boolean ignoresArrowSpecificCoding;
+	public final Optional<String> rodOnHitCommand;
 
 	// Future Plans
 	// - ConsumesAmmo

@@ -32,7 +32,7 @@ public class ModClientEventSubscriber {
 			// Add dynamic DrillHeads
 			DataDrillHeadVariantsDataLoader.getIds().forEach(id -> {
 				ItemStack stack = new ItemStack(IEToolTweaksItems.DRILLHEAD.get());
-				stack.getOrCreateTag().putString("drillhead_variant_data", id);
+				stack.getOrCreateTag().putString("drillhead_variant_id", id);
 				event.accept(stack);
 			});
 		}

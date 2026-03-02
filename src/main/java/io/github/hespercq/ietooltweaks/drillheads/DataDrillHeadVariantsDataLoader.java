@@ -18,7 +18,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 public class DataDrillHeadVariantsDataLoader extends SimpleJsonResourceReloadListener {
 	// Data for constructor
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-	private static final String FOLDER = "drillheads";
+	public static final String FOLDER = "drillheads";
 
 	// Constants
 	public static final DataDrillHeadVariant DEBUG = new DataDrillHeadVariantBuilder("debug").build();
@@ -31,16 +31,12 @@ public class DataDrillHeadVariantsDataLoader extends SimpleJsonResourceReloadLis
 		// <-- Folder inside data/<modid>/
 	}
 
-	public static Map<String, DataDrillHeadVariant> getMap() {
-		return VARIANTS;
-	}
-
 	public static Set<String> getIds() {
-		return getMap().keySet();
+		return VARIANTS.keySet();
 	}
 
 	public static DataDrillHeadVariant getData(String hdId) {
-		return getMap().getOrDefault(hdId, DEBUG);
+		return VARIANTS.getOrDefault(hdId, DEBUG);
 	}
 
 	@Override

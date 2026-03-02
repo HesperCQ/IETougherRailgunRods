@@ -1,21 +1,39 @@
 package io.github.hespercq.ietooltweaks.manual;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.mojang.datafixers.util.Pair;
 
 import blusunrize.immersiveengineering.api.ManualHelper;
+import blusunrize.immersiveengineering.api.crafting.IERecipeTypes;
+import blusunrize.immersiveengineering.api.tool.RailgunHandler;
+import blusunrize.immersiveengineering.client.manual.ManualElementBlueprint;
 import blusunrize.immersiveengineering.common.util.Utils;
+import blusunrize.lib.manual.ManualElementCrafting;
+import blusunrize.lib.manual.ManualElementItem;
 import blusunrize.lib.manual.ManualEntry;
 import blusunrize.lib.manual.ManualEntry.SpecialElementData;
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import io.github.hespercq.ietooltweaks.drillheads.DataDrillHeadVariantsDataLoader;
+import io.github.hespercq.ietooltweaks.helpers.DisplayHelper;
+import io.github.hespercq.ietooltweaks.railgunrods.AmmoDataLoader;
+import io.github.hespercq.ietooltweaks.railgunrods.IRailgunAmmoData;
+import io.github.hespercq.ietooltweaks.railgunrods.RailgunAmmoData;
+import io.github.hespercq.ietooltweaks.register.IEToolTweaksItems;
 import io.github.hespercq.ietooltweaks.drillheads.DataDrillHeadVariant;
 import blusunrize.lib.manual.ManualInstance;
+import blusunrize.lib.manual.SpecialManualElement;
 import blusunrize.lib.manual.Tree.InnerNode;
+import blusunrize.lib.manual.utils.ManualRecipeRef;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
 
 public class ManualContent {
 	public static void setupManualPages() {
@@ -29,11 +47,8 @@ public class ManualContent {
 	}
 
 	public static ManualEntry buildDrillHeadsEntry(ManualInstance manual) {
-		IEToolTweaks.LOGGER.info("Start buildDrillHeadsEntry");
 		ManualEntry.ManualEntryBuilder builder = new ManualEntry.ManualEntryBuilder(manual);
-		IEToolTweaks.LOGGER.info("readFromFile");
 		builder.readFromFile(ResourceLocation.fromNamespaceAndPath(IEToolTweaks.MODID, "drillheads"));
-		IEToolTweaks.LOGGER.info("appendText");
 		builder.appendText(ManualContent::getDrillHeadTexts);
 		return builder.create();
 	}
@@ -41,42 +56,133 @@ public class ManualContent {
 	public static ManualEntry buildRailgunProjectilesEntry(ManualInstance manual) {
 		ManualEntry.ManualEntryBuilder builder = new ManualEntry.ManualEntryBuilder(manual);
 		builder.readFromFile(ResourceLocation.fromNamespaceAndPath(IEToolTweaks.MODID, "railgun_ammo"));
+		builder.appendText(ManualContent::getRailgunAmmoTexts);
 		return builder.create();
 	}
 
+	// ##############################################################################################
+	// Drillheads
+	// ##############################################################################################
 	public static Pair<String, List<SpecialElementData>> getDrillHeadTexts() {
 		StringBuilder text = new StringBuilder();
 		List<SpecialElementData> specials = new ArrayList<>();
 
 		IEToolTweaks.LOGGER.warn("Adding drill heads to IE Manual: {}", DataDrillHeadVariantsDataLoader.VARIANTS.values().size());
 
+		// Extra Pages
 		List<DataDrillHeadVariant> drillHeadVariants = DataDrillHeadVariantsDataLoader.VARIANTS.values().stream().toList();
 		for (DataDrillHeadVariant drillHeadVariant : drillHeadVariants) {
-
 			// Start new page
 			text.append("<np>");
-			text.append(Component.translatable("item.ie_hcq_tool_tweaks.drillhead.".concat(drillHeadVariant.name())).getString());
+			// Header
+			// Check recipe exists, otherwise display item
+			ResourceLocation recipeId = ResourceLocation.fromNamespaceAndPath(IEToolTweaks.MODID, DataDrillHeadVariantsDataLoader.FOLDER + "/" + drillHeadVariant.id());
+			ManualRecipeRef manualRecipeRef = new ManualRecipeRef(recipeId);
+			SpecialManualElement specialManualElement;
+			if (checkCraftingRecipeExists(manualRecipeRef)) {
+				// Recipe
+				specialManualElement = new ManualElementCrafting(ManualHelper.getManual(), new ManualRecipeRef[][] { { manualRecipeRef } });
+			}
+			else if (checkBlueprintRecipeExists(manualRecipeRef)) {
+				// Recipe
+				specialManualElement = new ManualElementBlueprint(ManualHelper.getManual(), new ManualRecipeRef[] { manualRecipeRef });
+			}
+			else {
+				// Item Display
+				ItemStack drillHeadVariantItemStack = new ItemStack(IEToolTweaksItems.DRILLHEAD.get());
+				drillHeadVariantItemStack.getOrCreateTag().putString("drillhead_variant_id", drillHeadVariant.id());
+				specialManualElement = new ManualElementItem(ManualHelper.getManual(), drillHeadVariantItemStack);
+			}
+			specials.add(new SpecialElementData(drillHeadVariant.id(), 0, specialManualElement));
+			text.append("<&").append(drillHeadVariant.id()).append(">");
+
+			// Name
+			text.append("\n");
+			text.append("§l").append(Component.translatable("item.ie_hcq_tool_tweaks.drillhead.".concat(drillHeadVariant.name())).getString()).append("§r");
+			// Stats
 			text.append("\n");
 			text.append(Component.translatable("desc.immersiveengineering.flavour.drillhead.size", new Object[] { drillHeadVariant.miningSize(), drillHeadVariant.miningDepth() }).getString());
+
 			text.append("\n");
 			text.append(Component.translatable("desc.immersiveengineering.flavour.drillhead.level", new Object[] { Utils.getHarvestLevelName(drillHeadVariant.miningLevel()) }).getString());
+
 			text.append("\n");
 			text.append(Component.translatable("desc.immersiveengineering.flavour.drillhead.speed", new Object[] { Utils.formatDouble((double) drillHeadVariant.miningSpeed(), "0.###") }).getString());
+
 			text.append("\n");
 			text.append(
 					Component.translatable("desc.immersiveengineering.flavour.drillhead.damage", new Object[] { Utils.formatDouble((double) drillHeadVariant.attackDamage(), "0.###") }).getString());
-			text.append("\n");
-			text.append(
-					Component.translatable("desc.immersiveengineering.flavour.drillhead.damage", new Object[] { Utils.formatDouble((double) drillHeadVariant.attackDamage(), "0.###") }).getString());
+
 			text.append("\n");
 			text.append(Component.translatable("desc.immersiveengineering.info.durability", new Object[] { drillHeadVariant.durability() }).getString());
-			/*
-			 * if (drillHeadVariant.isVeinMining()) { Component.translatable("manual.ie_hcq_tool_tweaks.drillhead.veinMining", new Object[] { drillHeadVariant.veinMiningSize(),
-			 * drillHeadVariant.veinMiningTag() }); }
-			 */
+
+			// Optional - Vein Mining
+			if (drillHeadVariant.isVeinMining()) {
+				drillHeadVariant.veinMiningTag().ifPresent((veinMiningTag) -> {
+					text.append("\n");
+					text.append(
+							Component.translatable("desc.ie_hcq_tool_tweaks.flavour.drillhead.vein", new Object[] { drillHeadVariant.veinMiningSize(), DisplayHelper.getTagDisplayName(veinMiningTag) })
+									.getString());
+				});
+			}
+
+			// If not empty - Repair Material
+			if (!drillHeadVariant.repairMaterial().isEmpty()) {
+				Component repairMaterialsListComponent = ComponentUtils.formatList(Arrays.stream(drillHeadVariant.repairMaterial().getItems()).map(ItemStack::getHoverName).toList(),
+						Component.literal(", "));
+				text.append("\n");
+				text.append(Component.translatable("manual.ie_hcq_tool_tweaks.drillheads.repair_material", new Object[] { repairMaterialsListComponent.getString() }).getString());
+			}
 		}
 
 		return Pair.of(text.toString(), specials);
+	}
+
+	// ##############################################################################################
+	// Railgun Ammo
+	// ##############################################################################################
+	public static Pair<String, List<SpecialElementData>> getRailgunAmmoTexts() {
+		StringBuilder text = new StringBuilder();
+		List<SpecialElementData> specials = new ArrayList<>();
+
+		IEToolTweaks.LOGGER.warn("Adding railgun rods to IE Manual: {}", RailgunHandler.projectilePropertyMap.size());
+
+		List<Entry<String, IRailgunAmmoData>> railgunAmmoEntries = AmmoDataLoader.RAILGUN_AMMO.entrySet().stream().toList();
+
+		railgunAmmoEntries.forEach((railgunAmmoEntry) -> {
+			String id = railgunAmmoEntry.getKey();
+			IRailgunAmmoData railgunAmmo = railgunAmmoEntry.getValue();
+			if (!(railgunAmmo instanceof RailgunAmmoData railgunAmmoData)) {
+				return;
+			}
+			// Start new page
+			text.append("<np>");
+
+			// Item Display
+			ManualElementItem manualElementItem = new ManualElementItem(ManualHelper.getManual(), railgunAmmoData.getAmmoIngredient().getItems());
+			specials.add(new SpecialElementData(id + "/items", 0, manualElementItem));
+			text.append("<&").append(id + "/items").append(">");
+
+			// Stats
+			text.append("\n");
+			text.append(
+					Component.translatable("desc.immersiveengineering.flavour.drillhead.damage", new Object[] { Utils.formatDouble((double) railgunAmmoData.rodDamage, "0.###") }).getString());
+
+		});
+
+		return Pair.of(text.toString(), specials);
+	}
+
+	private static boolean checkCraftingRecipeExists(ManualRecipeRef ref) {
+		AtomicBoolean found = new AtomicBoolean(false);
+		ref.forEachMatchingRecipe(RecipeType.CRAFTING, r -> found.set(true));
+		return found.get();
+	}
+
+	private static boolean checkBlueprintRecipeExists(ManualRecipeRef ref) {
+		AtomicBoolean found = new AtomicBoolean(false);
+		ref.forEachMatchingRecipe(IERecipeTypes.BLUEPRINT.get(), r -> found.set(true));
+		return found.get();
 	}
 
 	/*
