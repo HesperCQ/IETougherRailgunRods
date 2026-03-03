@@ -3,7 +3,7 @@
     "tag": "forge:rods/steel"
   },
   "chargeDuration": 40,
-  "miningSpeed": 20,
+  "speed": 20,
   "deviation": 0,
   "isValidForTurret": true,
   "rodDamage": 24,

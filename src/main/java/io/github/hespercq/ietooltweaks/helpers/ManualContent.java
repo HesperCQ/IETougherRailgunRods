@@ -1,4 +1,4 @@
-package io.github.hespercq.ietooltweaks.manual;
+package io.github.hespercq.ietooltweaks.helpers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +19,6 @@ import blusunrize.lib.manual.ManualEntry;
 import blusunrize.lib.manual.ManualEntry.SpecialElementData;
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import io.github.hespercq.ietooltweaks.drillheads.DataDrillHeadVariantsDataLoader;
-import io.github.hespercq.ietooltweaks.helpers.DisplayHelper;
 import io.github.hespercq.ietooltweaks.railgunrods.AmmoDataLoader;
 import io.github.hespercq.ietooltweaks.railgunrods.IRailgunAmmoData;
 import io.github.hespercq.ietooltweaks.railgunrods.RailgunAmmoData;
@@ -163,10 +162,30 @@ public class ManualContent {
 			specials.add(new SpecialElementData(id + "/items", 0, manualElementItem));
 			text.append("<&").append(id + "/items").append(">");
 
-			// Stats
+			// Charge Duration
 			text.append("\n");
-			text.append(
-					Component.translatable("desc.immersiveengineering.flavour.drillhead.damage", new Object[] { Utils.formatDouble((double) railgunAmmoData.rodDamage, "0.###") }).getString());
+			text.append(Component
+					.translatable("manual.ie_hcq_tool_tweaks.railgun_ammo.charge_duration", new Object[] { Utils.formatDouble((double) railgunAmmoData.chargeDuration / (double) 20, "0.###") })
+					.getString());
+			// Launch - Speed
+			text.append("\n");
+			text.append(Component.translatable("manual.ie_hcq_tool_tweaks.railgun_ammo.speed", new Object[] { Utils.formatDouble((double) railgunAmmoData.speed, "0.###") }).getString());
+			// Launch - Deviation
+			if (railgunAmmoData.deviation > 0) {
+				text.append("\n");
+				text.append(Component.translatable("manual.ie_hcq_tool_tweaks.railgun_ammo.deviation", new Object[] { Utils.formatDouble((double) railgunAmmoData.deviation, "0.###") }).getString());
+			}
+			// Projectile - Damage
+			text.append("\n");
+			text.append(Component.translatable("manual.ie_hcq_tool_tweaks.railgun_ammo.damage", new Object[] { Utils.formatDouble((double) railgunAmmoData.rodDamage, "0.###") }).getString());
+			// Projectile - Gravity
+			text.append("\n");
+			text.append(Component.translatable("manual.ie_hcq_tool_tweaks.railgun_ammo.gravity", new Object[] { Utils.formatDouble((double) railgunAmmoData.rodGravity, "0.###") }).getString());
+			// Projectile - Ignores most projectile deflections.
+			if (railgunAmmoData.ignoresArrowSpecificCoding) {
+				text.append("\n");
+				text.append(Component.translatable("manual.ie_hcq_tool_tweaks.railgun_ammo.no_deflection").getString());
+			}
 
 		});
 

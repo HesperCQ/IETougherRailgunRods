@@ -3,7 +3,7 @@ package io.github.hespercq.ietooltweaks.events;
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import io.github.hespercq.ietooltweaks.drillheads.DataDrillHeadItem;
 import io.github.hespercq.ietooltweaks.drillheads.DataDrillHeadVariantsDataLoader;
-import io.github.hespercq.ietooltweaks.manual.ManualContent;
+import io.github.hespercq.ietooltweaks.helpers.ManualContent;
 import io.github.hespercq.ietooltweaks.railgunrods.ToughRailgunShotRenderer;
 import io.github.hespercq.ietooltweaks.register.IEToolTweaksEntityTypes;
 import io.github.hespercq.ietooltweaks.register.IEToolTweaksItems;

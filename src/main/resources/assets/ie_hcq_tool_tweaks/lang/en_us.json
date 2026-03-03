@@ -1,22 +1,25 @@
 {
-    
-	"_comment": "################## IE-Manual ##################",
-    
+    "_comment": "################## IE-Manual ##################",
     "manual.ie_hcq_tool_tweaks.tool_tweaks": "[Add-On] Tool Tweaks",
-
-	"_comment": "Below are used for Dynamic page generation",
-
-    
+    "_comment": "Below are used for Dynamic page generation",
     "manual.ie_hcq_tool_tweaks.drillheads.repair_material": "Repair Material: %1$s",
+    "_comment": "Use manual.ie_hcq_tool_tweaks.drillheads.<drillhead id (filename)>.extra_text for additional text in manual entry",
+   
 
+    "manual.ie_hcq_tool_tweaks.railgun_ammo.charge_duration": "Charge Duration: %1$s seconds",
+    "manual.ie_hcq_tool_tweaks.railgun_ammo.speed": "Speed: %1$s",
+    "manual.ie_hcq_tool_tweaks.railgun_ammo.deviation": "Deviation: %1$s",
+    "manual.ie_hcq_tool_tweaks.railgun_ammo.damage": "Projectile Damage: %1$s",
+    "manual.ie_hcq_tool_tweaks.railgun_ammo.gravity": "Projectile Gravity: %1$s",
+    "manual.ie_hcq_tool_tweaks.railgun_ammo.no_deflection": "The Projectile can not be deflected by any normal means.",
+    "_comment": "Use manual.ie_hcq_tool_tweaks.railgun_ammo.<ammo id (filename)>.extra_text for additional text in manual entry",
+   
 
-
-	"_comment": "################## Descriptions ##################",
-
+    "_comment": "################## Descriptions ##################",
     "desc.ie_hcq_tool_tweaks.flavour.drillhead.vein": "Mines up to %1$s connected blocks of %2$s",
-    
-	"_comment": "################## Items ##################",
 
+    "_comment": "################## Items ##################",
+    "_comment": "Use item.ie_hcq_tool_tweaks.drillhead.<drillhead id (filename)> for custom display names for your drillheads",
     "item.ie_hcq_tool_tweaks.drillhead": "Drill Head",
     "item.ie_hcq_tool_tweaks.drillhead.debug": "Debug Drill Head",
     "item.ie_hcq_tool_tweaks.drillhead.diamond": "Diamond Coated Drill Head",
@@ -24,7 +27,7 @@
     "item.ie_hcq_tool_tweaks.drillhead.netherite": "Netherite Drill Head",
     "item.ie_hcq_tool_tweaks.drillhead.echo": "Echo Drill Head",
 
-	"_comment": "################## Tags // TODO move to Descriptions ##################",
-
+    "_comment": "################## Tags // TODO move to Descriptions ##################",
+    "_comment": "Use tag.block.<BlockTagNamespace>.<BlockTagName> for custom display names for tags in this mod",
     "tag.block.ie_hcq_tool_tweaks.vein_mine_echo": "Ores & Sculk"
 }
