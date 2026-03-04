@@ -1,5 +1,6 @@
 package io.github.hespercq.ietooltweaks.railgunrods;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import javax.annotation.Nullable;
@@ -7,13 +8,17 @@ import javax.annotation.Nullable;
 import blusunrize.immersiveengineering.api.tool.RailgunHandler.RailgunRenderColors;
 import blusunrize.immersiveengineering.api.tool.RailgunHandler.StandardRailgunProjectile;
 import blusunrize.immersiveengineering.common.entities.RailgunShotEntity;
+import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import io.github.hespercq.ietooltweaks.helpers.SafeJsonObject;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 
 public final class RailgunAmmoData extends StandardRailgunProjectile implements IRailgunAmmoData {
@@ -28,7 +33,8 @@ public final class RailgunAmmoData extends StandardRailgunProjectile implements 
 	public final double rodDamage;
 	public final double rodGravity;
 	public final boolean ignoresArrowSpecificCoding;
-	public final Optional<String> rodOnHitCommand;
+	public final Optional<String[]> onEntityHitCommands;
+	public final Optional<String[]> onBlockHitCommands;
 
 	// Future Plans
 	// - ConsumesAmmo
@@ -49,7 +55,8 @@ public final class RailgunAmmoData extends StandardRailgunProjectile implements 
 		this.rodDamage = builder.rodDamage;
 		this.rodGravity = builder.rodGravity;
 		this.ignoresArrowSpecificCoding = builder.ignoresArrowSpecificCoding;
-		this.rodOnHitCommand = builder.rodOnHitCommand;
+		this.onEntityHitCommands = builder.onEntityHitCommands;
+		this.onBlockHitCommands = builder.onBlockHitCommands;
 	}
 
 	@Override
@@ -92,10 +99,32 @@ public final class RailgunAmmoData extends StandardRailgunProjectile implements 
 
 	@Override
 	public void onHitTarget(Level world, HitResult target, @Nullable UUID shooter, Entity projectile) {
-		// Execute command if present
-		rodOnHitCommand.ifPresent((command) -> {
-			world.getServer().getCommands().performPrefixedCommand(world.getServer().createCommandSourceStack(), command);
-		});
+		IEToolTweaks.LOGGER.info("ZZZ onHitTarget");
+		if (world.isClientSide || world.getServer() == null)
+			return;
+
+		IEToolTweaks.LOGGER.info("ZZZ not Client");
+
+		Optional<String[]> commands;
+		CommandSourceStack source;
+
+		if (target instanceof EntityHitResult entityHit) {
+			source = entityHit.getEntity().createCommandSourceStack();
+			commands = onEntityHitCommands;
+		}
+		else if (target instanceof BlockHitResult blockHit) {
+			source = world.getServer().createCommandSourceStack().withPosition(blockHit.getLocation());
+			commands = onBlockHitCommands;
+		}
+		else {
+			return;
+		}
+
+		source = source.withPermission(4).withSuppressedOutput();
+		for (String command : commands.orElse(new String[0])) {
+			IEToolTweaks.LOGGER.info("ZZZ: " + command);
+			world.getServer().getCommands().performPrefixedCommand(source, command);
+		}
 	}
 
 	@Override
@@ -127,7 +156,8 @@ public final class RailgunAmmoData extends StandardRailgunProjectile implements 
 		private double rodGravity = 1.25;
 		private boolean ignoresArrowSpecificCoding = false;
 
-		private Optional<String> rodOnHitCommand = Optional.empty();
+		private Optional<String[]> onEntityHitCommands = Optional.empty();
+		private Optional<String[]> onBlockHitCommands = Optional.empty();
 		private Optional<RailgunRenderColors> railgunRenderColors = Optional.empty();
 
 		// ===== Setters =====
@@ -172,11 +202,17 @@ public final class RailgunAmmoData extends StandardRailgunProjectile implements 
 			return this;
 		}
 
-		public Builder rodOnHitCommand(String command) {
-			if (command.isBlank()) {
-				return this;
-			}
-			this.rodOnHitCommand = Optional.of(command);
+		public Builder onEntityHitCommands(List<String> commands) {
+			String[] commandsArray = commands.toArray(new String[commands.size()]);
+			IEToolTweaks.LOGGER.info("ZZZ" + commands);
+			this.onEntityHitCommands = Optional.of(commandsArray);
+			return this;
+		}
+
+		public Builder onBlockHitCommands(List<String> commands) {
+			String[] commandsArray = commands.toArray(new String[commands.size()]);
+			IEToolTweaks.LOGGER.info("ZZY" + "commands");
+			this.onBlockHitCommands = Optional.of(commandsArray);
 			return this;
 		}
 
@@ -195,14 +231,14 @@ public final class RailgunAmmoData extends StandardRailgunProjectile implements 
 			Builder builder = new Builder();
 			json.getIngredient("ammo").ifPresent(builder::ammo);
 			json.getInt("chargeDuration").ifPresent(builder::chargeDuration);
-			json.getFloat("miningSpeed").ifPresent(builder::speed);
+			json.getFloat("speed").ifPresent(builder::speed);
 			json.getFloat("deviation").ifPresent(builder::deviation);
 			json.getBoolean("isValidForTurret").ifPresent(builder::isValidForTurret);
 			json.getDouble("rodDamage").ifPresent(builder::rodDamage);
 			json.getDouble("rodGravity").ifPresent(builder::rodGravity);
 			json.getBoolean("ignoresArrowSpecificCoding").ifPresent(builder::ignoresArrowSpecificCoding);
-
-			json.getString("rodOnHitCommand").ifPresent(builder::rodOnHitCommand);
+			json.getStringArray("onEntityHitCommands").ifPresent(builder::onEntityHitCommands);
+			json.getStringArray("onBlockHitCommands").ifPresent(builder::onBlockHitCommands);
 			json.getRailgunRenderColors("railgunRenderColors").ifPresent(builder::railgunRenderColors);
 			return builder;
 		}

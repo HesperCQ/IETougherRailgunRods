@@ -8,5 +8,13 @@
   "isValidForTurret": true,
   "rodDamage": 16,
   "rodGravity": 1.25,
-  "ignoresArrowSpecificCoding": true
+  "ignoresArrowSpecificCoding": false,
+  "railgunRenderColors": [
+    "0xd8d8d8",
+    "0xd8d8d8",
+    "0xd8d8d8",
+    "0xa8a8a8",
+    "0x686868",
+    "0x686868"
+  ]
 }

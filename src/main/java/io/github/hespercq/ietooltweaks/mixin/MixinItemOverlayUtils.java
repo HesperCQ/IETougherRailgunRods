@@ -67,7 +67,7 @@ public abstract class MixinItemOverlayUtils {
 		if (RailgunHandler.getProjectile(ammo) instanceof IRailgunAmmoData data) {
 			baseCharge = data.getChargeDuration();
 		}
-		float speedUpgrade = RailgunItem.getUpgradesStatic(railgunItemStack).getFloat("miningSpeed");
+		float speedUpgrade = RailgunItem.getUpgradesStatic(railgunItemStack).getFloat("speed");
 		return (int) (baseCharge / (1 + speedUpgrade));
 
 	}

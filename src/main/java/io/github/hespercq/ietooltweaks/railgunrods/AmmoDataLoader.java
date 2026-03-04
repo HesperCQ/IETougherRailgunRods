@@ -28,6 +28,7 @@ public class AmmoDataLoader extends SimpleJsonResourceReloadListener {
 	@Override
 	protected void apply(Map<ResourceLocation, JsonElement> jsons, ResourceManager resourceManager, ProfilerFiller profiler) {
 		RailgunHandler.projectilePropertyMap.clear();
+		// TODO: Only delete standard projectiles, not all
 		jsons.forEach(this::processEntry);
 	}
 

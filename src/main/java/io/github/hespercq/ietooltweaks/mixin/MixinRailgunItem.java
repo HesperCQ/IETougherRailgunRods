@@ -33,7 +33,6 @@ public abstract class MixinRailgunItem {
 
     @Inject(method = "playChargeSound(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;)V", at = @At("HEAD"), cancellable = true, remap = false)
     private static void injectPlayChargeSound(LivingEntity living, ItemStack railgun, CallbackInfo ci) {
-        IEToolTweaks.LOGGER.info("chargeSound!");
         float customChargeTime = getProjectileChargeTime(railgun, living);
         float pitch = 1.0f;
         float sampleTime = customChargeTime < 40 ? 20.0f : 35.0f;
@@ -88,7 +87,6 @@ public abstract class MixinRailgunItem {
     // releaseUsing - should Work
     @Inject(method = "releaseUsing(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;I)V", at = @At("HEAD"), cancellable = true)
     private void injectReleaseUsing(ItemStack stack, Level world, LivingEntity user, int timeLeft, CallbackInfo ci) {
-        IEToolTweaks.LOGGER.info("release!");
         RailgunItem railgunItem = (RailgunItem) (Object) this; // cast to RailgunItem
 
         if (!world.isClientSide() && user instanceof Player player) {
@@ -97,7 +95,6 @@ public abstract class MixinRailgunItem {
 
             int customChargeTime = getProjectileChargeTime(stack, user);
             if (inUse < customChargeTime) {
-                IEToolTweaks.LOGGER.info("abort!");
                 ci.cancel(); // stop vanilla method
                 return;
             }
@@ -129,7 +126,7 @@ public abstract class MixinRailgunItem {
         if (RailgunHandler.getProjectile(ammo) instanceof IRailgunAmmoData data) {
             baseCharge = data.getChargeDuration();
         }
-        float speedUpgrade = RailgunItem.getUpgradesStatic(railgunItemStack).getFloat("miningSpeed");
+        float speedUpgrade = RailgunItem.getUpgradesStatic(railgunItemStack).getFloat("speed");
         return (int) (baseCharge / (1 + speedUpgrade));
 
     }
@@ -150,5 +147,5 @@ public abstract class MixinRailgunItem {
  * @Inject(method = "getChargeTime(Lnet/minecraft/world/item/ItemStack;)I", at = @At("HEAD"), cancellable = true, remap = false) private static void injectGetChargeTime(ItemStack railgun,
  * CallbackInfoReturnable<Integer> cir) { IEToolTweaks.LOGGER.info("MixinRailgunItem Called!"); ItemStack ammo = findAmmo(stack, player); IRailgunProjectile projectile =
  * RailgunHandler.getProjectile(railgun); if (projectile instanceof RailgunAmmoData data) { IEToolTweaks.LOGGER.info("Projectile!"); IEToolTweaks.LOGGER.info(data.chargeDuration); int baseCharge
- * = data.chargeDuration; float speedUpgrade = RailgunItem.getUpgradesStatic(railgun).getFloat("miningSpeed"); cir.setReturnValue((int) (baseCharge / (1 + speedUpgrade))); } }
+ * = data.chargeDuration; float speedUpgrade = RailgunItem.getUpgradesStatic(railgun).getFloat("speed"); cir.setReturnValue((int) (baseCharge / (1 + speedUpgrade))); } }
  */

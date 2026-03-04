@@ -1,6 +1,6 @@
 {
   "ammo": {
-    "tag": "forge:rods/aluminum"
+    "item": "minecraft:end_rod"
   },
   "chargeDuration": 40,
   "speed": 20,
@@ -8,13 +8,13 @@
   "isValidForTurret": true,
   "rodDamage": 10,
   "rodGravity": 1.05,
-  "ignoresArrowSpecificCoding": false,
+  "ignoresArrowSpecificCoding": true,
   "railgunRenderColors": [
-    "0xd8d8d8",
-    "0xd8d8d8",
-    "0xd8d8d8",
-    "0xa8a8a8",
-    "0x686868",
-    "0x686868"
+    "0xf6e2cd",
+    "0xfff6e6",
+    "0xffffff",
+    "0xfff6f6",
+    "0xf6e2cd",
+    "0x736565"
   ]
 }

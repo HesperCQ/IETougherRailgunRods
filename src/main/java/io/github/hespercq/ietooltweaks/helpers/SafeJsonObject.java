@@ -12,6 +12,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class SafeJsonObject {
 	private final JsonObject jsonObject;
@@ -124,11 +125,9 @@ public class SafeJsonObject {
 
 			List<int[]> rings = new ArrayList<>();
 
-			// Detect structure type
 			boolean isNestedArray = root.get(0).isJsonArray();
 
 			if (!isNestedArray) {
-				// Treat as single ring gradient
 				int gradientLength = root.size();
 				int[] gradient = new int[gradientLength];
 
@@ -166,6 +165,29 @@ public class SafeJsonObject {
 			return Optional.of(new RailgunHandler.RailgunRenderColors(rings.toArray(new int[0][])));
 		}
 		catch (Exception e) {
+			return Optional.empty();
+		}
+	}
+
+	public Optional<List<String>> getStringArray(String path) {
+		try {
+			if (!jsonObject.has(path) || !jsonObject.get(path).isJsonArray())
+				return Optional.empty();
+
+			JsonArray array = jsonObject.getAsJsonArray(path);
+			List<String> result = new ArrayList<>();
+
+			for (JsonElement element : array) {
+				if (element.isJsonNull())
+					return Optional.empty();
+
+				result.add(element.getAsString());
+			}
+
+			return Optional.of(result);
+		}
+		catch (Exception e) {
+			IEToolTweaks.LOGGER.warn("Failed to parse String array for path '{}': {}", path, e.getMessage());
 			return Optional.empty();
 		}
 	}

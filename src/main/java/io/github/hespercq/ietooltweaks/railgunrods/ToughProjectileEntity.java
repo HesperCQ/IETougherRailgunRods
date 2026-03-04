@@ -287,7 +287,7 @@ public abstract class ToughProjectileEntity extends ToughAbstractProjectile
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket()
 	{
-		// TODO see fluorescent tube
+		// TO_DO see fluorescent tube
 		return (Packet<ClientGamePacketListener>)NetworkHooks.getEntitySpawningPacket(this);
 	}
 

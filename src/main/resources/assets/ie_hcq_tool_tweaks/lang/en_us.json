@@ -1,19 +1,21 @@
 {
     "_comment": "################## IE-Manual ##################",
     "manual.ie_hcq_tool_tweaks.tool_tweaks": "[Add-On] Tool Tweaks",
+    
     "_comment": "Below are used for Dynamic page generation",
     "manual.ie_hcq_tool_tweaks.drillheads.repair_material": "Repair Material: %1$s",
+    
     "_comment": "Use manual.ie_hcq_tool_tweaks.drillheads.<drillhead id (filename)>.extra_text for additional text in manual entry",
-   
-
     "manual.ie_hcq_tool_tweaks.railgun_ammo.charge_duration": "Charge Duration: %1$s seconds",
     "manual.ie_hcq_tool_tweaks.railgun_ammo.speed": "Speed: %1$s",
     "manual.ie_hcq_tool_tweaks.railgun_ammo.deviation": "Deviation: %1$s",
     "manual.ie_hcq_tool_tweaks.railgun_ammo.damage": "Projectile Damage: %1$s",
     "manual.ie_hcq_tool_tweaks.railgun_ammo.gravity": "Projectile Gravity: %1$s",
-    "manual.ie_hcq_tool_tweaks.railgun_ammo.no_deflection": "The Projectile can not be deflected by any normal means.",
+    "manual.ie_hcq_tool_tweaks.railgun_ammo.no_deflection": "This projectile can not be deflected by any normal means.",
+    
     "_comment": "Use manual.ie_hcq_tool_tweaks.railgun_ammo.<ammo id (filename)>.extra_text for additional text in manual entry",
-   
+    "manual.ie_hcq_tool_tweaks.railgun_ammo.lightning_rod.extra_text": "Summons lightning during thunderstorms.",
+    "manual.ie_hcq_tool_tweaks.railgun_ammo.blaze_rod.extra_text": "Sets the target on fire.",
 
     "_comment": "################## Descriptions ##################",
     "desc.ie_hcq_tool_tweaks.flavour.drillhead.vein": "Mines up to %1$s connected blocks of %2$s",

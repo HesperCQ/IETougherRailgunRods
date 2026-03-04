@@ -97,7 +97,7 @@ public class ManualContent {
 
 			// Name
 			text.append("\n");
-			text.append("§l").append(Component.translatable("item.ie_hcq_tool_tweaks.drillhead.".concat(drillHeadVariant.name())).getString()).append("§r");
+			text.append("§l").append(DisplayHelper.getSubItemDisplayName("item.ie_hcq_tool_tweaks.drillhead", drillHeadVariant.name())).append("§r");
 			// Stats
 			text.append("\n");
 			text.append(Component.translatable("desc.immersiveengineering.flavour.drillhead.size", new Object[] { drillHeadVariant.miningSize(), drillHeadVariant.miningDepth() }).getString());
@@ -185,6 +185,17 @@ public class ManualContent {
 			if (railgunAmmoData.ignoresArrowSpecificCoding) {
 				text.append("\n");
 				text.append(Component.translatable("manual.ie_hcq_tool_tweaks.railgun_ammo.no_deflection").getString());
+			}
+
+			// Projectile - Additional Text
+			String extraTextKey = "manual.ie_hcq_tool_tweaks.railgun_ammo." + id + ".extra_text";
+			String extraText = Component.translatable(extraTextKey).getString();
+
+			IEToolTweaks.LOGGER.info("ZZZ Key: " + extraTextKey);
+			IEToolTweaks.LOGGER.info("ZZZ Text: " + extraText);
+			if (!extraText.equals(extraTextKey)) { // Translation Key exists
+				text.append("\n");
+				text.append(extraText);
 			}
 
 		});
