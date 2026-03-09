@@ -1,6 +1,6 @@
 {
   "miningSize": 2,
-  "miningDepth": 2,
+  "miningDepth": 1,
   "miningTier": 3,
   "miningSpeed": 11,
   "veinMiningTag": "ie_hcq_tool_tweaks:vein_mine_echo",
