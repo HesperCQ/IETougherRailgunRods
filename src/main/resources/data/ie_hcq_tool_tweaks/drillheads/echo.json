@@ -18,6 +18,6 @@
       "item": "minecraft:calibrated_sculk_sensor"
     }
   ],
-  "texture": "immersiveengineering:item/drill_iron",
+  "texture": "ie_hcq_tool_tweaks:drillheads/cyan",
   "color": "#0A4F5F"
 }

@@ -10,6 +10,6 @@
   "repairMaterial": {
     "item": "minecraft:diamond"
   },
-  "texture": "immersiveengineering:item/drill_iron",
+  "texture": "ie_hcq_tool_tweaks:drillheads/light_blue",
   "color": "#9FF8E5"
 }

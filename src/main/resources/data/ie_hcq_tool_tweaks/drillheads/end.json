@@ -10,6 +10,6 @@
   "repairMaterial": {
     "item": "minecraft:dragon_breath"
   },
-  "texture": "immersiveengineering:item/drill_iron",
+  "texture": "ie_hcq_tool_tweaks:drillheads/magenta",
   "color": "#CB74A2"
 }
