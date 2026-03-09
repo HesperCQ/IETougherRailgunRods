@@ -1,6 +1,6 @@
 {
-  "miningSize": 1,
-  "miningDepth": 1,
+  "miningSize": 2,
+  "miningDepth": 2,
   "miningTier": 3,
   "miningSpeed": 11,
   "veinMiningTag": "ie_hcq_tool_tweaks:vein_mine_echo",
@@ -18,6 +18,6 @@
       "item": "minecraft:calibrated_sculk_sensor"
     }
   ],
-  "texture": "ie_hcq_tool_tweaks:drillheads/cyan",
+  "texture": "ie_hcq_tool_tweaks:item/3d_drillheads/echo",
   "color": "#0A4F5F"
 }

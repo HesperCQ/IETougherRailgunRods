@@ -15,7 +15,7 @@
     
     "_comment": "Use manual.ie_hcq_tool_tweaks.railgun_ammo.<ammo id (filename)>.extra_text for additional text in manual entry",
     "manual.ie_hcq_tool_tweaks.railgun_ammo.lightning_rod.extra_text": "Summons lightning during thunderstorms.",
-    "manual.ie_hcq_tool_tweaks.railgun_ammo.blaze_rod.extra_text": "Sets the target on fire.",
+    "manual.ie_hcq_tool_tweaks.railgun_ammo.blaze_rod.extra_text": "Sets blocks & mobs on fire.",
 
     "_comment": "################## Descriptions ##################",
     "desc.ie_hcq_tool_tweaks.flavour.drillhead.vein": "Mines up to %1$s connected blocks of %2$s",

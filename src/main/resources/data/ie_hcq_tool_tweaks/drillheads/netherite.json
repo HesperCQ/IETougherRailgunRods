@@ -10,6 +10,6 @@
   "repairMaterial": {
     "item": "minecraft:netherite_ingot"
   },
-  "texture": "ie_hcq_tool_tweaks:drillheads/black",
+  "texture": "ie_hcq_tool_tweaks:item/3d_drillheads/black",
   "color": "#4C484C"
 }

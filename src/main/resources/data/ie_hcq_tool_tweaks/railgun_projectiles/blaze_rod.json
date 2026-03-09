@@ -2,7 +2,7 @@
   "ammo": {
     "tag": "forge:rods/blaze"
   },
-  "chargeDuration": 40,
+  "chargeDuration": 30,
   "speed": 20,
   "deviation": 0,
   "isValidForTurret": true,

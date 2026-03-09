@@ -97,7 +97,7 @@ public class ManualContent {
 
 			// Name
 			text.append("\n");
-			text.append("§l").append(DisplayHelper.getSubItemDisplayName("item.ie_hcq_tool_tweaks.drillhead", drillHeadVariant.name())).append("§r");
+			text.append("§l").append(DisplayHelper.getSubItemDisplayName("item.ie_hcq_tool_tweaks.drillhead", drillHeadVariant.name()).getString()).append("§r");
 			// Stats
 			text.append("\n");
 			text.append(Component.translatable("desc.immersiveengineering.flavour.drillhead.size", new Object[] { drillHeadVariant.miningSize(), drillHeadVariant.miningDepth() }).getString());
