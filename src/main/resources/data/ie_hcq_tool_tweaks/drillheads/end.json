@@ -5,8 +5,8 @@
   "miningSpeed": 10,
   "veinMiningTag": null,
   "veinMiningSize": null,
-  "attackDamage": 7,
-  "durability": 6000,
+  "attackDamage": 6,
+  "durability": 4000,
   "repairMaterial": {
     "item": "minecraft:dragon_breath"
   },

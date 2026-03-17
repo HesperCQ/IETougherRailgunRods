@@ -6,7 +6,7 @@
   "veinMiningTag": null,
   "veinMiningSize": null,
   "attackDamage": 7,
-  "durability": 6000,
+  "durability": 8000,
   "repairMaterial": {
     "item": "minecraft:diamond"
   },

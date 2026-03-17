@@ -2,31 +2,33 @@
   "ammo": {
     "tag": "forge:rods/blaze"
   },
-  "chargeDuration": 30,
-  "speed": 20,
-  "deviation": 0,
-  "isValidForTurret": true,
-  "rodDamage": 10,
-  "rodGravity": 1.05,
-  "ignoresArrowSpecificCoding": false,
-  "onEntityHitCommands": [
-    "data modify entity @s Fire set value 100"
-  ],
-  "onBlockHitCommands": [
-    "setblock ~ ~ ~ fire keep",
-    "setblock ~-1 ~ ~ fire keep",
-    "setblock ~1 ~ ~ fire keep",
-    "setblock ~ ~-1 ~ fire keep",
-    "setblock ~ ~1 ~ fire keep",
-    "setblock ~ ~ ~-1 fire keep",
-    "setblock ~ ~ ~1 fire keep"
-  ],
-  "railgunRenderColors": [
-    "0xfff32d",
-    "0xffc100",
-    "0xb36b19",
-    "0xbf5a00",
-    "0xbf5a00",
-    "0x953300"
-  ]
+  "firing": {
+    "chargeDuration": 40,
+    "speed": 20,
+    "deviation": 0,
+    "isValidForTurret": true
+  },
+  "projectile": {
+    "damage": 10,
+    "gravity": 1.05,
+    "useUpgradedProjectile": false,
+    "railgunRenderColors": [
+      "0xfff32d",
+      "0xffc100",
+      "0xb36b19",
+      "0xbf5a00",
+      "0xbf5a00",
+      "0x953300"
+    ],
+    "commandHooks": {
+      "onHitEntity": [
+        "data modify entity @s Fire set value 100"
+      ],
+      "onHitBlock": [
+        "fill ~ ~-1 ~-1 ~ ~1 ~1 minecraft:fire replace minecraft:air",
+        "fill ~-1 ~ ~-1 ~1 ~ ~1 minecraft:fire replace minecraft:air",
+        "fill ~-1 ~-1 ~ ~1 ~1 ~ minecraft:fire replace minecraft:air"
+      ]
+    }
+  }
 }

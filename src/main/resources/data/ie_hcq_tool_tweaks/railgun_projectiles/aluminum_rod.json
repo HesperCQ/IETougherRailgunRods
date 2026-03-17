@@ -2,19 +2,23 @@
   "ammo": {
     "tag": "forge:rods/aluminum"
   },
-  "chargeDuration": 40,
-  "speed": 20,
-  "deviation": 0,
-  "isValidForTurret": true,
-  "rodDamage": 10,
-  "rodGravity": 1.05,
-  "ignoresArrowSpecificCoding": false,
-  "railgunRenderColors": [
-    "0xd8d8d8",
-    "0xd8d8d8",
-    "0xd8d8d8",
-    "0xa8a8a8",
-    "0x686868",
-    "0x686868"
-  ]
+  "firing": {
+    "chargeDuration": 40,
+    "speed": 20,
+    "deviation": 0,
+    "isValidForTurret": true
+  },
+  "projectile": {
+    "damage": 15,
+    "gravity": 1.05,
+    "useUpgradedProjectile": false,
+    "railgunRenderColors": [
+      "0xd8d8d8",
+      "0xd8d8d8",
+      "0xd8d8d8",
+      "0xa8a8a8",
+      "0x686868",
+      "0x686868"
+    ]
+  }
 }

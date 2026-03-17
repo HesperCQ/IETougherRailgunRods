@@ -1,6 +1,5 @@
 package io.github.hespercq.ietooltweaks.railgunrods;
 
-
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.nbt.CompoundTag;
@@ -12,10 +11,12 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -27,10 +28,8 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
-public abstract class ToughProjectileEntity extends ToughAbstractProjectile
-{
-	private static final EntityDataAccessor<Optional<UUID>> SHOOTER_PARAMETER =
-			SynchedEntityData.defineId(ToughProjectileEntity.class, EntityDataSerializers.OPTIONAL_UUID);
+public abstract class ToughProjectileEntity extends ToughAbstractProjectile {
+	private static final EntityDataAccessor<Optional<UUID>> SHOOTER_PARAMETER = SynchedEntityData.defineId(ToughProjectileEntity.class, EntityDataSerializers.OPTIONAL_UUID);
 
 	public int ticksInAir;
 	protected IntSet piercedEntities;
@@ -42,104 +41,90 @@ public abstract class ToughProjectileEntity extends ToughAbstractProjectile
 
 	private int tickLimit = 40;
 
-	public ToughProjectileEntity(EntityType<? extends ToughProjectileEntity> type, Level world)
-	{
+	public ToughProjectileEntity(EntityType<? extends ToughProjectileEntity> type, Level world) {
 		super(type, world);
 		this.pickup = Pickup.DISALLOWED;
 	}
 
-	public ToughProjectileEntity(EntityType<? extends ToughProjectileEntity> type, Level world, double x, double y, double z)
-	{
+	public ToughProjectileEntity(EntityType<? extends ToughProjectileEntity> type, Level world, double x, double y, double z) {
 		this(type, world);
 		this.moveTo(x, y, z, this.getYRot(), this.getXRot());
 		this.setPos(x, y, z);
 	}
 
-	public ToughProjectileEntity(EntityType<? extends ToughProjectileEntity> type, Level world, LivingEntity living, double ax, double ay, double az)
-	{
-		this(type, world, living, living.getX(), living.getY()+living.getEyeHeight(), living.getZ(), ax, ay, az);
+	public ToughProjectileEntity(EntityType<? extends ToughProjectileEntity> type, Level world, LivingEntity living, double ax, double ay, double az) {
+		this(type, world, living, living.getX(), living.getY() + living.getEyeHeight(), living.getZ(), ax, ay, az);
 	}
 
-	public ToughProjectileEntity(EntityType<? extends ToughProjectileEntity> type, Level world, @Nonnull LivingEntity living, float velocity, float inaccuracy)
-	{
+	public ToughProjectileEntity(EntityType<? extends ToughProjectileEntity> type, Level world, @Nonnull LivingEntity living, float velocity, float inaccuracy) {
 		this(type, world);
 		setOwner(living);
 		this.setShooterSynced();
-		this.setPos(living.getX(), living.getEyeY()-0.1, living.getZ());
+		this.setPos(living.getX(), living.getEyeY() - 0.1, living.getZ());
 		this.shootFromRotation(living, living.getXRot(), living.getYRot(), 0.0F, velocity, inaccuracy);
 	}
 
-	public ToughProjectileEntity(EntityType<? extends ToughProjectileEntity> type, Level world, LivingEntity living, double x, double y, double z, double ax, double ay, double az)
-	{
+	public ToughProjectileEntity(EntityType<? extends ToughProjectileEntity> type, Level world, LivingEntity living, double x, double y, double z, double ax, double ay, double az) {
 		this(type, world);
-		float yaw = living!=null?living.getYRot(): 0;
-		float pitch = living!=null?living.getXRot(): 0;
+		float yaw = living != null ? living.getYRot() : 0;
+		float pitch = living != null ? living.getXRot() : 0;
 		this.moveTo(x, y, z, yaw, pitch);
 		this.setPos(this.getX(), this.getY(), this.getZ());
 		setDeltaMovement(ax, ay, az);
 		setOwner(living);
 		this.setShooterSynced();
 		Vec3 motion = getDeltaMovement();
-		this.shoot(motion.x, motion.y, motion.z, 2*1.5F, 1.0F);
+		this.shoot(motion.x, motion.y, motion.z, 2 * 1.5F, 1.0F);
 	}
 
 	@Override
-	protected void defineSynchedData()
-	{
+	protected void defineSynchedData() {
 		super.defineSynchedData();
 		this.entityData.define(SHOOTER_PARAMETER, Optional.empty());
 	}
 
 	@Nonnull
 	@Override
-	public EntityDimensions getDimensions(Pose poseIn)
-	{
+	public EntityDimensions getDimensions(Pose poseIn) {
 		return new EntityDimensions(.125f, .125f, true);
 	}
 
-	public void setTickLimit(int limit)
-	{
+	public void setTickLimit(int limit) {
 		this.tickLimit = limit;
 	}
 
-	public void setShooterSynced()
-	{
+	public void setShooterSynced() {
 		this.entityData.set(SHOOTER_PARAMETER, Optional.ofNullable(this.shooterUUID));
 	}
 
-	public UUID getShooterSynced()
-	{
+	public UUID getShooterSynced() {
 		Optional<UUID> s = this.entityData.get(SHOOTER_PARAMETER);
 		return s.orElse(null);
 	}
 
 	@Nullable
-	public UUID getShooterUUID()
-	{
+	public UUID getShooterUUID() {
 		return shooterUUID;
 	}
 
 	@Nonnull
 	@Override
-	protected ItemStack getPickupItem()
-	{
+	protected ItemStack getPickupItem() {
 		return ItemStack.EMPTY;
 	}
 
-	public boolean isInGround()
-	{
+	public boolean isInGround() {
 		return this.inGround;
 	}
 
 	@Override
-	public void tick()
-	{
-		if(!isInGround())
+	public void tick() {
+		if (!isInGround())
 			++ticksInAir;
-		if(this.ticksInAir >= this.tickLimit||this.inGroundTime >= this.getMaxTicksInGround())
+		if (this.ticksInAir >= this.tickLimit || this.inGroundTime >= this.getMaxTicksInGround())
 			this.discard();
 
-		if(this.getOwner()==null&&this.level().isClientSide)
+		if (this.getOwner() == null && this.level().isClientSide)
 			this.shooterUUID = getShooterSynced();
 
 		// store previous movement
@@ -150,29 +135,35 @@ public abstract class ToughProjectileEntity extends ToughAbstractProjectile
 		float yRot0Prev = this.yRotO;
 		// disable vanilla gravity
 		this.forceNoGravity = true;
-		
+
 		// perform vanilla tick
 		super.tick();
 
 		// enable gravity
 		this.forceNoGravity = false;
 
-		// Vanilla has a fun issue where it ignores a block hit result if it found any entities instead
-		// so we check for block hits here again...
-		if(!this.isRemoved() && !this.inGround)
-		{
-			Vec3 vec32 = this.position();
-			Vec3 vec33 = vec32.add(delta);
-			BlockHitResult blockHitResult = this.level().clip(new ClipContext(vec32, vec33, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-			if(blockHitResult.getType()!=HitResult.Type.MISS&&!ForgeEventFactory.onProjectileImpact(this, blockHitResult))
-			{
-				this.onHit(blockHitResult);
-				this.hasImpulse = true;
-			}
+		Vec3 start = this.position();
+		Vec3 end = start.add(delta);
+
+		// --- ENTITY HIT ---
+		EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(this.level(), this, start, end, this.getBoundingBox().expandTowards(delta).inflate(1.0),
+				e -> !e.isSpectator() && e.isPickable() && e != this.getOwner());
+
+		if (entityHit != null && !ForgeEventFactory.onProjectileImpact(this, entityHit)) {
+			this.onHit(entityHit);
+			this.hasImpulse = true;
+			return;
 		}
 
-		if(!this.inGround)
-		{
+		// --- BLOCK HIT ---
+		BlockHitResult blockHit = this.level().clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+
+		if (blockHit.getType() != HitResult.Type.MISS && !ForgeEventFactory.onProjectileImpact(this, blockHit)) {
+			this.onHit(blockHit);
+			this.hasImpulse = true;
+		}
+
+		if (!this.inGround) {
 			// restore rotations
 			this.setXRot(xRotPrev);
 			this.setYRot(yRotPrev);
@@ -180,41 +171,36 @@ public abstract class ToughProjectileEntity extends ToughAbstractProjectile
 			this.yRotO = yRot0Prev;
 
 			// perform custom movement changes
-			float absMotion = (float)delta.length();
-			this.setYRot((float)(Math.atan2(delta.x, delta.z)*180.0D/Math.PI));
-			this.setXRot((float)(Math.atan2(delta.y, absMotion)*180.0D/Math.PI));
-			while(this.getXRot()-this.xRotO < -180.0F)
+			float absMotion = (float) delta.length();
+			this.setYRot((float) (Math.atan2(delta.x, delta.z) * 180.0D / Math.PI));
+			this.setXRot((float) (Math.atan2(delta.y, absMotion) * 180.0D / Math.PI));
+			while (this.getXRot() - this.xRotO < -180.0F)
 				this.xRotO -= 360.0F;
-			while(this.getXRot()-this.xRotO >= 180.0F)
+			while (this.getXRot() - this.xRotO >= 180.0F)
 				this.xRotO += 360.0F;
-			while(this.getYRot()-this.yRotO < -180.0F)
+			while (this.getYRot() - this.yRotO < -180.0F)
 				this.yRotO -= 360.0F;
-			while(this.getYRot()-this.yRotO >= 180.0F)
+			while (this.getYRot() - this.yRotO >= 180.0F)
 				this.yRotO += 360.0F;
-			this.setXRot(this.xRotO+(this.getXRot()-this.xRotO)*0.2F);
-			this.setYRot(this.yRotO+(this.getYRot()-this.yRotO)*0.2F);
+			this.setXRot(this.xRotO + (this.getXRot() - this.xRotO) * 0.2F);
+			this.setYRot(this.yRotO + (this.getYRot() - this.yRotO) * 0.2F);
 			float movementDecay = getMotionDecayFactor();
-			if(this.isInWater())
+			if (this.isInWater())
 				movementDecay *= 0.8F;
-			if(movementDecay > 0)
+			if (movementDecay > 0)
 				setDeltaMovement(delta.scale(movementDecay).add(0, -getGravity(), 0));
 		}
 	}
 
 	@Override
-	public void playerTouch(Player player)
-	{
-		if(!this.level().isClientSide&&(this.inGround||this.isNoPhysics())&&this.shakeTime <= 0)
-		{
-			boolean flag = this.pickup==ToughAbstractProjectile.Pickup.ALLOWED
-					||this.pickup==ToughAbstractProjectile.Pickup.CREATIVE_ONLY&&player.getAbilities().instabuild
-					||this.isNoPhysics()&&this.getOwner().getUUID()==player.getUUID();
-			if(this.pickup==ToughAbstractProjectile.Pickup.ALLOWED
-					&&!player.getInventory().add(this.getPickupItem()))
+	public void playerTouch(Player player) {
+		if (!this.level().isClientSide && (this.inGround || this.isNoPhysics()) && this.shakeTime <= 0) {
+			boolean flag = this.pickup == ToughAbstractProjectile.Pickup.ALLOWED || this.pickup == ToughAbstractProjectile.Pickup.CREATIVE_ONLY && player.getAbilities().instabuild
+					|| this.isNoPhysics() && this.getOwner().getUUID() == player.getUUID();
+			if (this.pickup == ToughAbstractProjectile.Pickup.ALLOWED && !player.getInventory().add(this.getPickupItem()))
 				flag = false;
 
-			if(flag)
-			{
+			if (flag) {
 				player.take(this, 1);
 				this.discard();
 			}
@@ -222,14 +208,11 @@ public abstract class ToughProjectileEntity extends ToughAbstractProjectile
 		}
 	}
 
-	protected void handlePiecing(Entity target)
-	{
-		if(this.getPierceLevel() > 0)
-		{
-			if(this.piercedEntities==null)
+	protected void handlePiecing(Entity target) {
+		if (this.getPierceLevel() > 0) {
+			if (this.piercedEntities == null)
 				this.piercedEntities = new IntOpenHashSet(this.getPierceLevel());
-			if(this.piercedEntities.size() >= this.getPierceLevel()+1)
-			{
+			if (this.piercedEntities.size() >= this.getPierceLevel() + 1) {
 				this.discard();
 				return;
 			}
@@ -239,68 +222,58 @@ public abstract class ToughProjectileEntity extends ToughAbstractProjectile
 			this.discard();
 	}
 
-	public double getGravity()
-	{
+	public double getGravity() {
 		return 0.05F;
 	}
 
-	public boolean canIgnite()
-	{
+	public boolean canIgnite() {
 		return false;
 	}
 
-	public int getMaxTicksInGround()
-	{
+	public int getMaxTicksInGround() {
 		return 100;
 	}
 
-	protected float getMotionDecayFactor()
-	{
+	protected float getMotionDecayFactor() {
 		return 0.99F;
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag nbt)
-	{
+	public void addAdditionalSaveData(CompoundTag nbt) {
 		super.addAdditionalSaveData(nbt);
-		if(this.shooterUUID!=null)
+		if (this.shooterUUID != null)
 			nbt.putUUID("Owner", this.shooterUUID);
 
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag nbt)
-	{
+	public void readAdditionalSaveData(CompoundTag nbt) {
 		super.readAdditionalSaveData(nbt);
-		if(nbt.contains("Owner"))
+		if (nbt.contains("Owner"))
 			this.shooterUUID = nbt.getUUID("Owner");
 		else
 			this.shooterUUID = null;
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount)
-	{
+	public boolean hurt(DamageSource source, float amount) {
 		return false;
 	}
 
 	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket()
-	{
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		// TO_DO see fluorescent tube
-		return (Packet<ClientGamePacketListener>)NetworkHooks.getEntitySpawningPacket(this);
+		return (Packet<ClientGamePacketListener>) NetworkHooks.getEntitySpawningPacket(this);
 	}
 
-	public void setOwner(@Nullable Entity entityIn)
-	{
+	public void setOwner(@Nullable Entity entityIn) {
 		super.setOwner(entityIn);
-		if(entityIn!=null)
+		if (entityIn != null)
 			this.shooterUUID = entityIn.getUUID();
 	}
 
 	@Override
-	public boolean isNoGravity()
-	{
-		return this.forceNoGravity||super.isNoGravity();
+	public boolean isNoGravity() {
+		return this.forceNoGravity || super.isNoGravity();
 	}
 }

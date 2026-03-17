@@ -2,19 +2,47 @@
   "ammo": {
     "item": "minecraft:end_rod"
   },
-  "chargeDuration": 40,
-  "speed": 20,
-  "deviation": 0,
-  "isValidForTurret": true,
-  "rodDamage": 10,
-  "rodGravity": 1.05,
-  "ignoresArrowSpecificCoding": true,
-  "railgunRenderColors": [
-    "0xf6e2cd",
-    "0xfff6e6",
-    "0xffffff",
-    "0xfff6f6",
-    "0xf6e2cd",
-    "0x736565"
-  ]
+  "firing": {
+    "chargeDuration": 40,
+    "speed": 20,
+    "deviation": 0,
+    "isValidForTurret": true
+  },
+  "projectile": {
+    "damage": 10,
+    "gravity": 1.05,
+    "breakChance": 1.0,
+    "useUpgradedProjectile": true,
+    "railgunRenderColors": [
+      "0xf6e2cd",
+      "0xfff6e6",
+      "0xffffff",
+      "0xfff6f6",
+      "0xf6e2cd",
+      "0x736565"
+    ],
+    "commandHooks": {
+      "onHitEntity": [
+        "effect give @s minecraft:glowing 30 0 true"
+      ],
+      "onHitBlockNorth": [
+        "setblock ~ ~ ~-1 minecraft:end_rod[facing=north] keep"
+      ],
+      "onHitBlockEast": [
+        "setblock ~1 ~ ~ minecraft:end_rod[facing=east] keep"
+      ],
+      "onHitBlockSouth": [
+        "setblock ~ ~ ~1 minecraft:end_rod[facing=south] keep"
+      ],
+      "onHitBlockWest": [
+        "setblock ~-1 ~ ~ minecraft:end_rod[facing=west] keep"
+      ],
+      "onHitBlockUp": [
+        "setblock ~ ~1 ~ minecraft:end_rod[facing=up] keep"
+      ],
+      "onHitBlockDown": [
+        "setblock ~ ~-1 ~ minecraft:end_rod[facing=down] keep"
+      ]
+    }
+  }
 }

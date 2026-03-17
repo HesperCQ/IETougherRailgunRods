@@ -2,25 +2,31 @@
     "ammo": {
         "item": "minecraft:lightning_rod"
     },
-    "chargeDuration": 80,
-    "speed": 20,
-    "deviation": 0,
-    "isValidForTurret": true,
-    "rodDamage": 10,
-    "rodGravity": 1.05,
-    "ignoresArrowSpecificCoding": false,
-    "onEntityHitCommands": [
-        "execute if predicate ie_hcq_tool_tweaks:is_weather_thunder run summon lightning_bolt ~ ~ ~"
-    ],
-    "onBlockHitCommands": [
-        "execute if predicate ie_hcq_tool_tweaks:is_weather_thunder run summon lightning_bolt ~ ~ ~"
-    ],
-    "railgunRenderColors": [
-        "0xffa06a",
-        "0xffa06a",
-        "0xffa06a",
-        "0xe67e3c",
-        "0xa6522a",
-        "0xa6522a"
-    ]
+    "firing": {
+        "chargeDuration": 80,
+        "speed": 20,
+        "deviation": 0,
+        "isValidForTurret": true
+    },
+    "projectile": {
+        "damage": 10,
+        "gravity": 1.05,
+        "useUpgradedProjectile": false,
+        "railgunRenderColors": [
+            "0xffa06a",
+            "0xffa06a",
+            "0xffa06a",
+            "0xe67e3c",
+            "0xa6522a",
+            "0xa6522a"
+        ],
+        "commandHooks": {
+            "onHitEntity": [
+                "execute if predicate ie_hcq_tool_tweaks:is_weather_thunder run summon lightning_bolt ~ ~ ~"
+            ],
+            "onHitBlock": [
+                "execute if predicate ie_hcq_tool_tweaks:is_weather_thunder run summon lightning_bolt ~ ~ ~"
+            ]
+        }
+    }
 }

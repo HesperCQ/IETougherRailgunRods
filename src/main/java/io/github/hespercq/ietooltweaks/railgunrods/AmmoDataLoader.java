@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 
 import blusunrize.immersiveengineering.api.tool.RailgunHandler;
+import blusunrize.immersiveengineering.api.tool.RailgunHandler.StandardRailgunProjectile;
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import io.github.hespercq.ietooltweaks.helpers.SafeJsonObject;
 import net.minecraft.resources.ResourceLocation;
@@ -26,9 +27,12 @@ public class AmmoDataLoader extends SimpleJsonResourceReloadListener {
 	}
 
 	@Override
-	protected void apply(Map<ResourceLocation, JsonElement> jsons, ResourceManager resourceManager, ProfilerFiller profiler) {
-		RailgunHandler.projectilePropertyMap.clear();
-		// TODO: Only delete standard projectiles, not all
+	protected void apply(Map<ResourceLocation, JsonElement> jsons, ResourceManager resourceManager,
+			ProfilerFiller profiler) {
+		RailgunHandler.projectilePropertyMap.removeIf(entry -> {
+			return entry.getSecond() instanceof IRailgunAmmoData
+					|| entry.getSecond() instanceof StandardRailgunProjectile;
+		});
 		jsons.forEach(this::processEntry);
 	}
 
@@ -48,12 +52,12 @@ public class AmmoDataLoader extends SimpleJsonResourceReloadListener {
 				return;
 			}
 			/*
-			 * boolean projectileDataIsValid = validateAmmoOverlap(rl, projectile); if (!projectileDataIsValid) { return; }
+			 * boolean projectileDataIsValid = validateAmmoOverlap(rl, projectile); if
+			 * (!projectileDataIsValid) { return; }
 			 */
 			RAILGUN_AMMO.put(rl.getPath(), railgunAmmoData);
 			registerProjectile(rl, railgunAmmoData);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			IEToolTweaks.LOGGER.error("Failed to load railgun projectile data '{}': {}", rl, e.getMessage(), e);
 		}
 	}
@@ -68,13 +72,23 @@ public class AmmoDataLoader extends SimpleJsonResourceReloadListener {
 	// Helper Logic
 	// =========================================================
 	/*
-	 * private boolean validateAmmoOverlap(ResourceLocation rl, RailgunAmmoData projectile) { Ingredient newAmmoIngredient = projectile.ammo; boolean overlap =
-	 * RailgunHandler.projectilePropertyMap.stream().map(Pair::getFirst).map(Supplier::get).anyMatch(existing -> checkIngredientsOverlap(newAmmoIngredient, existing)); if (overlap) {
-	 * IEToolTweaks.LOGGER.warn("[IE-ToolTweaks] Railgun projectile not added due to ammo overlap: '{}' <<< {}", rl, newAmmoIngredient.toJson()); return false; } return true; }
+	 * private boolean validateAmmoOverlap(ResourceLocation rl, RailgunAmmoData
+	 * projectile) { Ingredient newAmmoIngredient = projectile.ammo; boolean overlap
+	 * =
+	 * RailgunHandler.projectilePropertyMap.stream().map(Pair::getFirst).map(
+	 * Supplier::get).anyMatch(existing ->
+	 * checkIngredientsOverlap(newAmmoIngredient, existing)); if (overlap) {
+	 * IEToolTweaks.LOGGER.
+	 * warn("[IE-ToolTweaks] Railgun projectile not added due to ammo overlap: '{}' <<< {}"
+	 * , rl, newAmmoIngredient.toJson()); return false; } return true; }
 	 */
 	/*
-	 * protected static boolean checkIngredientsOverlap(Ingredient newAmmoIngredient, Ingredient oldAmmoIngredient) { for (ItemStack newAmmoStack : newAmmoIngredient.getItems()) {
-	 * IEToolTweaks.LOGGER.info("[IE-ToolTweaks] All items '{}'", newAmmoStack.toString()); if (oldAmmoIngredient.test(newAmmoStack)) { IEToolTweaks.LOGGER.info("[IE-ToolTweaks] OVERLAP! '{}'",
+	 * protected static boolean checkIngredientsOverlap(Ingredient
+	 * newAmmoIngredient, Ingredient oldAmmoIngredient) { for (ItemStack
+	 * newAmmoStack : newAmmoIngredient.getItems()) {
+	 * IEToolTweaks.LOGGER.info("[IE-ToolTweaks] All items '{}'",
+	 * newAmmoStack.toString()); if (oldAmmoIngredient.test(newAmmoStack)) {
+	 * IEToolTweaks.LOGGER.info("[IE-ToolTweaks] OVERLAP! '{}'",
 	 * newAmmoStack.toString()); return true; } } return false; }
 	 */
 }
