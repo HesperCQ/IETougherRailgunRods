@@ -11,7 +11,7 @@
   "projectile": {
     "damage": 10,
     "gravity": 1.05,
-    "useUpgradedProjectile": false,
+    "useUpgradedProjectile": true,
     "railgunRenderColors": [
       "0xfff32d",
       "0xffc100",

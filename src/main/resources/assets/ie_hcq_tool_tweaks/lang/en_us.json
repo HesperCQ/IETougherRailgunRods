@@ -11,7 +11,7 @@
     "manual.ie_hcq_tool_tweaks.railgun_ammo.deviation": "Deviation: %1$s",
     "manual.ie_hcq_tool_tweaks.railgun_ammo.damage": "Projectile Damage: %1$s",
     "manual.ie_hcq_tool_tweaks.railgun_ammo.gravity": "Projectile Gravity: %1$s",
-    "manual.ie_hcq_tool_tweaks.railgun_ammo.no_deflection": "This projectile can not be deflected by any normal means.",
+    "manual.ie_hcq_tool_tweaks.railgun_ammo.no_deflection": "Ignores most types of projectile deflection and dodging.",
     
     "_comment": "Use manual.ie_hcq_tool_tweaks.railgun_ammo.<ammo id (filename)>.extra_text for additional text in manual entry",
     "manual.ie_hcq_tool_tweaks.railgun_ammo.blaze_rod.extra_text": "Sets blocks & mobs on fire.",
