@@ -1,0 +1,15 @@
+{
+  "miningSize": 3,
+  "miningDepth": 3,
+  "miningTier": 3,
+  "miningSpeed": 10,
+  "veinMiningTag": null,
+  "veinMiningSize": null,
+  "attackDamage": 6,
+  "durability": 8000,
+  "repairMaterial": {
+    "item": "minecraft:shulker_shell"
+  },
+  "texture": "ie_hcq_tool_tweaks:item/3d_drillheads/magenta",
+  "color": "#CB74A2"
+}

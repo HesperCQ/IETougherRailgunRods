@@ -1,0 +1,84 @@
+{
+    "ammo": {
+        "item": "minecraft:fishing_rod"
+    },
+    "firing": {
+        "chargeDuration": 100,
+        "speed": 5,
+        "deviation": 0.1,
+        "isValidForTurret": false
+    },
+    "projectile": {
+        "damage": 5,
+        "gravity": 0.1,
+        "useUpgradedProjectile": true,
+        "railgunRenderColors": [
+            "0x964B00",
+            "0x964B00",
+            "0x964B00",
+            "0x964B00",
+            "0x964B00",
+            "0x964B00"
+        ],
+        "commandHooks": {
+            "onHitEntity": [
+				"execute if block ~-1 ~-1 ~-1 minecraft:water run loot spawn ~-1 ~-1 ~-1 fish minecraft:gameplay/fishing ~-1 ~-1 ~-1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~-1 ~-1 ~0 minecraft:water run loot spawn ~-1 ~-1 ~0 fish minecraft:gameplay/fishing ~-1 ~-1 ~0 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~-1 ~-1 ~1 minecraft:water run loot spawn ~-1 ~-1 ~1 fish minecraft:gameplay/fishing ~-1 ~-1 ~1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~-1 ~0 ~-1 minecraft:water run loot spawn ~-1 ~0 ~-1 fish minecraft:gameplay/fishing ~-1 ~0 ~-1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~-1 ~0 ~0 minecraft:water run loot spawn ~-1 ~0 ~0 fish minecraft:gameplay/fishing ~-1 ~0 ~0 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~-1 ~0 ~1 minecraft:water run loot spawn ~-1 ~0 ~1 fish minecraft:gameplay/fishing ~-1 ~0 ~1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~-1 ~1 ~-1 minecraft:water run loot spawn ~-1 ~1 ~-1 fish minecraft:gameplay/fishing ~-1 ~1 ~-1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~-1 ~1 ~0 minecraft:water run loot spawn ~-1 ~1 ~0 fish minecraft:gameplay/fishing ~-1 ~1 ~0 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~-1 ~1 ~1 minecraft:water run loot spawn ~-1 ~1 ~1 fish minecraft:gameplay/fishing ~-1 ~1 ~1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~0 ~-1 ~-1 minecraft:water run loot spawn ~0 ~-1 ~-1 fish minecraft:gameplay/fishing ~0 ~-1 ~-1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~0 ~-1 ~0 minecraft:water run loot spawn ~0 ~-1 ~0 fish minecraft:gameplay/fishing ~0 ~-1 ~0 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~0 ~-1 ~1 minecraft:water run loot spawn ~0 ~-1 ~1 fish minecraft:gameplay/fishing ~0 ~-1 ~1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~0 ~0 ~-1 minecraft:water run loot spawn ~0 ~0 ~-1 fish minecraft:gameplay/fishing ~0 ~0 ~-1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~0 ~0 ~0 minecraft:water run loot spawn ~0 ~0 ~0 fish minecraft:gameplay/fishing ~0 ~0 ~0 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~0 ~0 ~1 minecraft:water run loot spawn ~0 ~0 ~1 fish minecraft:gameplay/fishing ~0 ~0 ~1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~0 ~1 ~-1 minecraft:water run loot spawn ~0 ~1 ~-1 fish minecraft:gameplay/fishing ~0 ~1 ~-1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~0 ~1 ~0 minecraft:water run loot spawn ~0 ~1 ~0 fish minecraft:gameplay/fishing ~0 ~1 ~0 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~0 ~1 ~1 minecraft:water run loot spawn ~0 ~1 ~1 fish minecraft:gameplay/fishing ~0 ~1 ~1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~1 ~-1 ~-1 minecraft:water run loot spawn ~1 ~-1 ~-1 fish minecraft:gameplay/fishing ~1 ~-1 ~-1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~1 ~-1 ~0 minecraft:water run loot spawn ~1 ~-1 ~0 fish minecraft:gameplay/fishing ~1 ~-1 ~0 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~1 ~-1 ~1 minecraft:water run loot spawn ~1 ~-1 ~1 fish minecraft:gameplay/fishing ~1 ~-1 ~1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~1 ~0 ~-1 minecraft:water run loot spawn ~1 ~0 ~-1 fish minecraft:gameplay/fishing ~1 ~0 ~-1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~1 ~0 ~0 minecraft:water run loot spawn ~1 ~0 ~0 fish minecraft:gameplay/fishing ~1 ~0 ~0 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~1 ~0 ~1 minecraft:water run loot spawn ~1 ~0 ~1 fish minecraft:gameplay/fishing ~1 ~0 ~1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~1 ~1 ~-1 minecraft:water run loot spawn ~1 ~1 ~-1 fish minecraft:gameplay/fishing ~1 ~1 ~-1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~1 ~1 ~0 minecraft:water run loot spawn ~1 ~1 ~0 fish minecraft:gameplay/fishing ~1 ~1 ~0 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~1 ~1 ~1 minecraft:water run loot spawn ~1 ~1 ~1 fish minecraft:gameplay/fishing ~1 ~1 ~1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}"
+            ],
+            "onHitBlock": [
+				"execute if block ~-1 ~-1 ~-1 minecraft:water run loot spawn ~-1 ~-1 ~-1 fish minecraft:gameplay/fishing ~-1 ~-1 ~-1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~-1 ~-1 ~0 minecraft:water run loot spawn ~-1 ~-1 ~0 fish minecraft:gameplay/fishing ~-1 ~-1 ~0 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~-1 ~-1 ~1 minecraft:water run loot spawn ~-1 ~-1 ~1 fish minecraft:gameplay/fishing ~-1 ~-1 ~1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~-1 ~0 ~-1 minecraft:water run loot spawn ~-1 ~0 ~-1 fish minecraft:gameplay/fishing ~-1 ~0 ~-1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~-1 ~0 ~0 minecraft:water run loot spawn ~-1 ~0 ~0 fish minecraft:gameplay/fishing ~-1 ~0 ~0 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~-1 ~0 ~1 minecraft:water run loot spawn ~-1 ~0 ~1 fish minecraft:gameplay/fishing ~-1 ~0 ~1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~-1 ~1 ~-1 minecraft:water run loot spawn ~-1 ~1 ~-1 fish minecraft:gameplay/fishing ~-1 ~1 ~-1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~-1 ~1 ~0 minecraft:water run loot spawn ~-1 ~1 ~0 fish minecraft:gameplay/fishing ~-1 ~1 ~0 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~-1 ~1 ~1 minecraft:water run loot spawn ~-1 ~1 ~1 fish minecraft:gameplay/fishing ~-1 ~1 ~1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~0 ~-1 ~-1 minecraft:water run loot spawn ~0 ~-1 ~-1 fish minecraft:gameplay/fishing ~0 ~-1 ~-1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~0 ~-1 ~0 minecraft:water run loot spawn ~0 ~-1 ~0 fish minecraft:gameplay/fishing ~0 ~-1 ~0 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~0 ~-1 ~1 minecraft:water run loot spawn ~0 ~-1 ~1 fish minecraft:gameplay/fishing ~0 ~-1 ~1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~0 ~0 ~-1 minecraft:water run loot spawn ~0 ~0 ~-1 fish minecraft:gameplay/fishing ~0 ~0 ~-1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~0 ~0 ~0 minecraft:water run loot spawn ~0 ~0 ~0 fish minecraft:gameplay/fishing ~0 ~0 ~0 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~0 ~0 ~1 minecraft:water run loot spawn ~0 ~0 ~1 fish minecraft:gameplay/fishing ~0 ~0 ~1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~0 ~1 ~-1 minecraft:water run loot spawn ~0 ~1 ~-1 fish minecraft:gameplay/fishing ~0 ~1 ~-1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~0 ~1 ~0 minecraft:water run loot spawn ~0 ~1 ~0 fish minecraft:gameplay/fishing ~0 ~1 ~0 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~0 ~1 ~1 minecraft:water run loot spawn ~0 ~1 ~1 fish minecraft:gameplay/fishing ~0 ~1 ~1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~1 ~-1 ~-1 minecraft:water run loot spawn ~1 ~-1 ~-1 fish minecraft:gameplay/fishing ~1 ~-1 ~-1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~1 ~-1 ~0 minecraft:water run loot spawn ~1 ~-1 ~0 fish minecraft:gameplay/fishing ~1 ~-1 ~0 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~1 ~-1 ~1 minecraft:water run loot spawn ~1 ~-1 ~1 fish minecraft:gameplay/fishing ~1 ~-1 ~1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~1 ~0 ~-1 minecraft:water run loot spawn ~1 ~0 ~-1 fish minecraft:gameplay/fishing ~1 ~0 ~-1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~1 ~0 ~0 minecraft:water run loot spawn ~1 ~0 ~0 fish minecraft:gameplay/fishing ~1 ~0 ~0 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~1 ~0 ~1 minecraft:water run loot spawn ~1 ~0 ~1 fish minecraft:gameplay/fishing ~1 ~0 ~1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~1 ~1 ~-1 minecraft:water run loot spawn ~1 ~1 ~-1 fish minecraft:gameplay/fishing ~1 ~1 ~-1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~1 ~1 ~0 minecraft:water run loot spawn ~1 ~1 ~0 fish minecraft:gameplay/fishing ~1 ~1 ~0 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}",
+				"execute if block ~1 ~1 ~1 minecraft:water run loot spawn ~1 ~1 ~1 fish minecraft:gameplay/fishing ~1 ~1 ~1 minecraft:fishing_rod{Enchantments:[{id:'minecraft:luck_of_the_sea',lvl:3}]}"
+            ]
+        }
+    }
+}

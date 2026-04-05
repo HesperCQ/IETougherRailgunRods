@@ -1,0 +1,22 @@
+{
+  "pack": {
+    "description": "IE - Tool Tweaks Example",
+    "pack_format": 15
+  },
+  "filter": {
+    "block": [
+      {
+        "namespace": "ie_hcq_tool_tweaks",
+        "path": "drillheads/diamond"
+      },
+      {
+        "namespace": "ie_hcq_tool_tweaks",
+        "path": "recipes/drillheads/diamond"
+      },
+      {
+        "namespace": "ie_hcq_tool_tweaks",
+        "path": "railgun_projectiles/lightning_rod"
+      }
+    ]
+  }
+}

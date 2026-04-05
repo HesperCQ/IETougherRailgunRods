@@ -1,0 +1,24 @@
+{
+  "ammo": {
+    "item": "immersiveengineering:graphite_electrode"
+  },
+  "firing": {
+    "chargeDuration": 80,
+    "speed": 20,
+    "deviation": 0,
+    "isValidForTurret": true
+  },
+  "projectile": {
+    "damage": 60,
+    "gravity": 0.9,
+    "useUpgradedProjectile": true,
+    "railgunRenderColors": [
+      "0x242424",
+      "0x242424",
+      "0x242424",
+      "0x171717",
+      "0x171717",
+      "0x0a0a0a"
+    ]
+  }
+}

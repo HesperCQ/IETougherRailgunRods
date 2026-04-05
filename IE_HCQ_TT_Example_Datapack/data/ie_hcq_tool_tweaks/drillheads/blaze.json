@@ -1,0 +1,20 @@
+{
+  "miningSize": 3,
+  "miningDepth": 1,
+  "miningTier": 3,
+  "miningSpeed": 30,
+  "veinMiningTag": "ie_hcq_tool_tweaks:cold_blocks",
+  "veinMiningSize": 64,
+  "attackDamage": 9,
+  "durability": 3000,
+  "repairMaterial": [
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
+      "item": "minecraft:blaze_rod"
+    }
+  ],
+  "texture": "ie_hcq_tool_tweaks:item/3d_drillheads/orange",
+  "color": "#FFA500"
+}
