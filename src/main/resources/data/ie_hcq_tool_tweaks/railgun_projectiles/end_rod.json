@@ -26,22 +26,22 @@
         "effect give @s minecraft:glowing 30 0 true"
       ],
       "onHitBlockNorth": [
-        "setblock ~ ~ ~-1 minecraft:end_rod[facing=north] keep"
+        "execute unless block ~ ~ ~ minecraft:end_rod run setblock ~ ~ ~-1 minecraft:end_rod[facing=north] keep"
       ],
       "onHitBlockEast": [
-        "setblock ~1 ~ ~ minecraft:end_rod[facing=east] keep"
+        "execute unless block ~ ~ ~ minecraft:end_rod run setblock ~1 ~ ~ minecraft:end_rod[facing=east] keep"
       ],
       "onHitBlockSouth": [
-        "setblock ~ ~ ~1 minecraft:end_rod[facing=south] keep"
+        "execute unless block ~ ~ ~ minecraft:end_rod run setblock ~ ~ ~1 minecraft:end_rod[facing=south] keep"
       ],
       "onHitBlockWest": [
-        "setblock ~-1 ~ ~ minecraft:end_rod[facing=west] keep"
+        "execute unless block ~ ~ ~ minecraft:end_rod run setblock ~-1 ~ ~ minecraft:end_rod[facing=west] keep"
       ],
       "onHitBlockUp": [
-        "setblock ~ ~1 ~ minecraft:end_rod[facing=up] keep"
+        "execute unless block ~ ~ ~ minecraft:end_rod run setblock ~ ~1 ~ minecraft:end_rod[facing=up] keep"
       ],
       "onHitBlockDown": [
-        "setblock ~ ~-1 ~ minecraft:end_rod[facing=down] keep"
+        "execute unless block ~ ~ ~ minecraft:end_rod run setblock ~ ~-1 ~ minecraft:end_rod[facing=down] keep"
       ]
     }
   }

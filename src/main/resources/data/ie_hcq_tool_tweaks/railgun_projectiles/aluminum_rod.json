@@ -3,13 +3,13 @@
     "tag": "forge:rods/aluminum"
   },
   "firing": {
-    "chargeDuration": 40,
+    "chargeDuration": 20,
     "speed": 20,
     "deviation": 0,
     "isValidForTurret": true
   },
   "projectile": {
-    "damage": 15,
+    "damage": 10,
     "gravity": 1.05,
     "useUpgradedProjectile": true,
     "railgunRenderColors": [

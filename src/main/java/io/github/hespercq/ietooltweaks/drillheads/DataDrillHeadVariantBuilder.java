@@ -28,7 +28,7 @@ public class DataDrillHeadVariantBuilder {
 
 	// Mining Veins Optionals
 	private Optional<TagKey<Block>> veinMiningTag = Optional.empty();
-	private int veinMiningSize = 64;
+	private int veinMiningSize = 0;
 
 	// Stats defaults
 	private int durability = 250;

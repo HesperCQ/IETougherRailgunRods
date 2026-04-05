@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 import blusunrize.immersiveengineering.api.tool.RailgunHandler.RailgunRenderColors;
 import blusunrize.immersiveengineering.api.tool.RailgunHandler.StandardRailgunProjectile;
 import blusunrize.immersiveengineering.common.entities.RailgunShotEntity;
-import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import io.github.hespercq.ietooltweaks.helpers.SafeJsonObject;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.Direction;
@@ -43,13 +42,6 @@ public final class RailgunAmmoData extends StandardRailgunProjectile implements 
 	public final Optional<String[]> onHitBlockCommandsWest;
 	public final Optional<String[]> onHitBlockCommandsUp;
 	public final Optional<String[]> onHitBlockCommandsDown;
-
-	// Future Plans
-	// - ConsumesAmmo
-	// - Shoots Entity
-	// Copy delta movement from base projectile
-	// Color
-	// Book
 
 	private RailgunAmmoData(Builder builder) {
 		super(builder.rodDamage, builder.rodGravity);
@@ -88,8 +80,7 @@ public final class RailgunAmmoData extends StandardRailgunProjectile implements 
 	@Override
 	public Entity getProjectile(@Nullable Player shooter, ItemStack ammo, Entity defaultProjectile) {
 		if (shooter == null) {
-			return defaultProjectile; // TODO: Check casting and getting the pos via that
-			// ToughRailgunShotEntity(defaultProjectile.level(), defaultProjectile.setOwner, speed, deviation, ammo);
+			return defaultProjectile; // TODO: Check casting and getting the pos / speed via that
 		}
 
 		if (ignoresArrowSpecificCoding) {
@@ -115,14 +106,11 @@ public final class RailgunAmmoData extends StandardRailgunProjectile implements 
 
 	@Override
 	public void onHitTarget(Level world, HitResult target, @Nullable UUID shooter, Entity projectile) {
-		IEToolTweaks.LOGGER.info("ZZZ onHitTarget");
 		if (world.isClientSide || world.getServer() == null)
 			return;
 
-		IEToolTweaks.LOGGER.info("ZZZ not Client");
-
-		String[] commands;
-		CommandSourceStack source;
+		String[] commands = null;
+		CommandSourceStack source = null;
 
 		if (target instanceof EntityHitResult entityHit) {
 			source = entityHit.getEntity().createCommandSourceStack();
@@ -151,14 +139,15 @@ public final class RailgunAmmoData extends StandardRailgunProjectile implements 
 			System.arraycopy(defaultCommands, 0, commands, 0, defaultCommands.length);
 			System.arraycopy(directionalCommands, 0, commands, defaultCommands.length, directionalCommands.length);
 		}
-		else {
+
+		if (source == null || target == null) {
 			return;
 		}
 
 		// Execute all commands
+		// TODO: Check permission level
 		source = source.withPermission(4).withSuppressedOutput();
 		for (String command : commands) {
-			IEToolTweaks.LOGGER.info("ZZZ: " + command);
 			world.getServer().getCommands().performPrefixedCommand(source, command);
 		}
 	}

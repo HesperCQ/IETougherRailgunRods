@@ -9,52 +9,55 @@ import net.minecraft.tags.TagKey;
 
 public class DisplayHelper {
 
-	// TODO Check which approach is better, string in translatable or second Component
-
-	// #region Tag Name
+	// -----------------------------
+	// Tag Display Name
+	// -----------------------------
 	public static Component getTagDisplayName(TagKey<?> tag) {
 		ResourceLocation id = tag.location();
 		String registry = tag.registry().location().getPath(); // "block", "item", etc.
-		return Component.translatable("tag." + registry + "." + id.getNamespace() + "." + id.getPath().replace('/', '.'), getTagDisplayFallback(id));
+		String langKey = "tag." + registry + "." + id.getNamespace() + "." + id.getPath().replace('/', '.');
+
+		Component translation = Component.translatable(langKey);
+
+		// Return translation if exists
+		if (!translation.getString().equals(langKey)) {
+			return translation;
+		}
+		// Fallback: last segment of the tag path
+		return Component.literal(toDisplayFallback(getLastSegment(id.getPath())));
 	}
 
-	public static String getTagDisplayFallback(ResourceLocation rl) {
-		return Arrays.stream(rl.getPath().split("/")).reduce((a, b) -> b) // take only the last path segment
-				.map(s -> s.split("_")).stream().flatMap(Arrays::stream).map(s -> s.substring(0, 1).toUpperCase() + s.substring(1)).collect(Collectors.joining(" "));
-	}
-	// #endregion
-
-	// #region SubItem Name
+	// -----------------------------
+	// SubItem Display Name
+	// -----------------------------
 	public static Component getSubItemDisplayName(String itemKey, String subKey) {
 		String fullKey = itemKey + "." + subKey;
 
-		// If a lang key was found
-		if (!Component.translatable(fullKey).getString().equals(fullKey)) {
-			return Component.translatable(fullKey); // Return translation
-		}
-		else {
-			return getSubItemDisplayFallback(itemKey, subKey);
-		}
+		Component translation = Component.translatable(fullKey);
 
-		// Otherwise generate prefix before item name
-
+		if (!translation.getString().equals(fullKey)) {
+			return translation;
+		}
+		// Fallback: subKey + itemKey translation
+		String displayName = toDisplayFallback(getLastSegment(subKey));
+		return Component.literal(displayName).append(" ").append(Component.translatable(itemKey));
 	}
 
-	public static Component getSubItemDisplayFallback(String itemKey, String subKey) {
-		String[] words = subKey.split("[_\\s]+"); // split on underscores or spaces
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < words.length; i++) {
-			if (words[i].isEmpty())
-				continue;
-			sb.append(Character.toUpperCase(words[i].charAt(0)));
-			if (words[i].length() > 1) {
-				sb.append(words[i].substring(1).toLowerCase());
-			}
-			if (i < words.length - 1)
-				sb.append(" ");
-		}
-		sb.toString();
-		return Component.literal(sb.toString()).append(" ").append(Component.translatable(itemKey));
+	// -----------------------------
+	// Helper: extract last segment from a path
+	// -----------------------------
+	public static String getLastSegment(String path) {
+		if (path == null || path.isEmpty())
+			return "";
+		int index = path.lastIndexOf('/');
+		return index == -1 ? path : path.substring(index + 1);
 	}
-	// #endregion
+
+	// -----------------------------
+	// Helper: convert segment to display fallback
+	// -----------------------------
+	public static String toDisplayFallback(String segment) {
+		return Arrays.stream(segment.split("[_\\s]+")) // split on underscores or spaces
+				.filter(s -> !s.isEmpty()).map(s -> Character.toUpperCase(s.charAt(0)) + s.substring(1).toLowerCase()).collect(Collectors.joining(" "));
+	}
 }

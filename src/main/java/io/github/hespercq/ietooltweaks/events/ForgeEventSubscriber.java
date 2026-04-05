@@ -15,6 +15,5 @@ public class ForgeEventSubscriber {
 	public static void onAddReloadListener(final AddReloadListenerEvent event) {
 		event.addListener(new DataDrillHeadVariantsDataLoader());
 		event.addListener(new AmmoDataLoader());
-		IEToolTweaks.LOGGER.info("Reload Listeners Registered");
 	}
 }

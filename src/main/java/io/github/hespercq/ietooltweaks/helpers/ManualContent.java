@@ -117,15 +117,18 @@ public class ManualContent {
 
 			// Optional - Vein Mining
 			if (drillHeadVariant.isVeinMining()) {
-				drillHeadVariant.veinMiningTag().ifPresent((veinMiningTag) -> {
+				drillHeadVariant.veinMiningTag().ifPresentOrElse((veinMiningTag) -> {
 					text.append("\n");
-					text.append(
-							Component.translatable("desc.ie_hcq_tool_tweaks.flavour.drillhead.vein", new Object[] { drillHeadVariant.veinMiningSize(), DisplayHelper.getTagDisplayName(veinMiningTag) })
-									.getString());
+					text.append(Component
+							.translatable("desc.ie_hcq_tool_tweaks.flavour.drillhead.vein.tag", new Object[] { drillHeadVariant.veinMiningSize(), DisplayHelper.getTagDisplayName(veinMiningTag) })
+							.getString());
+				}, () -> {
+					text.append("\n");
+					text.append(Component.translatable("desc.ie_hcq_tool_tweaks.flavour.drillhead.vein", new Object[] { drillHeadVariant.veinMiningSize() }).getString());
 				});
 			}
 
-			// If not empty - Repair Material
+			// Repair Material Ingredient not empty
 			if (!drillHeadVariant.repairMaterial().isEmpty()) {
 				Component repairMaterialsListComponent = ComponentUtils.formatList(Arrays.stream(drillHeadVariant.repairMaterial().getItems()).map(ItemStack::getHoverName).toList(),
 						Component.literal(", "));
@@ -191,8 +194,6 @@ public class ManualContent {
 			String extraTextKey = "manual.ie_hcq_tool_tweaks.railgun_ammo." + id + ".extra_text";
 			String extraText = Component.translatable(extraTextKey).getString();
 
-			IEToolTweaks.LOGGER.info("ZZZ Key: " + extraTextKey);
-			IEToolTweaks.LOGGER.info("ZZZ Text: " + extraText);
 			if (!extraText.equals(extraTextKey)) { // Translation Key exists
 				text.append("\n");
 				text.append(extraText);

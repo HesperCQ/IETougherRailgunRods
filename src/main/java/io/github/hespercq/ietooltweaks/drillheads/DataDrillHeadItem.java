@@ -65,11 +65,14 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 		String s = status + (this.getMaximumHeadDamage(stack) - this.getHeadDamage(stack)) + "/" + this.getMaximumHeadDamage(stack);
 		list.add(Component.translatable("desc.immersiveengineering.info.durability", new Object[] { s }));
 
-		// Additional Info:
+		// Vein Mining Info:
 		if (permData.isVeinMining()) {
-			permData.veinMiningTag().ifPresent((veinMiningTag) -> {
-				list.add(Component.translatable("desc.ie_hcq_tool_tweaks.flavour.drillhead.vein",
+			permData.veinMiningTag().ifPresentOrElse((veinMiningTag) -> {
+				list.add(Component.translatable("desc.ie_hcq_tool_tweaks.flavour.drillhead.vein.tag",
 						new Object[] { permData.veinMiningSize(), DisplayHelper.getTagDisplayName(veinMiningTag).getString() }));
+			}, () -> {
+				list.add(Component.translatable("desc.ie_hcq_tool_tweaks.flavour.drillhead.vein",
+						new Object[] { permData.veinMiningSize() }));
 			});
 		}
 	}
@@ -179,9 +182,9 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 		boolean hardnessStart = state.getDestroyProgress(player, world, startPos) >= maxHardness;
 
 		// Get vein blocks instead if drill and block fit
-		boolean stateInTag = dh_type.veinMiningTag().map(state::is).orElse(false);
+		boolean stateFitsVeinMiningTag = dh_type.veinMiningTag().isEmpty() || dh_type.veinMiningTag().map(state::is).orElse(false);
 
-		if (dh_type.isVeinMining() && stateInTag && hardnessStart) {
+		if (dh_type.isVeinMining() && stateFitsVeinMiningTag && hardnessStart) {
 			return getBlocksInVein(head, world, player, brtr, dh_type.veinMiningSize());
 		}
 

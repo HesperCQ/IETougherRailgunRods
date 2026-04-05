@@ -28,7 +28,6 @@ public class DataDrillHeadVariantsDataLoader extends SimpleJsonResourceReloadLis
 
 	public DataDrillHeadVariantsDataLoader() {
 		super(GSON, FOLDER);
-		// <-- Folder inside data/<modid>/
 	}
 
 	public static Set<String> getIds() {

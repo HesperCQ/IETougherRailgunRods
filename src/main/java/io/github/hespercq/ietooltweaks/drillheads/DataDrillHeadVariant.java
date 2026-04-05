@@ -19,7 +19,7 @@ public record DataDrillHeadVariant(String id, String name,
 		int color, ResourceLocation texture, Optional<Float> itemModelOverrideId) {
 
 	public boolean isVeinMining() {
-		return veinMiningTag.isPresent() && veinMiningSize > 0;
+		return veinMiningSize > 0;
 	}
 
 }
