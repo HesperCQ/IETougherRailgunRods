@@ -3,13 +3,13 @@
     "item": "immersiveengineering:graphite_electrode"
   },
   "firing": {
-    "chargeDuration": 80,
+    "chargeDuration": 200,
     "speed": 20,
     "deviation": 0,
     "isValidForTurret": true
   },
   "projectile": {
-    "damage": 60,
+    "damage": 300,
     "gravity": 0.9,
     "useUpgradedProjectile": true,
     "railgunRenderColors": [
