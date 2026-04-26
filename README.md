@@ -5,6 +5,7 @@ The Data Pack
 - changes the behaviour of the pneumatic drill head (end)
 - adds a blaze drill head (this file references a texture in the resource pack, so if you want to use just the datapack, you will need to change the texture from blaze to e.g. orange)
 - adds the cold_blocks tag that is used in the blaze drill head.
+
 The Resource Pack
 - adds info text for the fishing rod projectile about what happens when you shoot at water
 - adds custom name for the blaze drill head
