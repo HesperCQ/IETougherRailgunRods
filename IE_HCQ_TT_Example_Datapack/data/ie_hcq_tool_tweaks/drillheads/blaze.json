@@ -15,6 +15,6 @@
       "item": "minecraft:blaze_rod"
     }
   ],
-  "texture": "ie_hcq_tool_tweaks:item/3d_drillheads/orange",
+  "texture": "ie_hcq_tool_tweaks:item/3d_drillheads/blaze",
   "color": "#FFA500"
 }
