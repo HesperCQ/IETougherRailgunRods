@@ -1,4 +1,4 @@
-package io.github.hespercq.ietooltweaks.helpers;
+package io.github.hespercq.ietooltweaks.common.util;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

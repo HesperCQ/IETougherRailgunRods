@@ -1,9 +1,9 @@
 package io.github.hespercq.ietooltweaks.events;
 
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
-import io.github.hespercq.ietooltweaks.drillheads.DataDrillHeadItem;
-import io.github.hespercq.ietooltweaks.drillheads.DataDrillHeadVariantsDataLoader;
-import io.github.hespercq.ietooltweaks.helpers.ManualContent;
+import io.github.hespercq.ietooltweaks.common.drillheads.VariantDrillHeadItem;
+import io.github.hespercq.ietooltweaks.common.drillheads.DrillHeadVariantManager;
+import io.github.hespercq.ietooltweaks.common.util.ManualContent;
 import io.github.hespercq.ietooltweaks.railgunrods.ToughRailgunShotRenderer;
 import io.github.hespercq.ietooltweaks.register.IEToolTweaksEntityTypes;
 import io.github.hespercq.ietooltweaks.register.IEToolTweaksItems;
@@ -30,9 +30,9 @@ public class ModClientEventSubscriber {
 		// Is this the IE main creative tab?
 		if (event.getTabKey().location().equals(ResourceLocation.fromNamespaceAndPath("immersiveengineering", "main"))) {
 			// Add dynamic DrillHeads
-			DataDrillHeadVariantsDataLoader.getIds().forEach(id -> {
+			DrillHeadVariantManager.getIdSet().forEach(id -> {
 				ItemStack stack = new ItemStack(IEToolTweaksItems.DRILLHEAD.get());
-				stack.getOrCreateTag().putString("drillhead_variant_id", id);
+				stack.getOrCreateTag().putString("drillhead_variant_id", id.toString());
 				event.accept(stack);
 			});
 		}
@@ -41,7 +41,7 @@ public class ModClientEventSubscriber {
 	@SubscribeEvent // RegisterColorHandlersEvent.Item
 	public static void onRegisterColorHandlersItem(RegisterColorHandlersEvent.Item event) {
 		event.register((stack, layer) -> {
-			if (stack.getItem() instanceof DataDrillHeadItem drillHead) {
+			if (stack.getItem() instanceof VariantDrillHeadItem drillHead) {
 				return drillHead.getItemColor(stack);
 			}
 			return 0xFFFFFF; // fallback white

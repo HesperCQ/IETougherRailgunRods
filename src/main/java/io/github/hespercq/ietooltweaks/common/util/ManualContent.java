@@ -1,4 +1,4 @@
-package io.github.hespercq.ietooltweaks.helpers;
+package io.github.hespercq.ietooltweaks.common.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,12 +18,12 @@ import blusunrize.lib.manual.ManualElementItem;
 import blusunrize.lib.manual.ManualEntry;
 import blusunrize.lib.manual.ManualEntry.SpecialElementData;
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
-import io.github.hespercq.ietooltweaks.drillheads.DataDrillHeadVariantsDataLoader;
+import io.github.hespercq.ietooltweaks.common.drillheads.DrillHeadVariantHolder;
+import io.github.hespercq.ietooltweaks.common.drillheads.DrillHeadVariantManager;
 import io.github.hespercq.ietooltweaks.railgunrods.AmmoDataLoader;
 import io.github.hespercq.ietooltweaks.railgunrods.IRailgunAmmoData;
 import io.github.hespercq.ietooltweaks.railgunrods.RailgunAmmoData;
 import io.github.hespercq.ietooltweaks.register.IEToolTweaksItems;
-import io.github.hespercq.ietooltweaks.drillheads.DataDrillHeadVariant;
 import blusunrize.lib.manual.ManualInstance;
 import blusunrize.lib.manual.SpecialManualElement;
 import blusunrize.lib.manual.Tree.InnerNode;
@@ -32,6 +32,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 
 public class ManualContent {
@@ -55,7 +56,7 @@ public class ManualContent {
 	public static ManualEntry buildRailgunProjectilesEntry(ManualInstance manual) {
 		ManualEntry.ManualEntryBuilder builder = new ManualEntry.ManualEntryBuilder(manual);
 		builder.readFromFile(ResourceLocation.fromNamespaceAndPath(IEToolTweaks.MODID, "railgun_ammo"));
-		builder.appendText(ManualContent::getRailgunAmmoTexts);
+		// builder.appendText(ManualContent::getRailgunAmmoTexts);
 		return builder.create();
 	}
 
@@ -66,38 +67,38 @@ public class ManualContent {
 		StringBuilder text = new StringBuilder();
 		List<SpecialElementData> specials = new ArrayList<>();
 
-		IEToolTweaks.LOGGER.warn("Adding drill heads to IE Manual: {}", DataDrillHeadVariantsDataLoader.VARIANTS.values().size());
+		IEToolTweaks.LOGGER.warn("Adding drill heads to IE Manual: {}", DrillHeadVariantManager.VARIANTS.values().size());
 
 		// Extra Pages
-		List<DataDrillHeadVariant> drillHeadVariants = DataDrillHeadVariantsDataLoader.VARIANTS.values().stream().toList();
-		for (DataDrillHeadVariant drillHeadVariant : drillHeadVariants) {
+		var variantHolderSet = DrillHeadVariantManager.getHolderSet();
+		for (DrillHeadVariantHolder drillHeadVariantHolder : variantHolderSet) {
+			var drillHeadVariant = drillHeadVariantHolder.variant();
 			// Start new page
 			text.append("<np>");
 			// Header
 			// Check recipe exists, otherwise display item
-			ResourceLocation recipeId = ResourceLocation.fromNamespaceAndPath(IEToolTweaks.MODID, DataDrillHeadVariantsDataLoader.FOLDER + "/" + drillHeadVariant.id());
+			ResourceLocation recipeId = drillHeadVariantHolder.id();
 			ManualRecipeRef manualRecipeRef = new ManualRecipeRef(recipeId);
 			SpecialManualElement specialManualElement;
 			if (checkCraftingRecipeExists(manualRecipeRef)) {
-				// Recipe
 				specialManualElement = new ManualElementCrafting(ManualHelper.getManual(), new ManualRecipeRef[][] { { manualRecipeRef } });
 			}
 			else if (checkBlueprintRecipeExists(manualRecipeRef)) {
-				// Recipe
 				specialManualElement = new ManualElementBlueprint(ManualHelper.getManual(), new ManualRecipeRef[] { manualRecipeRef });
 			}
 			else {
 				// Item Display
 				ItemStack drillHeadVariantItemStack = new ItemStack(IEToolTweaksItems.DRILLHEAD.get());
-				drillHeadVariantItemStack.getOrCreateTag().putString("drillhead_variant_id", drillHeadVariant.id());
+				drillHeadVariantItemStack.getOrCreateTag().putString("drillhead_variant_id", drillHeadVariantHolder.id().toString());
 				specialManualElement = new ManualElementItem(ManualHelper.getManual(), drillHeadVariantItemStack);
 			}
-			specials.add(new SpecialElementData(drillHeadVariant.id(), 0, specialManualElement));
-			text.append("<&").append(drillHeadVariant.id()).append(">");
+
+			specials.add(new SpecialElementData(drillHeadVariantHolder.id().getPath(), 0, specialManualElement));
+			text.append("<&").append(drillHeadVariantHolder.id().getPath()).append(">");
 
 			// Name
 			text.append("\n");
-			text.append("§l").append(DisplayHelper.getSubItemDisplayName("item.ie_hcq_tool_tweaks.drillhead", drillHeadVariant.name()).getString()).append("§r");
+			text.append("§l").append(DisplayHelper.getSubItemDisplayName("item.ie_hcq_tool_tweaks.drillhead", drillHeadVariantHolder.id().toLanguageKey()).getString()).append("§r");
 			// Stats
 			text.append("\n");
 			text.append(Component.translatable("desc.immersiveengineering.flavour.drillhead.size", new Object[] { drillHeadVariant.miningSize(), drillHeadVariant.miningDepth() }).getString());
@@ -138,6 +139,7 @@ public class ManualContent {
 		}
 
 		return Pair.of(text.toString(), specials);
+
 	}
 
 	// ##############################################################################################
@@ -215,23 +217,5 @@ public class ManualContent {
 		ref.forEachMatchingRecipe(IERecipeTypes.BLUEPRINT.get(), r -> found.set(true));
 		return found.get();
 	}
-
-	/*
-	 * private static Pair<String, List<SpecialElementData>> getMineralVeinTexts() { StringBuilder text = new StringBuilder(); List<SpecialElementData> specials = new ArrayList<>(); List<MineralMix>
-	 * mineralsToAdd = new ArrayList<>(MineralMix.RECIPES.getRecipes(Minecraft.getInstance().level)); Function<MineralMix, String> toName = mineral -> { String translationKey =
-	 * mineral.getTranslationKey(); String localizedName = I18n.get(translationKey); if (localizedName.equals(translationKey)) localizedName = mineral.getPlainName(); return localizedName; };
-	 * mineralsToAdd.sort((i1, i2) -> toName.apply(i1).compareToIgnoreCase(toName.apply(i2))); for (MineralMix mineral : mineralsToAdd) { String dimensionString; if (mineral.dimensions != null &&
-	 * mineral.dimensions.size() > 0) { StringBuilder validDims = new StringBuilder(); for (ResourceKey<Level> dim : mineral.dimensions) validDims.append((validDims.length() > 0) ? ", " :
-	 * "").append("<dim;").append(dim.location()).append(">"); dimensionString = I18n.get("ie.manual.entry.mineralsDimValid", toName.apply(mineral), validDims.getString()); } else dimensionString =
-	 * I18n.get("ie.manual.entry.mineralsDimAny", toName.apply(mineral)); List<StackWithChance> formattedOutputs = Arrays.asList(mineral.outputs); List<StackWithChance> formattedSpoils =
-	 * Arrays.asList(mineral.spoils); formattedOutputs.sort(Comparator.comparingDouble(i -> -i.chance())); formattedSpoils.sort(Comparator.comparingDouble(i -> -i.chance())); StringBuilder
-	 * outputString = new StringBuilder(); NonNullList<ItemStack> sortedOres = NonNullList.create(); for (StackWithChance sorted : formattedOutputs) { outputString.append("\n").append(new
-	 * DecimalFormat("00.00").format(sorted.chance() * 100).replaceAll("\\G0", "\u00A0")).append("% ") .append(sorted.stack().get().getHoverName().getString()); sortedOres.add(sorted.stack().get()); }
-	 * StringBuilder spoilString = new StringBuilder(); for (StackWithChance sorted : formattedSpoils) { spoilString.append("\n").append(new DecimalFormat("00.00").format(sorted.chance() *
-	 * 100).replaceAll("\\G0", "\u00A0")).append("% ") .append(sorted.stack().get().getHoverName().getString()); sortedOres.add(sorted.stack().get()); } specials.add(new
-	 * SpecialElementData(mineral.getId().getString(), 0, new ManualElementItem(ManualHelper.getManual(), sortedOres))); String desc = I18n.get("ie.manual.entry.minerals_desc", dimensionString,
-	 * outputString.getString(), spoilString.getString()); if (text.length() > 0) text.append("<np>"); text.append("<&").append(mineral.getId()).append(">").append(desc); } return
-	 * Pair.of(text.getString(), specials); }
-	 */
 
 }

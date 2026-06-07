@@ -17,10 +17,10 @@ public class IEToolTweaksNetwork {
     private static int packetId = 0;
 
     public static void register() {
-        INSTANCE.messageBuilder(SyncDataPacket.class, packetId++)
-                .encoder(SyncDataPacket::encode)
-                .decoder(SyncDataPacket::new)
-                .consumerMainThread(SyncDataPacket::handle)
+        INSTANCE.messageBuilder(SyncDrillHeadVariantsPacket.class, packetId++)
+                .encoder(SyncDrillHeadVariantsPacket::encode)
+                .decoder(SyncDrillHeadVariantsPacket::new)
+                .consumerMainThread(SyncDrillHeadVariantsPacket::handle)
                 .add();
     }
 }

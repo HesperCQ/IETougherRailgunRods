@@ -17,6 +17,6 @@
   ],
   "result": {
     "item": "ie_hcq_tool_tweaks:drillhead",
-    "nbt": "{drillhead_variant_id:diamond}"
+    "nbt": "{drillhead_variant_id:\"ie_hcq_tool_tweaks:drillheads/diamond\"}"
   }
 }

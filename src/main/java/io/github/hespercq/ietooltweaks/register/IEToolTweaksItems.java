@@ -1,7 +1,7 @@
 package io.github.hespercq.ietooltweaks.register;
 
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
-import io.github.hespercq.ietooltweaks.drillheads.DataDrillHeadItem;
+import io.github.hespercq.ietooltweaks.common.drillheads.VariantDrillHeadItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -13,6 +13,6 @@ public class IEToolTweaksItems {
 	public static final DeferredRegister<Item> REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, IEToolTweaks.MODID);
 
 	// HCQDrillHead (Data Driven)
-	public static final RegistryObject<Item> DRILLHEAD = REGISTER.register("drillhead", () -> new DataDrillHeadItem());
+	public static final RegistryObject<Item> DRILLHEAD = REGISTER.register("drillhead", () -> new VariantDrillHeadItem());
 
 }

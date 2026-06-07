@@ -40,11 +40,11 @@
     "_comment_item": "################## Items ##################",
     "_comment_item_dh_name": "Use item.ie_hcq_tool_tweaks.drillhead.<drillhead id (filename)> for custom display names for your drillheads",
     "item.ie_hcq_tool_tweaks.drillhead": "Drill Head",
-    "item.ie_hcq_tool_tweaks.drillhead.debug": "Debug Drill Head",
-    "item.ie_hcq_tool_tweaks.drillhead.diamond": "Diamond Coated Drill Head",
-    "item.ie_hcq_tool_tweaks.drillhead.end": "Pneumatic Drill Head",
-    "item.ie_hcq_tool_tweaks.drillhead.netherite": "Netherite Drill Head",
-    "item.ie_hcq_tool_tweaks.drillhead.echo": "Echo Drill Head",
+    "ie_hcq_tool_tweaks.drillheads/debug": "Debug Drill Head",
+    "ie_hcq_tool_tweaks.drillheads/diamond": "Diamond Coated Drill Head",
+    "ie_hcq_tool_tweaks.drillheads/end": "Pneumatic Drill Head",
+    "ie_hcq_tool_tweaks.drillheads/netherite": "Netherite Drill Head",
+    "ie_hcq_tool_tweaks.drillheads/echo": "Echo Drill Head",
 
 
 

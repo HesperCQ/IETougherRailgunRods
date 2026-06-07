@@ -1,8 +1,9 @@
-package io.github.hespercq.ietooltweaks.helpers;
+package io.github.hespercq.ietooltweaks.common.util;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -30,16 +31,17 @@ public class DisplayHelper {
 	// -----------------------------
 	// SubItem Display Name
 	// -----------------------------
-	public static Component getSubItemDisplayName(String itemKey, String subKey) {
-		String fullKey = itemKey + "." + subKey;
+	public static Component getSubItemDisplayName(String itemKey, String translationKey) {
+		Component translation = Component.translatable(translationKey);
 
-		Component translation = Component.translatable(fullKey);
-
-		if (!translation.getString().equals(fullKey)) {
+		// If translated
+		if (!translation.getString().equals(translationKey)) {
 			return translation;
 		}
-		// Fallback: subKey + itemKey translation
-		String displayName = toDisplayFallback(getLastSegment(subKey));
+
+		// Fallback
+		IEToolTweaks.LOGGER.warn("HCQ TRANS KEY : {}", translationKey);
+		String displayName = toDisplayFallback(getLastSegment(translationKey));
 		return Component.literal(displayName).append(" ").append(Component.translatable(itemKey));
 	}
 

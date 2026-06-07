@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 import blusunrize.immersiveengineering.api.tool.RailgunHandler.RailgunRenderColors;
 import blusunrize.immersiveengineering.api.tool.RailgunHandler.StandardRailgunProjectile;
 import blusunrize.immersiveengineering.common.entities.RailgunShotEntity;
-import io.github.hespercq.ietooltweaks.helpers.SafeJsonObject;
+import io.github.hespercq.ietooltweaks.common.util.SafeJsonObject;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.Direction;
 import net.minecraft.world.damagesource.DamageSource;

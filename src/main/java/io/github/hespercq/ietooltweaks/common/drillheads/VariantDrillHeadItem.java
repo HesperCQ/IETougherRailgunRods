@@ -1,4 +1,4 @@
-package io.github.hespercq.ietooltweaks.drillheads;
+package io.github.hespercq.ietooltweaks.common.drillheads;
 
 import blusunrize.immersiveengineering.api.tool.IDrillHead;
 import blusunrize.immersiveengineering.common.items.DrillItem;
@@ -6,7 +6,7 @@ import blusunrize.immersiveengineering.common.items.IEBaseItem;
 import blusunrize.immersiveengineering.common.register.IEItems.Tools;
 import blusunrize.immersiveengineering.common.util.ItemNBTHelper;
 import blusunrize.immersiveengineering.common.util.Utils;
-import io.github.hespercq.ietooltweaks.helpers.DisplayHelper;
+import io.github.hespercq.ietooltweaks.common.util.DisplayHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -38,21 +38,21 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.function.Predicate;
 
-public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
-	public DataDrillHeadItem() {
+public class VariantDrillHeadItem extends IEBaseItem implements IDrillHead {
+	public VariantDrillHeadItem() {
 		super(new Properties().stacksTo(1));
 	}
 
 	@Override
 	public Component getName(ItemStack stack) {
-		String itemKey = stack.getDescriptionId();
-		String subKey = getPermData(stack).name();
-		return DisplayHelper.getSubItemDisplayName(itemKey, subKey);
+		String descriptionId = stack.getDescriptionId();
+		String langKey = getVariantId(stack).toLanguageKey();
+		return DisplayHelper.getSubItemDisplayName(descriptionId, langKey);
 	}
 
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> list, TooltipFlag flag) {
-		DataDrillHeadVariant permData = getPermData(stack);
+		DrillHeadVariant permData = getVariant(stack);
 		list.add(Component.translatable("desc.immersiveengineering.flavour.drillhead.size", new Object[] { permData.miningSize(), permData.miningDepth() }));
 		list.add(Component.translatable("desc.immersiveengineering.flavour.drillhead.level", new Object[] { Utils.getHarvestLevelName(this.getMiningLevel(stack)) }));
 		list.add(Component.translatable("desc.immersiveengineering.flavour.drillhead.speed", new Object[] { Utils.formatDouble((double) this.getMiningSpeed(stack), "0.###") }));
@@ -71,8 +71,7 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 				list.add(Component.translatable("desc.ie_hcq_tool_tweaks.flavour.drillhead.vein.tag",
 						new Object[] { permData.veinMiningSize(), DisplayHelper.getTagDisplayName(veinMiningTag).getString() }));
 			}, () -> {
-				list.add(Component.translatable("desc.ie_hcq_tool_tweaks.flavour.drillhead.vein",
-						new Object[] { permData.veinMiningSize() }));
+				list.add(Component.translatable("desc.ie_hcq_tool_tweaks.flavour.drillhead.vein", new Object[] { permData.veinMiningSize() }));
 			});
 		}
 	}
@@ -86,13 +85,13 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 	}
 
 	public boolean isValidRepairItem(ItemStack stack, ItemStack material) {
-		Ingredient ingredient = getPermData(stack).repairMaterial();
+		Ingredient ingredient = getVariant(stack).repairMaterial();
 		return ingredient.test(material);
 	}
 
 	// Custom Data for Item rendering
 	public int getItemColor(ItemStack stack) {
-		return getPermData(stack).color();
+		return getVariant(stack).color();
 	}
 
 	// ==============================================================================================================
@@ -100,27 +99,27 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 	// ==============================================================================================================
 	@Override
 	public float getAttackDamage(ItemStack head) {
-		return getPermData(head).attackDamage();
+		return getVariant(head).attackDamage();
 	}
 
 	@Override
 	public int getMaximumHeadDamage(ItemStack head) {
-		return getPermData(head).durability();
+		return getVariant(head).durability();
 	}
 
 	@Override
 	public Tier getMiningLevel(ItemStack head) {
-		return getPermData(head).miningLevel();
+		return getVariant(head).miningLevel();
 	}
 
 	@Override
 	public float getMiningSpeed(ItemStack head) {
-		return getPermData(head).miningSpeed();
+		return getVariant(head).miningSpeed();
 	}
 
 	@Override
 	public ResourceLocation getDrillTexture(ItemStack drill, ItemStack head) {
-		return getPermData(head).texture();
+		return getVariant(head).texture();
 	}
 
 	@Override
@@ -158,7 +157,7 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 		}
 
 		// Get drill params
-		DataDrillHeadVariant dh_type = getPermData(head);
+		DrillHeadVariant dh_type = getVariant(head);
 		int diameter = dh_type.miningSize();
 		int depth = dh_type.miningDepth();
 
@@ -275,12 +274,16 @@ public class DataDrillHeadItem extends IEBaseItem implements IDrillHead {
 	// ==============================================================================================================
 	// #region HELPERS
 	// ==============================================================================================================
-	public static String getDrillHeadId(ItemStack stack) {
-		return ItemNBTHelper.getString(stack, "drillhead_variant_id");
+	public static ResourceLocation getVariantId(ItemStack stack) {
+		return getVariantHolder(stack).id();
 	}
 
-	public static DataDrillHeadVariant getPermData(ItemStack stack) {
-		return DataDrillHeadVariantsDataLoader.getData(getDrillHeadId(stack));
+	public static DrillHeadVariant getVariant(ItemStack stack) {
+		return getVariantHolder(stack).variant();
+	}
+
+	public static DrillHeadVariantHolder getVariantHolder(ItemStack stack) {
+		return DrillHeadVariantManager.getHolder(ResourceLocation.parse(ItemNBTHelper.getString(stack, "drillhead_variant_id")));
 	}
 
 	public static void setHeadDamage(ItemStack head, int totalDamage) {
