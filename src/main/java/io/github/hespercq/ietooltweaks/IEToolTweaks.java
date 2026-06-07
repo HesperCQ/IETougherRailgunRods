@@ -1,5 +1,6 @@
 package io.github.hespercq.ietooltweaks;
 
+import io.github.hespercq.ietooltweaks.common.IEToolTweaksNetwork;
 import io.github.hespercq.ietooltweaks.register.IEToolTweaksEntityTypes;
 import io.github.hespercq.ietooltweaks.register.IEToolTweaksItems;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -17,9 +18,8 @@ public class IEToolTweaks {
 
 	public IEToolTweaks(FMLJavaModLoadingContext modContext) {
 		final IEventBus modEventBus = modContext.getModEventBus();
-		// TODO: Add Configs
-		// modContext.registerConfig(ModConfig.Type.SERVER, IPServerConfig.ALL);
-		// modContext.registerConfig(ModConfig.Type.CLIENT, IPClientConfig.ALL);
+		// Network
+		IEToolTweaksNetwork.register();
 
 		// Registers
 		IEToolTweaksItems.REGISTER.register(modEventBus);

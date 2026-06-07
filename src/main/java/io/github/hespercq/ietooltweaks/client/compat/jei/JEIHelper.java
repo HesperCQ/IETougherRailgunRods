@@ -1,4 +1,4 @@
-package io.github.hespercq.ietooltweaks.compat.jei;
+package io.github.hespercq.ietooltweaks.client.compat.jei;
 
 import blusunrize.immersiveengineering.api.Lib;
 import io.github.hespercq.ietooltweaks.drillheads.DataDrillHeadItem;

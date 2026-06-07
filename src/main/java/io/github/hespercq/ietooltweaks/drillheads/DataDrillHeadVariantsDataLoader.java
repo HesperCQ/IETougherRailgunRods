@@ -9,11 +9,17 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
+import io.github.hespercq.ietooltweaks.common.IEToolTweaksNetwork;
+import io.github.hespercq.ietooltweaks.common.SyncDataPacket;
 import io.github.hespercq.ietooltweaks.helpers.SafeJsonObject;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 public class DataDrillHeadVariantsDataLoader extends SimpleJsonResourceReloadListener {
 	// Data for constructor
@@ -55,5 +61,17 @@ public class DataDrillHeadVariantsDataLoader extends SimpleJsonResourceReloadLis
 			}
 		});
 
+	}
+
+	public static void syncDataToPlayers() {
+		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+
+		if (server != null) {
+			SyncDataPacket packet = new SyncDataPacket(DataDrillHeadVariantsDataLoader.VARIANTS.size());
+
+			for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+				IEToolTweaksNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), packet);
+			}
+		}
 	}
 }
