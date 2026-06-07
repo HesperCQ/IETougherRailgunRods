@@ -3,7 +3,7 @@ package io.github.hespercq.ietooltweaks.common.railgun_ammo;
 import blusunrize.immersiveengineering.api.tool.RailgunHandler;
 import blusunrize.immersiveengineering.api.tool.RailgunHandler.IRailgunProjectile;
 import blusunrize.immersiveengineering.common.config.IEServerConfig;
-import io.github.hespercq.ietooltweaks.register.IEToolTweaksEntityTypes;
+import io.github.hespercq.ietooltweaks.common.register.IEToolTweaksEntityTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;

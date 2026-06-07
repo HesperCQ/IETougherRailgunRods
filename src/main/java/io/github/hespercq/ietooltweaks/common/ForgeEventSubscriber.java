@@ -4,6 +4,7 @@ import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import io.github.hespercq.ietooltweaks.common.drillheads.DrillHeadVariantManager;
 import io.github.hespercq.ietooltweaks.common.network.IEToolTweaksNetwork;
 import io.github.hespercq.ietooltweaks.common.network.SyncDrillHeadVariantsPacket;
+import io.github.hespercq.ietooltweaks.common.network.SyncRailgunAmmosPacket;
 import io.github.hespercq.ietooltweaks.common.railgun_ammo.RailgunAmmoManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -26,6 +27,7 @@ public class ForgeEventSubscriber {
 	public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
 		if (event.getEntity() instanceof ServerPlayer player) {
 			IEToolTweaksNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new SyncDrillHeadVariantsPacket(DrillHeadVariantManager.VARIANTS));
+			IEToolTweaksNetwork.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new SyncRailgunAmmosPacket(RailgunAmmoManager.AMMOS));
 		}
 	}
 }

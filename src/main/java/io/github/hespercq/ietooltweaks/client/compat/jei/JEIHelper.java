@@ -2,7 +2,7 @@ package io.github.hespercq.ietooltweaks.client.compat.jei;
 
 import blusunrize.immersiveengineering.api.Lib;
 import io.github.hespercq.ietooltweaks.common.drillheads.VariantDrillHeadItem;
-import io.github.hespercq.ietooltweaks.register.IEToolTweaksItems;
+import io.github.hespercq.ietooltweaks.common.register.IEToolTweaksItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;

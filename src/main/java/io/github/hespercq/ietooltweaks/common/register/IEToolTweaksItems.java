@@ -1,4 +1,4 @@
-package io.github.hespercq.ietooltweaks.register;
+package io.github.hespercq.ietooltweaks.common.register;
 
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import io.github.hespercq.ietooltweaks.common.drillheads.VariantDrillHeadItem;

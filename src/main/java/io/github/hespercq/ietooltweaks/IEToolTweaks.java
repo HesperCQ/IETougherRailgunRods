@@ -1,8 +1,8 @@
 package io.github.hespercq.ietooltweaks;
 
 import io.github.hespercq.ietooltweaks.common.network.IEToolTweaksNetwork;
-import io.github.hespercq.ietooltweaks.register.IEToolTweaksEntityTypes;
-import io.github.hespercq.ietooltweaks.register.IEToolTweaksItems;
+import io.github.hespercq.ietooltweaks.common.register.IEToolTweaksEntityTypes;
+import io.github.hespercq.ietooltweaks.common.register.IEToolTweaksItems;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
