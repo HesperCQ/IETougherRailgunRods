@@ -1,10 +1,10 @@
-package io.github.hespercq.ietooltweaks.events;
+package io.github.hespercq.ietooltweaks.client;
 
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
+import io.github.hespercq.ietooltweaks.client.ie_manual.ManualContent;
+import io.github.hespercq.ietooltweaks.client.railgun_ammo.HCQRailgunShotRenderer;
 import io.github.hespercq.ietooltweaks.common.drillheads.VariantDrillHeadItem;
 import io.github.hespercq.ietooltweaks.common.drillheads.DrillHeadVariantManager;
-import io.github.hespercq.ietooltweaks.common.util.ManualContent;
-import io.github.hespercq.ietooltweaks.railgunrods.ToughRailgunShotRenderer;
 import io.github.hespercq.ietooltweaks.register.IEToolTweaksEntityTypes;
 import io.github.hespercq.ietooltweaks.register.IEToolTweaksItems;
 import net.minecraft.resources.ResourceLocation;
@@ -22,7 +22,7 @@ public class ModClientEventSubscriber {
 
 	@SubscribeEvent // EntityRenderersEvent.RegisterRenderers
 	public static void onRegisterRenderers(final EntityRenderersEvent.RegisterRenderers event) {
-		event.registerEntityRenderer(IEToolTweaksEntityTypes.TOUGH_RAILGUN_SHOT.get(), ToughRailgunShotRenderer::new);
+		event.registerEntityRenderer(IEToolTweaksEntityTypes.TOUGH_RAILGUN_SHOT.get(), HCQRailgunShotRenderer::new);
 	}
 
 	@SubscribeEvent // BuildCreativeModeTabContentsEvent

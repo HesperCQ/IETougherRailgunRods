@@ -1,4 +1,4 @@
-package io.github.hespercq.ietooltweaks.common.railgunrods;
+package io.github.hespercq.ietooltweaks.common.railgun_ammo;
 
 import java.util.List;
 

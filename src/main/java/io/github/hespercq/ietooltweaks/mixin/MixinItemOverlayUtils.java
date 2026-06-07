@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import blusunrize.immersiveengineering.common.items.RailgunItem;
 import blusunrize.immersiveengineering.common.register.IEItems.Ingredients;
-import io.github.hespercq.ietooltweaks.railgunrods.IRailgunAmmoData;
+import io.github.hespercq.ietooltweaks.common.railgun_ammo.IRailgunAmmo;
 import net.minecraft.client.gui.Font.DisplayMode;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.InteractionHand;
@@ -64,7 +64,7 @@ public abstract class MixinItemOverlayUtils {
 		int baseCharge = 40;
 		ItemStack ammo = getAmmoStack(railgunItemStack, entity);
 
-		if (RailgunHandler.getProjectile(ammo) instanceof IRailgunAmmoData data) {
+		if (RailgunHandler.getProjectile(ammo) instanceof IRailgunAmmo data) {
 			baseCharge = data.getChargeDuration();
 		}
 		float speedUpgrade = RailgunItem.getUpgradesStatic(railgunItemStack).getFloat("speed");

@@ -1,9 +1,8 @@
-package io.github.hespercq.ietooltweaks.common.util;
+package io.github.hespercq.ietooltweaks.client.ie_manual;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.mojang.datafixers.util.Pair;
@@ -20,9 +19,10 @@ import blusunrize.lib.manual.ManualEntry.SpecialElementData;
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import io.github.hespercq.ietooltweaks.common.drillheads.DrillHeadVariantHolder;
 import io.github.hespercq.ietooltweaks.common.drillheads.DrillHeadVariantManager;
-import io.github.hespercq.ietooltweaks.railgunrods.AmmoDataLoader;
-import io.github.hespercq.ietooltweaks.railgunrods.IRailgunAmmoData;
-import io.github.hespercq.ietooltweaks.railgunrods.RailgunAmmoData;
+import io.github.hespercq.ietooltweaks.common.railgun_ammo.RailgunAmmoManager;
+import io.github.hespercq.ietooltweaks.common.railgun_ammo.RailgunAmmo;
+import io.github.hespercq.ietooltweaks.common.railgun_ammo.RailgunAmmoHolder;
+import io.github.hespercq.ietooltweaks.common.util.DisplayHelper;
 import io.github.hespercq.ietooltweaks.register.IEToolTweaksItems;
 import blusunrize.lib.manual.ManualInstance;
 import blusunrize.lib.manual.SpecialManualElement;
@@ -32,7 +32,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 
 public class ManualContent {
@@ -56,7 +55,7 @@ public class ManualContent {
 	public static ManualEntry buildRailgunProjectilesEntry(ManualInstance manual) {
 		ManualEntry.ManualEntryBuilder builder = new ManualEntry.ManualEntryBuilder(manual);
 		builder.readFromFile(ResourceLocation.fromNamespaceAndPath(IEToolTweaks.MODID, "railgun_ammo"));
-		// builder.appendText(ManualContent::getRailgunAmmoTexts);
+		builder.appendText(ManualContent::getRailgunAmmoTexts);
 		return builder.create();
 	}
 
@@ -67,7 +66,7 @@ public class ManualContent {
 		StringBuilder text = new StringBuilder();
 		List<SpecialElementData> specials = new ArrayList<>();
 
-		IEToolTweaks.LOGGER.warn("Adding drill heads to IE Manual: {}", DrillHeadVariantManager.VARIANTS.values().size());
+		IEToolTweaks.LOGGER.info("Adding drill heads to IE Manual: {}", DrillHeadVariantManager.VARIANTS.values().size());
 
 		// Extra Pages
 		var variantHolderSet = DrillHeadVariantManager.getHolderSet();
@@ -149,51 +148,50 @@ public class ManualContent {
 		StringBuilder text = new StringBuilder();
 		List<SpecialElementData> specials = new ArrayList<>();
 
-		IEToolTweaks.LOGGER.warn("Adding railgun rods to IE Manual: {}", RailgunHandler.projectilePropertyMap.size());
+		IEToolTweaks.LOGGER.info("Adding railgun rods to IE Manual: {}", RailgunHandler.projectilePropertyMap.size());
 
-		List<Entry<String, IRailgunAmmoData>> railgunAmmoEntries = AmmoDataLoader.RAILGUN_AMMO.entrySet().stream().toList();
+		var railgunAmmoHolderSet = RailgunAmmoManager.getHolderSet();
+		for (RailgunAmmoHolder railgunAmmoHolder : railgunAmmoHolderSet) {
+			String ammoId = railgunAmmoHolder.id().toString();
+			RailgunAmmo railgunAmmo = railgunAmmoHolder.ammo();
 
-		railgunAmmoEntries.forEach((railgunAmmoEntry) -> {
-			String id = railgunAmmoEntry.getKey();
-			IRailgunAmmoData railgunAmmo = railgunAmmoEntry.getValue();
-			if (!(railgunAmmo instanceof RailgunAmmoData railgunAmmoData)) {
-				return;
-			}
 			// Start new page
 			text.append("<np>");
 
 			// Item Display
-			ManualElementItem manualElementItem = new ManualElementItem(ManualHelper.getManual(), railgunAmmoData.getAmmoIngredient().getItems());
-			specials.add(new SpecialElementData(id + "/items", 0, manualElementItem));
-			text.append("<&").append(id + "/items").append(">");
+			ManualElementItem manualElementItem = new ManualElementItem(ManualHelper.getManual(), railgunAmmo.getAmmoIngredient().getItems());
+			specials.add(new SpecialElementData(ammoId + "/items", 0, manualElementItem));
+			text.append("<&").append(ammoId + "/items").append(">");
 
 			// Charge Duration
 			text.append("\n");
-			text.append(Component
-					.translatable("manual.ie_hcq_tool_tweaks.railgun_ammo.charge_duration", new Object[] { Utils.formatDouble((double) railgunAmmoData.chargeDuration / (double) 20, "0.###") })
-					.getString());
+			text.append(Component.translatable("manual.ie_hcq_tool_tweaks.railgun_ammo.charge_duration",
+					new Object[] { Utils.formatDouble((double) railgunAmmo.firingData.chargeDuration() / (double) 20, "0.###") }).getString());
 			// Launch - Speed
 			text.append("\n");
-			text.append(Component.translatable("manual.ie_hcq_tool_tweaks.railgun_ammo.speed", new Object[] { Utils.formatDouble((double) railgunAmmoData.speed, "0.###") }).getString());
+			text.append(Component.translatable("manual.ie_hcq_tool_tweaks.railgun_ammo.speed", new Object[] { Utils.formatDouble((double) railgunAmmo.firingData.speed(), "0.###") }).getString());
 			// Launch - Deviation
-			if (railgunAmmoData.deviation > 0) {
+			if (railgunAmmo.firingData.deviation() > 0) {
 				text.append("\n");
-				text.append(Component.translatable("manual.ie_hcq_tool_tweaks.railgun_ammo.deviation", new Object[] { Utils.formatDouble((double) railgunAmmoData.deviation, "0.###") }).getString());
+				text.append(Component.translatable("manual.ie_hcq_tool_tweaks.railgun_ammo.deviation", new Object[] { Utils.formatDouble((double) railgunAmmo.firingData.deviation(), "0.###") })
+						.getString());
 			}
 			// Projectile - Damage
 			text.append("\n");
-			text.append(Component.translatable("manual.ie_hcq_tool_tweaks.railgun_ammo.damage", new Object[] { Utils.formatDouble((double) railgunAmmoData.rodDamage, "0.###") }).getString());
+			text.append(
+					Component.translatable("manual.ie_hcq_tool_tweaks.railgun_ammo.damage", new Object[] { Utils.formatDouble((double) railgunAmmo.projectileData.damage(), "0.###") }).getString());
 			// Projectile - Gravity
 			text.append("\n");
-			text.append(Component.translatable("manual.ie_hcq_tool_tweaks.railgun_ammo.gravity", new Object[] { Utils.formatDouble((double) railgunAmmoData.rodGravity, "0.###") }).getString());
+			text.append(
+					Component.translatable("manual.ie_hcq_tool_tweaks.railgun_ammo.gravity", new Object[] { Utils.formatDouble((double) railgunAmmo.projectileData.gravity(), "0.###") }).getString());
 			// Projectile - Ignores most projectile deflections.
-			if (railgunAmmoData.ignoresArrowSpecificCoding) {
+			if (railgunAmmo.projectileData.useUpgradedProjectile()) {
 				text.append("\n");
 				text.append(Component.translatable("manual.ie_hcq_tool_tweaks.railgun_ammo.no_deflection").getString());
 			}
 
 			// Projectile - Additional Text
-			String extraTextKey = "manual.ie_hcq_tool_tweaks.railgun_ammo." + id + ".extra_text";
+			String extraTextKey = "manual." + railgunAmmoHolder.id().toLanguageKey() + ".extra_text";
 			String extraText = Component.translatable(extraTextKey).getString();
 
 			if (!extraText.equals(extraTextKey)) { // Translation Key exists
@@ -201,7 +199,7 @@ public class ManualContent {
 				text.append(extraText);
 			}
 
-		});
+		}
 
 		return Pair.of(text.toString(), specials);
 	}

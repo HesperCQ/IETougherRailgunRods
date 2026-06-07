@@ -1,4 +1,4 @@
-package io.github.hespercq.ietooltweaks.railgunrods;
+package io.github.hespercq.ietooltweaks.common.railgun_ammo;
 
 import com.google.common.collect.Lists;
 
@@ -47,14 +47,15 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public abstract class ToughAbstractProjectile extends Projectile {
-   private static final EntityDataAccessor<Byte> ID_FLAGS = SynchedEntityData.defineId(ToughAbstractProjectile.class, EntityDataSerializers.BYTE);
-   private static final EntityDataAccessor<Byte> PIERCE_LEVEL = SynchedEntityData.defineId(ToughAbstractProjectile.class, EntityDataSerializers.BYTE);
+@SuppressWarnings("all")
+public abstract class HCQAbstractProjectile extends Projectile {
+   private static final EntityDataAccessor<Byte> ID_FLAGS = SynchedEntityData.defineId(HCQAbstractProjectile.class, EntityDataSerializers.BYTE);
+   private static final EntityDataAccessor<Byte> PIERCE_LEVEL = SynchedEntityData.defineId(HCQAbstractProjectile.class, EntityDataSerializers.BYTE);
    @Nullable
    private BlockState lastState;
    protected boolean inGround;
    protected int inGroundTime;
-   public ToughAbstractProjectile.Pickup pickup = ToughAbstractProjectile.Pickup.DISALLOWED;
+   public HCQAbstractProjectile.Pickup pickup = HCQAbstractProjectile.Pickup.DISALLOWED;
    public int shakeTime;
    private int life;
    private double baseDamage = 2.0D;
@@ -67,20 +68,20 @@ public abstract class ToughAbstractProjectile extends Projectile {
 
    private final IntOpenHashSet ignoredEntities = new IntOpenHashSet();
 
-   protected ToughAbstractProjectile(EntityType<? extends ToughAbstractProjectile> pEntityType, Level pLevel) {
+   protected HCQAbstractProjectile(EntityType<? extends HCQAbstractProjectile> pEntityType, Level pLevel) {
       super(pEntityType, pLevel);
    }
 
-   protected ToughAbstractProjectile(EntityType<? extends ToughAbstractProjectile> pEntityType, double pX, double pY, double pZ, Level pLevel) {
+   protected HCQAbstractProjectile(EntityType<? extends HCQAbstractProjectile> pEntityType, double pX, double pY, double pZ, Level pLevel) {
       this(pEntityType, pLevel);
       this.setPos(pX, pY, pZ);
    }
 
-   protected ToughAbstractProjectile(EntityType<? extends ToughAbstractProjectile> pEntityType, LivingEntity pShooter, Level pLevel) {
+   protected HCQAbstractProjectile(EntityType<? extends HCQAbstractProjectile> pEntityType, LivingEntity pShooter, Level pLevel) {
       this(pEntityType, pShooter.getX(), pShooter.getEyeY() - (double)0.1F, pShooter.getZ(), pLevel);
       this.setOwner(pShooter);
       if (pShooter instanceof Player) {
-         this.pickup = ToughAbstractProjectile.Pickup.ALLOWED;
+         this.pickup = HCQAbstractProjectile.Pickup.ALLOWED;
       }
 
    }
@@ -419,7 +420,7 @@ public abstract class ToughAbstractProjectile extends Projectile {
          this.setYRot(this.getYRot() + 180.0F);
          this.yRotO += 180.0F;
          if (!this.level().isClientSide && this.getDeltaMovement().lengthSqr() < 1.0E-7D) {
-            if (this.pickup == ToughAbstractProjectile.Pickup.ALLOWED) {
+            if (this.pickup == HCQAbstractProjectile.Pickup.ALLOWED) {
                this.spawnAtLocation(this.getPickupItem(), 0.1F);
             }
 
@@ -505,7 +506,7 @@ public abstract class ToughAbstractProjectile extends Projectile {
          this.baseDamage = pCompound.getDouble("damage");
       }
 
-      this.pickup = ToughAbstractProjectile.Pickup.byOrdinal(pCompound.getByte("pickup"));
+      this.pickup = HCQAbstractProjectile.Pickup.byOrdinal(pCompound.getByte("pickup"));
       this.setCritArrow(pCompound.getBoolean("crit"));
       this.setPierceLevel(pCompound.getByte("PierceLevel"));
       if (pCompound.contains("SoundEvent", 8)) {
@@ -518,7 +519,7 @@ public abstract class ToughAbstractProjectile extends Projectile {
    public void setOwner(@Nullable Entity pEntity) {
       super.setOwner(pEntity);
       if (pEntity instanceof Player) {
-         this.pickup = ((Player)pEntity).getAbilities().instabuild ? ToughAbstractProjectile.Pickup.CREATIVE_ONLY : ToughAbstractProjectile.Pickup.ALLOWED;
+         this.pickup = ((Player)pEntity).getAbilities().instabuild ? HCQAbstractProjectile.Pickup.CREATIVE_ONLY : HCQAbstractProjectile.Pickup.ALLOWED;
       }
 
    }
@@ -677,7 +678,7 @@ public abstract class ToughAbstractProjectile extends Projectile {
       ALLOWED,
       CREATIVE_ONLY;
 
-      public static ToughAbstractProjectile.Pickup byOrdinal(int pOrdinal) {
+      public static HCQAbstractProjectile.Pickup byOrdinal(int pOrdinal) {
          if (pOrdinal < 0 || pOrdinal > values().length) {
             pOrdinal = 0;
          }

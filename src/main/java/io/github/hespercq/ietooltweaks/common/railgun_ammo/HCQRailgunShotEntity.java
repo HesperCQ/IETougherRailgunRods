@@ -1,4 +1,4 @@
-package io.github.hespercq.ietooltweaks.railgunrods;
+package io.github.hespercq.ietooltweaks.common.railgun_ammo;
 
 import blusunrize.immersiveengineering.api.tool.RailgunHandler;
 import blusunrize.immersiveengineering.api.tool.RailgunHandler.IRailgunProjectile;
@@ -23,18 +23,18 @@ import net.minecraftforge.network.NetworkHooks;
 import javax.annotation.Nonnull;
 import java.util.UUID;
 
-public class ToughRailgunShotEntity extends ToughProjectileEntity
+public class HCQRailgunShotEntity extends HCQProjectileEntity
 {
 	private ItemStack ammo = ItemStack.EMPTY;
-	private static final EntityDataAccessor<ItemStack> dataMarker_ammo = SynchedEntityData.defineId(ToughRailgunShotEntity.class, EntityDataSerializers.ITEM_STACK);
+	private static final EntityDataAccessor<ItemStack> dataMarker_ammo = SynchedEntityData.defineId(HCQRailgunShotEntity.class, EntityDataSerializers.ITEM_STACK);
 	private IRailgunProjectile ammoProperties;
 
-	public ToughRailgunShotEntity(EntityType<ToughRailgunShotEntity> type, Level world)
+	public HCQRailgunShotEntity(EntityType<HCQRailgunShotEntity> type, Level world)
 	{
 		super(type, world);
 	}
 
-	public ToughRailgunShotEntity(Level world, @Nonnull LivingEntity living, float velocity, float accuracy, ItemStack ammo)
+	public HCQRailgunShotEntity(Level world, @Nonnull LivingEntity living, float velocity, float accuracy, ItemStack ammo)
 	{
 		super(IEToolTweaksEntityTypes.TOUGH_RAILGUN_SHOT.get(), world, living, velocity, accuracy);
 		this.ammo = ammo;
@@ -105,7 +105,7 @@ public class ToughRailgunShotEntity extends ToughProjectileEntity
 				double damage = projectileProperties.getDamage(this.level(), hit, shooterUuid, this);
 				DamageSource source = projectileProperties.getDamageSource(this.level(), hit, shooterUuid, this);
 				if(source==null)
-					source = ToughDamageSources.causeToughRailgunDamage(this, shooter);
+					source = HCQDamageSources.causeToughRailgunDamage(this, shooter);
 				if(shooter instanceof LivingEntity livingShooter)
 					livingShooter.setLastHurtMob(hit);
 				hit.hurt(source, (float)(damage*IEServerConfig.TOOLS.railgun_damage.get()));

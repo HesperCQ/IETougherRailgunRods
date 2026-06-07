@@ -21,9 +21,9 @@
     
     "_comment_man_rp_add_text": "#### Use manual.ie_hcq_tool_tweaks.railgun_ammo.<ammo id (filename)>.extra_text for additional text in manual entry",
 
-    "manual.ie_hcq_tool_tweaks.railgun_ammo.blaze_rod.extra_text": "Sets blocks & mobs on fire.",
-    "manual.ie_hcq_tool_tweaks.railgun_ammo.end_rod.extra_text": "Applies glowing on hit and tries to place an end rod when hitting a solid block.",
-    "manual.ie_hcq_tool_tweaks.railgun_ammo.lightning_rod.extra_text": "Summons lightning during thunderstorms.",
+    "manual.ie_hcq_tool_tweaks.railgun_ammo/blaze_rod.extra_text": "Sets blocks & mobs on fire.",
+    "manual.ie_hcq_tool_tweaks.railgun_ammo/end_rod.extra_text": "Applies glowing on hit and tries to place an end rod when hitting a solid block.",
+    "manual.ie_hcq_tool_tweaks.railgun_ammo/lightning_rod.extra_text": "Summons lightning during thunderstorms.",
 
 
 
@@ -40,6 +40,8 @@
     "_comment_item": "################## Items ##################",
     "_comment_item_dh_name": "Use item.ie_hcq_tool_tweaks.drillhead.<drillhead id (filename)> for custom display names for your drillheads",
     "item.ie_hcq_tool_tweaks.drillhead": "Drill Head",
+
+
     "ie_hcq_tool_tweaks.drillheads/debug": "Debug Drill Head",
     "ie_hcq_tool_tweaks.drillheads/diamond": "Diamond Coated Drill Head",
     "ie_hcq_tool_tweaks.drillheads/end": "Pneumatic Drill Head",

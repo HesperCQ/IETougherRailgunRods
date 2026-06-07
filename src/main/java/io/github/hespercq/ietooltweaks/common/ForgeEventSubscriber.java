@@ -1,10 +1,10 @@
-package io.github.hespercq.ietooltweaks.events;
+package io.github.hespercq.ietooltweaks.common;
 
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
-import io.github.hespercq.ietooltweaks.common.IEToolTweaksNetwork;
-import io.github.hespercq.ietooltweaks.common.SyncDrillHeadVariantsPacket;
 import io.github.hespercq.ietooltweaks.common.drillheads.DrillHeadVariantManager;
-import io.github.hespercq.ietooltweaks.railgunrods.AmmoDataLoader;
+import io.github.hespercq.ietooltweaks.common.network.IEToolTweaksNetwork;
+import io.github.hespercq.ietooltweaks.common.network.SyncDrillHeadVariantsPacket;
+import io.github.hespercq.ietooltweaks.common.railgun_ammo.RailgunAmmoManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -19,7 +19,7 @@ public class ForgeEventSubscriber {
 	@SubscribeEvent
 	public static void onAddReloadListener(final AddReloadListenerEvent event) {
 		event.addListener(new DrillHeadVariantManager());
-		event.addListener(new AmmoDataLoader());
+		event.addListener(new RailgunAmmoManager());
 	}
 
 	@SubscribeEvent

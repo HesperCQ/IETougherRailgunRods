@@ -1,9 +1,9 @@
-package io.github.hespercq.ietooltweaks.railgunrods;
+package io.github.hespercq.ietooltweaks.common.railgun_ammo;
 
 import blusunrize.immersiveengineering.api.tool.RailgunHandler.IRailgunProjectile;
 import net.minecraft.world.item.crafting.Ingredient;
 
-public interface IRailgunAmmoData extends IRailgunProjectile {
+public interface IRailgunAmmo extends IRailgunProjectile {
 
 	/**
 	 * @return Ingredient that defines what items are recognized as this ammo

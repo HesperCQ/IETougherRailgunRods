@@ -14,8 +14,8 @@ import com.mojang.serialization.JsonOps;
 
 import blusunrize.immersiveengineering.ImmersiveEngineering;
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
-import io.github.hespercq.ietooltweaks.common.IEToolTweaksNetwork;
-import io.github.hespercq.ietooltweaks.common.SyncDrillHeadVariantsPacket;
+import io.github.hespercq.ietooltweaks.common.network.IEToolTweaksNetwork;
+import io.github.hespercq.ietooltweaks.common.network.SyncDrillHeadVariantsPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,7 +28,7 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 public class DrillHeadVariantManager extends SimpleJsonResourceReloadListener {
-	// Data for constructor
+	// Data for SimpleJsonResourceReloadListener constructor
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	public static final String FOLDER = "drillheads";
 

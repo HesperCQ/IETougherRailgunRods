@@ -1,4 +1,4 @@
-package io.github.hespercq.ietooltweaks.common;
+package io.github.hespercq.ietooltweaks.common.network;
 
 import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import net.minecraft.resources.ResourceLocation;
@@ -21,6 +21,12 @@ public class IEToolTweaksNetwork {
                 .encoder(SyncDrillHeadVariantsPacket::encode)
                 .decoder(SyncDrillHeadVariantsPacket::new)
                 .consumerMainThread(SyncDrillHeadVariantsPacket::handle)
+                .add();
+
+        INSTANCE.messageBuilder(SyncRailgunAmmosPacket.class, packetId++)
+                .encoder(SyncRailgunAmmosPacket::encode)
+                .decoder(SyncRailgunAmmosPacket::new)
+                .consumerMainThread(SyncRailgunAmmosPacket::handle)
                 .add();
     }
 }

@@ -1,4 +1,4 @@
-package io.github.hespercq.ietooltweaks.railgunrods;
+package io.github.hespercq.ietooltweaks.common.railgun_ammo;
 
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
@@ -28,8 +28,8 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
-public abstract class ToughProjectileEntity extends ToughAbstractProjectile {
-	private static final EntityDataAccessor<Optional<UUID>> SHOOTER_PARAMETER = SynchedEntityData.defineId(ToughProjectileEntity.class, EntityDataSerializers.OPTIONAL_UUID);
+public abstract class HCQProjectileEntity extends HCQAbstractProjectile {
+	private static final EntityDataAccessor<Optional<UUID>> SHOOTER_PARAMETER = SynchedEntityData.defineId(HCQProjectileEntity.class, EntityDataSerializers.OPTIONAL_UUID);
 
 	public int ticksInAir;
 	protected IntSet piercedEntities;
@@ -41,22 +41,22 @@ public abstract class ToughProjectileEntity extends ToughAbstractProjectile {
 
 	private int tickLimit = 40;
 
-	public ToughProjectileEntity(EntityType<? extends ToughProjectileEntity> type, Level world) {
+	public HCQProjectileEntity(EntityType<? extends HCQProjectileEntity> type, Level world) {
 		super(type, world);
 		this.pickup = Pickup.DISALLOWED;
 	}
 
-	public ToughProjectileEntity(EntityType<? extends ToughProjectileEntity> type, Level world, double x, double y, double z) {
+	public HCQProjectileEntity(EntityType<? extends HCQProjectileEntity> type, Level world, double x, double y, double z) {
 		this(type, world);
 		this.moveTo(x, y, z, this.getYRot(), this.getXRot());
 		this.setPos(x, y, z);
 	}
 
-	public ToughProjectileEntity(EntityType<? extends ToughProjectileEntity> type, Level world, LivingEntity living, double ax, double ay, double az) {
+	public HCQProjectileEntity(EntityType<? extends HCQProjectileEntity> type, Level world, LivingEntity living, double ax, double ay, double az) {
 		this(type, world, living, living.getX(), living.getY() + living.getEyeHeight(), living.getZ(), ax, ay, az);
 	}
 
-	public ToughProjectileEntity(EntityType<? extends ToughProjectileEntity> type, Level world, @Nonnull LivingEntity living, float velocity, float inaccuracy) {
+	public HCQProjectileEntity(EntityType<? extends HCQProjectileEntity> type, Level world, @Nonnull LivingEntity living, float velocity, float inaccuracy) {
 		this(type, world);
 		setOwner(living);
 		this.setShooterSynced();
@@ -64,7 +64,7 @@ public abstract class ToughProjectileEntity extends ToughAbstractProjectile {
 		this.shootFromRotation(living, living.getXRot(), living.getYRot(), 0.0F, velocity, inaccuracy);
 	}
 
-	public ToughProjectileEntity(EntityType<? extends ToughProjectileEntity> type, Level world, LivingEntity living, double x, double y, double z, double ax, double ay, double az) {
+	public HCQProjectileEntity(EntityType<? extends HCQProjectileEntity> type, Level world, LivingEntity living, double x, double y, double z, double ax, double ay, double az) {
 		this(type, world);
 		float yaw = living != null ? living.getYRot() : 0;
 		float pitch = living != null ? living.getXRot() : 0;
@@ -195,9 +195,9 @@ public abstract class ToughProjectileEntity extends ToughAbstractProjectile {
 	@Override
 	public void playerTouch(Player player) {
 		if (!this.level().isClientSide && (this.inGround || this.isNoPhysics()) && this.shakeTime <= 0) {
-			boolean flag = this.pickup == ToughAbstractProjectile.Pickup.ALLOWED || this.pickup == ToughAbstractProjectile.Pickup.CREATIVE_ONLY && player.getAbilities().instabuild
+			boolean flag = this.pickup == HCQAbstractProjectile.Pickup.ALLOWED || this.pickup == HCQAbstractProjectile.Pickup.CREATIVE_ONLY && player.getAbilities().instabuild
 					|| this.isNoPhysics() && this.getOwner().getUUID() == player.getUUID();
-			if (this.pickup == ToughAbstractProjectile.Pickup.ALLOWED && !player.getInventory().add(this.getPickupItem()))
+			if (this.pickup == HCQAbstractProjectile.Pickup.ALLOWED && !player.getInventory().add(this.getPickupItem()))
 				flag = false;
 
 			if (flag) {

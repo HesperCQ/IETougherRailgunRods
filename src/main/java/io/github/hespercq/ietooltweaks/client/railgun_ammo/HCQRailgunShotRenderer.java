@@ -1,10 +1,12 @@
-package io.github.hespercq.ietooltweaks.railgunrods;
+package io.github.hespercq.ietooltweaks.client.railgun_ammo;
 
 import blusunrize.immersiveengineering.api.tool.RailgunHandler;
 import blusunrize.immersiveengineering.api.tool.RailgunHandler.RailgunRenderColors;
 import blusunrize.immersiveengineering.api.tool.RailgunHandler.StandardRailgunProjectile;
 import blusunrize.immersiveengineering.client.utils.IERenderTypes;
 import blusunrize.immersiveengineering.client.utils.TransformingVertexBuilder;
+import io.github.hespercq.ietooltweaks.common.railgun_ammo.HCQRailgunShotEntity;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import org.joml.Quaternionf;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -15,15 +17,15 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class ToughRailgunShotRenderer extends EntityRenderer<ToughRailgunShotEntity> {
+public class HCQRailgunShotRenderer extends EntityRenderer<HCQRailgunShotEntity> {
 	private static final RailgunRenderColors DEFAULT_RENDER_COLORS = new RailgunRenderColors(0x686868, 0xa4a4a4, 0xa4a4a4, 0xa4a4a4, 0x686868);
 
-	public ToughRailgunShotRenderer(Context renderManager) {
+	public HCQRailgunShotRenderer(Context renderManager) {
 		super(renderManager);
 	}
 
 	@Override
-	public void render(ToughRailgunShotEntity entity, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+	public void render(HCQRailgunShotEntity entity, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
 		double yaw = entity.yRotO + (entity.getYRot() - entity.yRotO) * partialTicks - 90.0F;
 		double pitch = entity.xRotO + (entity.getXRot() - entity.xRotO) * partialTicks;
 
@@ -103,7 +105,7 @@ public class ToughRailgunShotRenderer extends EntityRenderer<ToughRailgunShotEnt
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(@Nonnull ToughRailgunShotEntity entity) {
+	public ResourceLocation getTextureLocation(@Nonnull HCQRailgunShotEntity entity) {
 		return ResourceLocation.fromNamespaceAndPath("immersiveengineering", "textures/models/white.png");
 	}
 

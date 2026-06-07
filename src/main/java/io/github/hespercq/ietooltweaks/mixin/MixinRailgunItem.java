@@ -11,6 +11,7 @@ import blusunrize.immersiveengineering.common.register.IEItems.Ingredients;
 import blusunrize.immersiveengineering.common.util.IESounds;
 import blusunrize.immersiveengineering.common.util.ItemNBTHelper;
 import blusunrize.immersiveengineering.common.util.Utils;
+import io.github.hespercq.ietooltweaks.common.railgun_ammo.IRailgunAmmo;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,7 +26,6 @@ import blusunrize.immersiveengineering.api.shader.ShaderRegistry.ShaderAndCase;
 import blusunrize.immersiveengineering.api.tool.RailgunHandler;
 import blusunrize.immersiveengineering.api.utils.CapabilityUtils;
 import blusunrize.immersiveengineering.api.utils.ItemUtils;
-import io.github.hespercq.ietooltweaks.railgunrods.IRailgunAmmoData;
 
 @Mixin(RailgunItem.class)
 public abstract class MixinRailgunItem {
@@ -122,7 +122,7 @@ public abstract class MixinRailgunItem {
         int baseCharge = 40;
         ItemStack ammo = getAmmoStack(railgunItemStack, entity);
 
-        if (RailgunHandler.getProjectile(ammo) instanceof IRailgunAmmoData data) {
+        if (RailgunHandler.getProjectile(ammo) instanceof IRailgunAmmo data) {
             baseCharge = data.getChargeDuration();
         }
         float speedUpgrade = RailgunItem.getUpgradesStatic(railgunItemStack).getFloat("speed");
@@ -141,10 +141,3 @@ public abstract class MixinRailgunItem {
     }
     // #endregion
 }
-
-/*
- * @Inject(method = "getChargeTime(Lnet/minecraft/world/item/ItemStack;)I", at = @At("HEAD"), cancellable = true, remap = false) private static void injectGetChargeTime(ItemStack railgun,
- * CallbackInfoReturnable<Integer> cir) { IEToolTweaks.LOGGER.info("MixinRailgunItem Called!"); ItemStack ammo = findAmmo(stack, player); IRailgunProjectile projectile =
- * RailgunHandler.getProjectile(railgun); if (projectile instanceof RailgunAmmoData data) { IEToolTweaks.LOGGER.info("Projectile!"); IEToolTweaks.LOGGER.info(data.chargeDuration); int baseCharge
- * = data.chargeDuration; float speedUpgrade = RailgunItem.getUpgradesStatic(railgun).getFloat("speed"); cir.setReturnValue((int) (baseCharge / (1 + speedUpgrade))); } }
- */

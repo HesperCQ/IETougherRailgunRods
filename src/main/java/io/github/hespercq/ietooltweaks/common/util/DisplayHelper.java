@@ -3,7 +3,6 @@ package io.github.hespercq.ietooltweaks.common.util;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import io.github.hespercq.ietooltweaks.IEToolTweaks;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -40,7 +39,6 @@ public class DisplayHelper {
 		}
 
 		// Fallback
-		IEToolTweaks.LOGGER.warn("HCQ TRANS KEY : {}", translationKey);
 		String displayName = toDisplayFallback(getLastSegment(translationKey));
 		return Component.literal(displayName).append(" ").append(Component.translatable(itemKey));
 	}

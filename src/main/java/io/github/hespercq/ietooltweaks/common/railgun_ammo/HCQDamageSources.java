@@ -1,4 +1,4 @@
-package io.github.hespercq.ietooltweaks.railgunrods;
+package io.github.hespercq.ietooltweaks.common.railgun_ammo;
 
 import blusunrize.immersiveengineering.api.Lib.DamageTypes;
 import blusunrize.immersiveengineering.api.Lib.TurretDamageType;
@@ -9,8 +9,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 
-public class ToughDamageSources {
-	public static DamageSource causeToughRailgunDamage(ToughRailgunShotEntity shot, Entity shooter)
+public class HCQDamageSources {
+	public static DamageSource causeToughRailgunDamage(HCQRailgunShotEntity shot, Entity shooter)
 	{
 		TurretDamageType turretDamageType = DamageTypes.RAILGUN;
 		ResourceKey<DamageType> type = shooter==null ? turretDamageType.turretType() : turretDamageType.playerType();

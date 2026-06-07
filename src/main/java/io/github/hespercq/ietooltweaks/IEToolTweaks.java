@@ -1,6 +1,6 @@
 package io.github.hespercq.ietooltweaks;
 
-import io.github.hespercq.ietooltweaks.common.IEToolTweaksNetwork;
+import io.github.hespercq.ietooltweaks.common.network.IEToolTweaksNetwork;
 import io.github.hespercq.ietooltweaks.register.IEToolTweaksEntityTypes;
 import io.github.hespercq.ietooltweaks.register.IEToolTweaksItems;
 import net.minecraftforge.eventbus.api.IEventBus;
