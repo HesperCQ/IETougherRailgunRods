@@ -13,12 +13,14 @@
     "gravity": 1.05,
     "useUpgradedProjectile": true,
     "railgunRenderColors": [
-      "0xfff32d",
-      "0xffc100",
-      "0xb36b19",
-      "0xbf5a00",
-      "0xbf5a00",
-      "0x953300"
+      [
+        "0xfff32d",
+        "0xffc100",
+        "0xb36b19",
+        "0xbf5a00",
+        "0xbf5a00",
+        "0x953300"
+      ]
     ],
     "commandHooks": {
       "onHitEntity": [

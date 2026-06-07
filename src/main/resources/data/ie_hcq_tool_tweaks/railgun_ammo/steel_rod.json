@@ -13,12 +13,14 @@
     "gravity": 1.25,
     "useUpgradedProjectile": true,
     "railgunRenderColors": [
-      "0xb4b4b4",
-      "0xb4b4b4",
-      "0xb4b4b4",
-      "0x7a7a7a",
-      "0x555555",
-      "0x555555"
+      [
+        "0xb4b4b4",
+        "0xb4b4b4",
+        "0xb4b4b4",
+        "0x7a7a7a",
+        "0x555555",
+        "0x555555"
+      ]
     ]
   }
 }

@@ -14,12 +14,14 @@
     "breakChance": 1.0,
     "useUpgradedProjectile": true,
     "railgunRenderColors": [
-      "0xf6e2cd",
-      "0xfff6e6",
-      "0xffffff",
-      "0xfff6f6",
-      "0xf6e2cd",
-      "0x736565"
+      [
+        "0xf6e2cd",
+        "0xfff6e6",
+        "0xffffff",
+        "0xfff6f6",
+        "0xf6e2cd",
+        "0x736565"
+      ]
     ],
     "commandHooks": {
       "onHitEntity": [
