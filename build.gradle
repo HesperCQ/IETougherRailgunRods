@@ -18,7 +18,7 @@ plugins {
 }
 apply plugin: 'org.spongepowered.mixin'
 
-version = ie_version + "--" + this_mod_version
+version = mod_version + "--" + immersive_engineering_version
 group = '${mod_group_id}'
 
 base {
@@ -125,26 +125,24 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-    maven { url 'https://maven.blamejared.com/'}
-    maven { url 'https://www.cursemaven.com' }
-    maven { url 'https://cfa2.cursemaven.com' }
-    maven {
-        url 'https://squiddev.cc/maven/'
-        content {
-            includeGroup 'cc.tweaked'
-            includeModule 'org.squiddev', 'Cobalt'
-        }
-    }
-    mavenCentral()
-    gradlePluginPortal()
+    maven { url 'https://maven.blamejared.com/'} // Immersive Engineering / JEI
+    mavenCentral() // Mixin?
+    gradlePluginPortal() // Mixin?
 }
 
 dependencies {
+    // Minecraft / Forge
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    compileOnly fg.deobf("curse.maven:immersive-engineering-231951:6206989")
+    
+    // Immersive Engineering
+	implementation fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:${immersive_engineering_version}")
+    
+    // Mixin
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
+    // JEI (Optional)
     compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge-api:${jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-1.20.1-common-api:${jei_version}")
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 mixin {
@@ -158,19 +156,24 @@ mixin {
 // When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
 // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
 tasks.named('processResources', ProcessResources).configure {
-    var replaceProperties = [
+    var replaceProperties = [            // Mod Properties
+            mod_id: mod_id,
+            mod_name: mod_name,
+            mod_license: mod_license,
+            mod_version: version,
+            mod_authors: mod_authors,
+            mod_description: mod_description,
+            mod_issues: mod_issues,
+            mod_homepage: mod_homepage,
+            mod_credits: mod_credits,
+            // Dependencies - Forge
             minecraft_version: minecraft_version,
             minecraft_version_range: minecraft_version_range,
             forge_version: forge_version,
             forge_version_range: forge_version_range,
             loader_version_range: loader_version_range,
-            mod_id: mod_id,
-            mod_name: mod_name,
-            mod_license: mod_license,
-            version: version,
-            mod_authors: mod_authors,
-            mod_description: mod_description,
-            ie_version: ie_version,
+            // Dependencies - Other Mods
+            immersive_engineering_version: immersive_engineering_version,
             jei_version: jei_version
     ]
     inputs.properties replaceProperties

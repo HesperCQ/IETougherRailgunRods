@@ -77,7 +77,7 @@ public abstract class MixinRailgunItem {
         // Play sound when charge time is hit maybe little earlier because reaction time
         if (inUse == (customChargeTime)) {
             user.level().playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.NOTE_BLOCK_BELL.get(), // Sound
-                    SoundSource.PLAYERS, 1.3, // Volume
+                    SoundSource.PLAYERS, 1.3f, // Volume
                     2.0f - (0.03f * user.getRandom().nextFloat())); // Pitch
         }
         ci.cancel(); // prevent the original method from running
